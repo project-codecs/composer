@@ -49,18 +49,6 @@ repositories {
     strictMaven("https://maven.nucleoid.xyz/", "Nucleoid")
 }
 
-subprojects {
-    tasks.withType<Test>().configureEach {
-        enabled = false
-    }
-}
-
-project(":1.21.4") {
-    tasks.withType<Test>().configureEach {
-        enabled = true
-    }
-}
-
 dependencies {
     fun cca(): Any? {
         return property("deps.cca_source")
@@ -81,7 +69,8 @@ dependencies {
     modRuntimeOnly("${cca()}.cardinal-components-api:cardinal-components-api:${property("deps.cca")}")
 //    modLocalRuntime("com.terraformersmc:modmenu:${property("r.deps.mod_menu")}")
 
-    compileOnly("org.lilbrocodes:constructive-core:${property("constructive_version")}")
+    implementation("org.lilbrocodes:constructive-core:${property("constructive_version")}")
+    include("org.lilbrocodes:constructive-core:${property("constructive_version")}")
     annotationProcessor("org.lilbrocodes:constructive-processor:${property("constructive_version")}")
 
     testImplementation(platform("org.junit:junit-bom:${property("junit_version")}"))

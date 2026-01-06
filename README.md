@@ -56,6 +56,12 @@ repositories {
         url = "https://dl.cloudsmith.io/public/project-codex/composer/maven/"
     }
     
+    // After 3.0.4
+    maven {
+        name "Constructive"
+        url "https://dl.cloudsmith.io/public/lilbrocodes/constructive/maven/"
+    }
+    
     maven {
         name = "Cardinal Components"
         url = "https://maven.ladysnake.org/releases"
@@ -101,6 +107,11 @@ repositories {
     maven("https://dl.cloudsmith.io/public/project-codex/composer/maven/") {
         name = "Composer Maven"
     }
+
+    // After 3.0.4
+    maven("https://dl.cloudsmith.io/public/lilbrocodes/constructive/maven/") {
+        name = "Constructive"
+    }
     
     maven("https://maven.ladysnake.org/releases") {
         name = "Cardinal Components"
@@ -138,6 +149,11 @@ dependencies {
     <repository>
         <id>composer-maven</id>
         <url>https://dl.cloudsmith.io/public/project-codex/composer/maven/</url>
+    </repository>
+    <!-- After 3.0.4 -->
+    <repository>
+        <id>constructive-maven</id>
+        <url>https://dl.cloudsmith.io/public/lilbrocodes/constructive/maven/</url>
     </repository>
     <repository>
         <id>cardinal-components</id>
