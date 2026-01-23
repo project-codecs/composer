@@ -25,7 +25,7 @@ public class ColorArgumentType implements ArgumentType<Integer> {
         return new ColorArgumentType(false);
     }
 
-    public static ColorArgumentType argb() {
+    public static ColorArgumentType rgba() {
         return new ColorArgumentType(true);
     }
 
@@ -43,7 +43,7 @@ public class ColorArgumentType implements ArgumentType<Integer> {
             hex.append(reader.read());
         }
 
-        if (hex.length() != 6 && hex.length() != 8) {
+        if (hex.length() != 6 && (hex.length() != 8 && includeAlpha)) {
             throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException()
                     .create("Color must be in #RRGGBB or #RRGGBBAA format");
         }
@@ -62,11 +62,12 @@ public class ColorArgumentType implements ArgumentType<Integer> {
         String remaining = builder.getRemaining();
 
         if (!remaining.startsWith("#")) {
+            builder.suggest("#");
             return builder.buildFuture();
         }
 
         int length = remaining.length() - 1;
-        if (length >= 8) return builder.buildFuture();
+        if (length >= (includeAlpha ? 8 : 6)) return builder.buildFuture();
 
         for (char c : HEX_DIGITS) {
             builder.suggest(remaining + c);

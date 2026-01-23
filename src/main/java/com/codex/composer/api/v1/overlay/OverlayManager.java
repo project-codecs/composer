@@ -1,6 +1,7 @@
 package com.codex.composer.api.v1.overlay;
 
 import com.codex.composer.api.v1.overlay.impl.Overlay;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,8 @@ public class OverlayManager {
         return queue;
     }
 
-    public void queue(Overlay overlay) {
-        queue.add(overlay);
+    public void queue(@NotNull Overlay overlay) {
+        if (!overlay.shouldRemove()) queue.add(overlay);
     }
 
     public void clearVisible() {

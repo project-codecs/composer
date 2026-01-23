@@ -139,6 +139,7 @@ public abstract class AnimatedOverlay extends AlignedOverlay {
     }
 
     public enum Animation implements StringIdentifiable {
+        NONE(false, false),
         FADE(true, false),
         SLIDE(false, true),
         BOTH(true, true);

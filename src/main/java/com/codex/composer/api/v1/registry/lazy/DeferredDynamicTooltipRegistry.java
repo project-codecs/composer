@@ -3,7 +3,8 @@ package com.codex.composer.api.v1.registry.lazy;
 import net.minecraft.util.Identifier;
 import com.codex.composer.api.v1.tooltips.DynamicTooltip;
 import com.codex.composer.api.v1.tooltips.DynamicTooltipRegistry;
-import com.codex.composer.api.v1.util.misc.Provider;
+
+import java.util.function.Supplier;
 
 public class DeferredDynamicTooltipRegistry extends EmptyDeferredRegistry {
     private final DynamicTooltipRegistry reg = DynamicTooltipRegistry.getInstance();
@@ -16,7 +17,7 @@ public class DeferredDynamicTooltipRegistry extends EmptyDeferredRegistry {
         return reg.register(Identifier.of(modId, name), tooltip);
     }
 
-    public <T extends DynamicTooltip> T add(String name, Provider<T> tooltip) {
-        return register(name, tooltip.provide());
+    public <T extends DynamicTooltip> T add(String name, Supplier<T> tooltip) {
+        return register(name, tooltip.get());
     }
 }

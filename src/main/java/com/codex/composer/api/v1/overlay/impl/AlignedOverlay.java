@@ -12,10 +12,11 @@ import net.minecraft.client.render.RenderTickCounter;
 public abstract class AlignedOverlay extends Overlay {
     protected AlignedOverlay(Anchor anchor) {
         super(anchor);
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) init();
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && !lateInit()) init();
     }
 
     public void render(DrawContext context, /*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f) {
+        if (shouldRemove()) return;
         Vector2i pos = calculatePosition();
         render(context, f, pos.x, pos.y);
     }
@@ -31,5 +32,9 @@ public abstract class AlignedOverlay extends Overlay {
 
     protected void init() {
 
+    }
+
+    protected boolean lateInit() {
+        return false;
     }
 }

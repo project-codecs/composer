@@ -1,5 +1,6 @@
 package com.codex.composer.internal.overlay;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import org.jetbrains.annotations.ApiStatus;
 import com.codex.composer.api.v1.overlay.OverlayManager;
@@ -11,7 +12,7 @@ import net.minecraft.client.render.RenderTickCounter;
 @ApiStatus.Internal
 public class OverlayHandler {
     @ApiStatus.Internal
-    public static void tick() {
+    public static void tick(MinecraftClient ignored) {
         OverlayManager man = OverlayManager.getInstance();
 
         man.getVisible().forEach(Overlay::tick);

@@ -48,8 +48,8 @@ public class ToastCommand extends ComposerCommand {
     private ArgumentBuilder<ServerCommandSource, ?> toastOptions(Command<ServerCommandSource> command) {
         return CommandManager.argument("where", ToastCornerArgumentType.corners()).then(
                 CommandManager.argument("message", StringArgumentType.string()).then(
-                        CommandManager.argument("background_color", ColorArgumentType.argb()).then(
-                                CommandManager.argument("border_color", ColorArgumentType.argb()).executes(command)
+                        CommandManager.argument("background_color", ColorArgumentType.rgba()).then(
+                                CommandManager.argument("border_color", ColorArgumentType.rgba()).executes(command)
                         )
                 )
         );

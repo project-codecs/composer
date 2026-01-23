@@ -16,6 +16,8 @@ import com.codex.composer.api.v1.util.render.Opacitator;
 import com.codex.composer.internal.Composer;
 import com.codex.composer.internal.networking.ShowOverlayPayload;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 //? if minecraft: >=1.21
 import net.minecraft.client.render.RenderTickCounter;
@@ -81,10 +83,17 @@ public class Overlays {
             this.texture = texture;
             this.scale = scale;
             this.shouldLoadTextures = shouldLoadTextures;
+            init();
         }
 
+        @Contract(mutates = "this")
         private void remove() {
             this.removed = true;
+        }
+
+        @Override
+        protected boolean lateInit() {
+            return true;
         }
 
         @Override
@@ -111,10 +120,16 @@ public class Overlays {
             }
 
             size = shape.mul(scale);
+            if (size == null) remove();
         }
 
         @Override
         protected void render(DrawContext context,/*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f, int x, int y) {
+            if (size == null) {
+                remove();
+                return;
+            }
+
             Opacitator.drawWithOpacity(
                     getOpacity(f),
                     //? if minecraft: <=1.20.6 {
@@ -159,7 +174,8 @@ public class Overlays {
             return size;
         }
 
-        private Vec2 loadSize(AbstractTexture tex) throws Exception {
+        @Contract("null -> fail")
+        private @NotNull Vec2 loadSize(AbstractTexture tex) throws Exception {
             if (tex instanceof NativeImageBackedTexture nat) {
                 NativeImage image = nat.getImage();
                 if (image == null) {

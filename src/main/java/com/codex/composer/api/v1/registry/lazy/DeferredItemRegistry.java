@@ -15,11 +15,10 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import org.jetbrains.annotations.NotNull;
+
 //? if minecraft: >=1.20.6
 import net.minecraft.registry.RegistryKeys;
-
-import com.codex.composer.api.v1.item.settings.ComposerItemSettings;
-import com.codex.composer.api.v1.util.misc.Provider;
 
 public class DeferredItemRegistry extends EmptyDeferredRegistry {
     private final RegistryKey<ItemGroup> itemGroupKey;
@@ -30,125 +29,72 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
         this.itemGroupKey = itemGroupKey;
     }
 
-    //? if minecraft: >=1.21.3
-    @SuppressWarnings("unchecked")
-    public <I extends Item, S extends Item.Settings> I register(String name, Function<S, I> provider, Provider<S> settingsSupplier, boolean addToGroup) {
-        Identifier id = Identifier.of(modId, name);
-        S settings = settingsSupplier.provide();
-
-        //? if minecraft: >=1.21.3 {
-        settings = (S) settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, id));
-        //? }
-
-        I item = provider.apply(settings);
-        I registered = Registry.register(Registries.ITEM, id, item);
-
-        if (addToGroup) registeredItems.add(registered);
-        return registered;
+    public Item register(String name) {
+        return register(name, Item::new, new Item.Settings(), true);
     }
 
-    public <I extends Item, S extends Item.Settings> I register(String name, Function<S, I> provider, S settings, boolean addToGroup) {
-        return register(name, provider, (Provider<S>) () -> settings, addToGroup);
+    public Item register(String name, UnaryOperator<Item.Settings> settingsBuilder) {
+        return register(name, Item::new, settingsBuilder.apply(new Item.Settings()), true);
+    }
+
+    public <I extends Item> I register(String name, Function<Item.Settings, I> provider) {
+        return register(name, provider, new Item.Settings(), true);
+    }
+
+    public <I extends Item> I register(String name, Function<Item.Settings, I> provider,
+                                       UnaryOperator<Item.Settings> settingsBuilder) {
+        return register(name, provider, settingsBuilder.apply(new Item.Settings()), true);
     }
 
     public <I extends Item, S extends Item.Settings> I register(String name, Function<S, I> provider, S settings) {
         return register(name, provider, settings, true);
     }
 
-    public <I extends Item, S extends Item.Settings> I register(String name, Function<S, I> provider, Provider<S> settings) {
-        return register(name, provider, settings, true);
-    }
-
-    public <I extends Item, S extends Item.Settings> I register(String name, Function<S, I> provider, Provider<S> settings, UnaryOperator<S> sBuilder) {
-        return register(name, provider, sBuilder.apply(settings.provide()), true);
-    }
-
-    public <I extends Item> I register(String name, Function<ComposerItemSettings, I> provider, UnaryOperator<ComposerItemSettings> sBuilder) {
-        return register(name, provider, sBuilder.apply(new ComposerItemSettings()), true);
-    }
-
-    public Item register(String name) {
-        return register(name, true);
-    }
-
-    public Item register(String name, boolean addToGroup) {
-        return register(name, Item::new, (Provider<Item.Settings>) Item.Settings::new, addToGroup);
-    }
-
-    public <S extends Item.Settings> Item register(String name, Provider<S> settings) {
-        return register(name, Item::new, settings, true);
-    }
-
-    public <S extends Item.Settings> Item register(
-            String name,
-            Provider<S> settings,
-            boolean addToGroup
-    ) {
-        return register(name, Item::new, settings, addToGroup);
-    }
-
-    public <B extends Block, I extends BlockItem, S extends Item.Settings> I register(B block, String name, Function<S, I> provider, Provider<S> settings, boolean addToGroup) {
-        return register(name, provider, settings, addToGroup);
-    }
-
-    public <B extends Block, I extends BlockItem, S extends Item.Settings> I register(B block, String name, Function<S, I> provider, S settings, boolean addToGroup) {
-        return register(block, name, provider, (Provider<S>) () -> settings, addToGroup);
-    }
-
-    public <B extends Block, I extends BlockItem, S extends Item.Settings> I register(B block, String name, Function<S, I> provider, S settings) {
-        return register(block, name, provider, settings, true);
-    }
-
-    public <B extends Block, I extends BlockItem, S extends Item.Settings> I register(B block, String name, Function<S, I> provider, Provider<S> settings) {
-        return register(block, name, provider, settings, true);
-    }
-
-    public <B extends Block, I extends BlockItem, S extends Item.Settings> I register(B block, String name, Function<S, I> provider, Provider<S> settings, UnaryOperator<S> sBuilder) {
-        return register(block, name, provider, sBuilder.apply(settings.provide()), true);
-    }
-
-    public <B extends Block, I extends BlockItem> I register(B block, String name, Function<ComposerItemSettings, I> provider, UnaryOperator<ComposerItemSettings> sBuilder) {
-        return register(block, name, provider, sBuilder.apply(new ComposerItemSettings()), true);
-    }
-
     public <B extends Block> BlockItem register(B block, String name) {
-        return register(block, name, true);
+        return register(block, name, new Item.Settings());
     }
 
     public <B extends Block> BlockItem register(B block, String name, boolean addToGroup) {
-        return register(
-                block,
-                name,
-                s -> new BlockItem(block, s),
-                (Provider<Item.Settings>) Item.Settings::new,
-                addToGroup
-        );
+        return register(block, name, new Item.Settings(), addToGroup);
     }
 
-    public <B extends Block, S extends Item.Settings> BlockItem register(B block, String name, Provider<S> settings) {
+    public <B extends Block> BlockItem register(B block, String name, UnaryOperator<Item.Settings> settingsBuilder) {
+        return register(block, name, settingsBuilder, true);
+    }
+
+    public <B extends Block> BlockItem register(B block, String name, UnaryOperator<Item.Settings> settingsBuilder, boolean addToGroup) {
+        Item.Settings settings = settingsBuilder.apply(new Item.Settings());
+        return register(block, name, settings, addToGroup);
+    }
+
+    public <B extends Block, S extends Item.Settings> BlockItem register(B block, String name, S settings) {
         return register(block, name, settings, true);
     }
 
-    public <B extends Block, S extends Item.Settings> BlockItem register(B block, String name, Provider<S> settings, boolean addToGroup) {
-        return register(
-                block,
-                name,
-                s -> new BlockItem(block, s),
-                settings,
-                addToGroup
-        );
+    public <B extends Block, S extends Item.Settings> BlockItem register(B block, String name, S settings, boolean addToGroup) {
+        return register(name, s -> new BlockItem(block, s), settings, addToGroup);
     }
 
-    /* =========================== */
+    //? if minecraft: >=1.21.3
+    @SuppressWarnings("unchecked")
+    private <I extends Item, S extends Item.Settings> I register(String name, @NotNull Function<S, I> provider, @NotNull S settings, boolean addToGroup) {
+        Identifier id = Identifier.of(modId, name);
+
+        S finalSettings = settings;
+        //? if minecraft: >=1.21.3
+        finalSettings = (S) finalSettings.registryKey(RegistryKey.of(RegistryKeys.ITEM, id));
+
+        I item = provider.apply(finalSettings);
+        I registered = Registry.register(Registries.ITEM, id, item);
+
+        if (addToGroup) registeredItems.add(registered);
+        return registered;
+    }
 
     public void finalizeRegistration() {
         if (itemGroupKey != null) {
             ItemGroupEvents.modifyEntriesEvent(itemGroupKey)
-                    .register(entries ->
-                            registeredItems.forEach(item ->
-                                    entries.add(item.getDefaultStack())
-                            )
-                    );
+                    .register(entries -> registeredItems.forEach(item -> entries.add(item.getDefaultStack())));
         }
     }
 }

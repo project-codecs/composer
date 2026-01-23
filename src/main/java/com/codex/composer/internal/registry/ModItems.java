@@ -8,7 +8,11 @@ import com.codex.composer.internal.Composer;
 public class ModItems {
     private static final DeferredItemRegistry REGISTRY = new DeferredItemRegistry(Composer.MOD_ID, ModItemGroups.COMPOSER);
 
-    public static final BlockItem PLUSHIE = REGISTRY.register(ModBlocks.PLUSH, "plush", () -> new ComposerItemSettings().soulbound(true));
+    public static final BlockItem PLUSHIE = REGISTRY.register(
+            ModBlocks.PLUSH,
+            "plush",
+            new ComposerItemSettings().soulbound(true)
+    );
 
     public static void initialize() {
         REGISTRY.finalizeRegistration();

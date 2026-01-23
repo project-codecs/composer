@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+//? if minecraft: >=1.21
+import net.minecraft.client.render.RenderTickCounter;
+
 public class ToastManager {
     private final HashMap<Corner, List<AbstractToast>> toastMap = new HashMap<>();
     private static ToastManager INSTANCE;
@@ -51,14 +54,13 @@ public class ToastManager {
         return false;
     }
 
-
-    public void render(DrawContext context) {
+    public void render(DrawContext context, /*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ fIgnored) {
         int screenWidth = context.getScaledWindowWidth();
         int screenHeight = context.getScaledWindowHeight();
         for (Corner corner : Corner.values()) {
             List<AbstractToast> toasts = toastMap.get(corner);
             if (!toasts.isEmpty()) {
-                AbstractToast toast = toasts.get(0);
+                AbstractToast toast = toasts.getFirst();
                 int centerX;
                 int centerY = switch (corner) {
                     case TOP_LEFT -> {
@@ -80,7 +82,7 @@ public class ToastManager {
                 };
                 toast.draw(context, centerX, centerY);
                 if (toast.shouldRemove()) {
-                    toasts.remove(0);
+                    toasts.removeFirst();
                 }
             }
         }

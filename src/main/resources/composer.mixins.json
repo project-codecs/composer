@@ -22,9 +22,7 @@
     "scroll.MouseMixin",
     "scroll.PlayerInventoryMixin",
     "soul_binding.ClientPlayerEntityMixin",
-    "targeting.MinecraftClientMixin",
-    "toasts_overlays.GameRendererMixin",
-    "toasts_overlays.MinecraftClientMixin"
+    "targeting.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
