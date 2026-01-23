@@ -1,0 +1,7 @@
+# ChangeLog Pro Entry
+# Created: 2026-01-23 17:39
+
+type: added
+description: "Methods in DeferredItemRegistry for registering items while not adding them to the item group"
+author: "lilbrocodes"
+timestamp: 1769186365369
