@@ -1,0 +1,7 @@
+# ChangeLog Pro Entry
+# Created: 2026-01-23 14:36
+
+type: fixed
+description: "ColorArgumentType allowing you to use RGBA syntax on an RGB color input"
+author: "lilbrocodes"
+timestamp: 1769175400388

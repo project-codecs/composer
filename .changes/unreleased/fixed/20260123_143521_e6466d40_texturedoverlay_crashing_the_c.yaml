@@ -1,0 +1,7 @@
+# ChangeLog Pro Entry
+# Created: 2026-01-23 14:35
+
+type: fixed
+description: "TexturedOverlay crashing the client on invalid texture"
+author: "lilbrocodes"
+timestamp: 1769175321193
