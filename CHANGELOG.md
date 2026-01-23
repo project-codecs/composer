@@ -1,6 +1,7 @@
-### Organization!
-The project has now been transferred from my account into Project Codex, an organization I created for libraries made to improve the experience of developing fabric minecraft mods.
+# Changelog
 
----
-### Changes
-You can notice some things have been removed. Some classes were moved around and others well removed because of lack of use. Mainly, the entirety of velora has been removed as the features provided by it are going to be moved to a separate library.
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
