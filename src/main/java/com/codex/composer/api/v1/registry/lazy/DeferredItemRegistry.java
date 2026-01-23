@@ -37,13 +37,24 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
         return register(name, Item::new, settingsBuilder.apply(new Item.Settings()), true);
     }
 
+    public Item register(String name, UnaryOperator<Item.Settings> settingsBuilder, boolean addToGroup) {
+        return register(name, Item::new, settingsBuilder.apply(new Item.Settings()), addToGroup);
+    }
+
     public <I extends Item> I register(String name, Function<Item.Settings, I> provider) {
         return register(name, provider, new Item.Settings(), true);
     }
 
-    public <I extends Item> I register(String name, Function<Item.Settings, I> provider,
-                                       UnaryOperator<Item.Settings> settingsBuilder) {
+    public <I extends Item> I register(String name, Function<Item.Settings, I> provider, boolean addToGroup) {
+        return register(name, provider, new Item.Settings(), addToGroup);
+    }
+
+    public <I extends Item> I register(String name, Function<Item.Settings, I> provider, UnaryOperator<Item.Settings> settingsBuilder) {
         return register(name, provider, settingsBuilder.apply(new Item.Settings()), true);
+    }
+
+    public <I extends Item> I register(String name, Function<Item.Settings, I> provider, UnaryOperator<Item.Settings> settingsBuilder, boolean addToGroup) {
+        return register(name, provider, settingsBuilder.apply(new Item.Settings()), addToGroup);
     }
 
     public <I extends Item, S extends Item.Settings> I register(String name, Function<S, I> provider, S settings) {
@@ -77,7 +88,7 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
 
     //? if minecraft: >=1.21.3
     @SuppressWarnings("unchecked")
-    private <I extends Item, S extends Item.Settings> I register(String name, @NotNull Function<S, I> provider, @NotNull S settings, boolean addToGroup) {
+    private <I extends Item, S extends Item.Settings> I register(String name, @NotNull Function<? super S, I> provider, @NotNull S settings, boolean addToGroup) {
         Identifier id = Identifier.of(modId, name);
 
         S finalSettings = settings;
