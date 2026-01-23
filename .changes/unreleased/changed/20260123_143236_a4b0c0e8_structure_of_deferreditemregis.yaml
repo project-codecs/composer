@@ -1,0 +1,7 @@
+# ChangeLog Pro Entry
+# Created: 2026-01-23 14:32
+
+type: changed
+description: "Structure of DeferredItemRegistry for less-verbose registration"
+author: "lilbrocodes"
+timestamp: 1769175156380
