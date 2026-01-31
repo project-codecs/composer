@@ -1,0 +1,7 @@
+# ChangeLog Pro Entry
+# Created: 2026-01-31 16:02
+
+type: fixed
+description: "A gradle misconfiguration which caused all depending mods to need gradle 9.2.0 and loom 1.14-SNAPSHOT"
+author: "lilbrocodes"
+timestamp: 1769871744679

@@ -1,0 +1,7 @@
+# ChangeLog Pro Entry
+# Created: 2026-01-31 16:03
+
+type: added
+description: "A \"relevancy\" check before appending tooltips to make it so not all items have useless keybinds in their tooltips."
+author: "lilbrocodes"
+timestamp: 1769871784931
