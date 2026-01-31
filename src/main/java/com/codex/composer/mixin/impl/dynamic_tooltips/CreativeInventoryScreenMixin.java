@@ -7,7 +7,7 @@ import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import com.codex.composer.api.v1.tooltips.DynamicTooltip;
+import com.codex.composer.api.v1.tooltips.layout.DynamicTooltip;
 import com.codex.composer.api.v1.util.misc.ComposedStream;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

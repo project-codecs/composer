@@ -1,5 +1,6 @@
-package com.codex.composer.api.v1.tooltips;
+package com.codex.composer.api.v1.tooltips.layout;
 
+import com.codex.composer.api.v1.tooltips.TooltipContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.lilbrocodes.constructive.api.v1.anno.Constructive;

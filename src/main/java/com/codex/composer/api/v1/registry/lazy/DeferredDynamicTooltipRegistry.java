@@ -1,7 +1,7 @@
 package com.codex.composer.api.v1.registry.lazy;
 
 import net.minecraft.util.Identifier;
-import com.codex.composer.api.v1.tooltips.DynamicTooltip;
+import com.codex.composer.api.v1.tooltips.layout.DynamicTooltip;
 import com.codex.composer.api.v1.tooltips.DynamicTooltipRegistry;
 
 import java.util.function.Supplier;

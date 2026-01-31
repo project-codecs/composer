@@ -23,7 +23,7 @@ public abstract class ItemFilterClientScrollEvent implements ClientScrollEvents.
     /**
      * Constructs a new ItemFilterClientScrollEvent.
      *
-     * @param hand the hand to check (MAIN_HAND or OFF_HAND)
+     * @param hand the hand to check ({@link Hand#MAIN_HAND} or {@link Hand#OFF_HAND})
      * @param item the item to filter for
      */
     protected ItemFilterClientScrollEvent(Hand hand, Item item) {

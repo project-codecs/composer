@@ -1,5 +1,6 @@
 package com.codex.composer.internal.command;
 
+import com.codex.composer.api.v1.runtime.ServerHolder;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -18,7 +19,6 @@ import com.codex.composer.api.v1.feature.ComposerFeatures;
 import com.codex.composer.api.v1.feature.FeatureHandle;
 import com.codex.composer.api.v1.feature.FeatureNode;
 import com.codex.composer.api.v1.feature.state.FeatureState;
-import com.codex.composer.api.v1.runtime.ServerHolder;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
@@ -73,7 +73,7 @@ public class FeatureCommand extends ComposerCommand {
 
     private int enable(CommandContext<ServerCommandSource> ctx) {
         Identifier id = resolveId(ctx);
-        FeatureState state = ServerHolder.features();
+        FeatureState state = ServerHolder.get().features();
 
         if (ComposerFeatures.getInstance().featureMissing(id)) {
             return error(ctx, Text.translatable("composer.feature.missing", id.toString()));
@@ -86,7 +86,7 @@ public class FeatureCommand extends ComposerCommand {
 
     private int disable(CommandContext<ServerCommandSource> ctx) {
         Identifier id = resolveId(ctx);
-        FeatureState state = ServerHolder.features();
+        FeatureState state = ServerHolder.get().features();
 
         if (ComposerFeatures.getInstance().featureMissing(id)) {
             return error(ctx, Text.translatable("composer.feature.missing", id.toString())

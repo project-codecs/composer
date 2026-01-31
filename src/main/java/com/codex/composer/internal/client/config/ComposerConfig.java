@@ -4,6 +4,7 @@ import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import me.fzzyhmstrs.fzzy_config.config.Config;
 import me.fzzyhmstrs.fzzy_config.util.EnumTranslatable;
+import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
 import org.jetbrains.annotations.NotNull;
 import com.codex.composer.internal.Composer;
@@ -50,10 +51,12 @@ public class ComposerConfig extends Config {
     @Name("Allow Duplicate Keybinds")
     public BindsMode allowDuplicateKeybinds = BindsMode.MC_AND_CM;
 
-    @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
+    //? if minecraft: <=1.20.1 || >=1.21
+    @Prefix("Always shows the \"Press <> to show <>\" in tooltips (or the tooltip if the keys are held) for all tooltips, regardless of them being relevant or not.")
+    public ValidatedBoolean alwaysShowTooltips = new ValidatedBoolean(false);
+
     public static void initialize() {
-        if (Composer.dupedBinds())
-            INSTANCE = ConfigApiJava.registerAndLoadConfig(ComposerConfig::new, RegisterType.CLIENT);
+        INSTANCE = ConfigApiJava.registerAndLoadConfig(ComposerConfig::new, RegisterType.CLIENT);
     }
 
     public enum BindsMode implements EnumTranslatable {

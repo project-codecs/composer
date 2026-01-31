@@ -1,9 +1,10 @@
 package com.codex.composer.internal.data.loader;
 
+import com.codex.composer.api.v1.runtime.ServerHolder;
+import com.codex.composer.internal.runtime.ServerHolderImpl;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import com.codex.composer.api.v1.runtime.ServerHolder;
 import com.codex.composer.internal.Composer;
 
 public class FeatureStateLoader implements SimpleSynchronousResourceReloadListener {
@@ -16,6 +17,6 @@ public class FeatureStateLoader implements SimpleSynchronousResourceReloadListen
 
     @Override
     public void reload(ResourceManager manager) {
-        if (ServerHolder.has()) ServerHolder.reloadFeatures();
+        if (ServerHolder.get().has()) ((ServerHolderImpl) ServerHolder.get()).reloadFeatures();
     }
 }

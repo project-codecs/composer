@@ -1,7 +1,7 @@
 plugins {
     id("com.modrinth.minotaur") version "2+"
     id("me.modmuss50.mod-publish-plugin")
-    id("net.fabricmc.fabric-loom-remap")
+    id("fabric-loom")
 
     id("maven-publish")
     id("java")
@@ -80,7 +80,7 @@ dependencies {
 }
 
 loom {
-    fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
+//    fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
     accessWidenerPath = project.file("src/main/resources/${property("mod.mc_title")}.accesswidener")
 
     decompilerOptions.named("vineflower") {

@@ -1,6 +1,6 @@
-plugins {
+    plugins {
     id("dev.kikugie.stonecutter")
-    id("net.fabricmc.fabric-loom-remap") version "1.14-SNAPSHOT" apply false
+    id("fabric-loom") version "1.10-SNAPSHOT" apply false
     id("me.modmuss50.mod-publish-plugin") version "1.0.+" apply false
 }
 

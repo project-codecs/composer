@@ -14,7 +14,7 @@ public class BindTracker {
 
     @ApiStatus.Internal
     public static boolean bindAllowed(KeyBinding keyBinding) {
-        if (!Composer.dupedBinds()) return false;
+        if (Composer.disableDupedBinds()) return false;
         if (keyBinding == null) return false;
         return switch (ComposerConfig.INSTANCE.allowDuplicateKeybinds) {
             case NONE -> false;

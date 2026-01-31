@@ -21,7 +21,7 @@ public class GameOptionsMixin {
 
     @Inject(method = "load", at = @At("HEAD"))
     private void flowed_combat$getBaseBinds(CallbackInfo ci) {
-        if (!Composer.dupedBinds()) return;
+        if (Composer.disableDupedBinds()) return;
         BindTracker.MC_CM_BINDS.addAll(Arrays.asList(allKeys));
     }
 }

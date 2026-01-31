@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import com.codex.composer.api.v1.easytags.impl.DefaultSerializers;
 import com.codex.composer.api.v1.events.composite.ComposerCompositeEvents;
 import com.codex.composer.api.v1.feature.ComposerFeatures;
-import com.codex.composer.api.v1.runtime.ServerHolder;
+import com.codex.composer.internal.runtime.ServerHolderImpl;
 import com.codex.composer.api.v1.util.misc.AbstractPseudoRegistry;
 import com.codex.composer.api.v1.util.misc.EventStacker;
 import com.codex.composer.internal.client.config.ComposerConfig;
@@ -97,7 +97,7 @@ public class Composer implements ModInitializer {
 
         EventStacker.registerAll(
                 ServerLifecycleEvents.SERVER_STARTED,
-                ServerHolder::accept,
+                ServerHolderImpl.INSTANCE::accept,
                 AbstractPseudoRegistry::runAfterInit,
                 ComposerFeatures.getInstance()::afterInitialization
         );
@@ -106,8 +106,8 @@ public class Composer implements ModInitializer {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FeatureStateLoader());
     }
 
-    public static boolean dupedBinds() {
-        return dupedKeybindsEnabled;
+    public static boolean disableDupedBinds() {
+        return !dupedKeybindsEnabled;
     }
 
     public static Identifier identify(String name) {

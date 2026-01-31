@@ -1,5 +1,6 @@
 package com.codex.composer.api.v1.feature;
 
+import com.codex.composer.api.v1.runtime.ServerHolder;
 import com.google.gson.JsonElement;
 import net.minecraft.util.Identifier;
 import com.codex.composer.api.v1.feature.config.BooleanConfigSerializer;
@@ -8,7 +9,6 @@ import com.codex.composer.api.v1.feature.config.IntConfigSerializer;
 import com.codex.composer.api.v1.feature.config.StringConfigSerializer;
 import com.codex.composer.api.v1.feature.state.FeatureState;
 import com.codex.composer.api.v1.nbt.GsonSerializer;
-import com.codex.composer.api.v1.runtime.ServerHolder;
 import com.codex.composer.api.v1.util.misc.Translatable;
 
 import java.util.Optional;
@@ -34,8 +34,8 @@ public class FeatureHandle implements Translatable {
             if (!group.enabled()) return false;
         }
 
-        if (ServerHolder.has()) {
-            FeatureState state = ServerHolder.features();
+        if (ServerHolder.get().has()) {
+            FeatureState state = ServerHolder.get().features();
             Boolean v = state.getEnabled(id().toString());
             if (v != null) return v;
         }
@@ -55,8 +55,8 @@ public class FeatureHandle implements Translatable {
 
     @SuppressWarnings("unchecked")
     public <T> T getConfig(String key, GsonSerializer<T> serializer, Class<T> cls) {
-        if (ServerHolder.has()) {
-            FeatureState state = ServerHolder.features();
+        if (ServerHolder.get().has()) {
+            FeatureState state = ServerHolder.get().features();
             JsonElement val = state.getConfigValue(id().toString(), key, null);
             if (val != null) {
                 return serializer.read(val);
@@ -69,8 +69,8 @@ public class FeatureHandle implements Translatable {
 
     public Object getConfigAny(String key) {
         Optional<FeatureNode.ConfigDefault<?>> cd = findInheritedDefault(key);
-        if (ServerHolder.has()) {
-            FeatureState state = ServerHolder.features();
+        if (ServerHolder.get().has()) {
+            FeatureState state = ServerHolder.get().features();
             JsonElement val = state.getConfigValue(id().toString(), key, null);
             if (val != null && cd.isPresent()) {
                 return cd.get().serializer.read(val);
@@ -80,8 +80,8 @@ public class FeatureHandle implements Translatable {
     }
 
     public <T> void setConfig(String key, GsonSerializer<T> serializer, T value) {
-        if (ServerHolder.has()) {
-            FeatureState state = ServerHolder.features();
+        if (ServerHolder.get().has()) {
+            FeatureState state = ServerHolder.get().features();
             state.setConfigValue(id().toString(), key, serializer.writeToJson(value));
         }
     }

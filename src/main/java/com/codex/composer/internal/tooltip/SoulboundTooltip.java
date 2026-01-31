@@ -1,10 +1,11 @@
 package com.codex.composer.internal.tooltip;
 
 import com.codex.composer.api.v1.item.settings.component.SoulboundComponent;
-import com.codex.composer.api.v1.tooltips.Modifier;
-import com.codex.composer.api.v1.tooltips.Section;
-import com.codex.composer.api.v1.tooltips.SectionBuilder;
+import com.codex.composer.api.v1.tooltips.TooltipContext;
+import com.codex.composer.api.v1.tooltips.layout.Modifier;
+import com.codex.composer.api.v1.tooltips.layout.Section;
 import com.codex.composer.api.v1.tooltips.impl.SimpleDynamicTooltip;
+import com.codex.composer.api.v1.tooltips.layout.SectionBuilder;
 import com.codex.composer.api.v1.util.misc.LanguageUtils;
 
 public class SoulboundTooltip extends SimpleDynamicTooltip {
@@ -23,6 +24,11 @@ public class SoulboundTooltip extends SimpleDynamicTooltip {
                 .content(ctx -> LanguageUtils.negate("composer.tooltips.soulbound", SoulboundComponent.isSoulbound(ctx.stack)))
                 .children().push(droppable).end()
                 .build();
+    }
+
+    @Override
+    public boolean isRelevant(TooltipContext context) {
+        return SoulboundComponent.isSoulbound(context.stack);
     }
 
     @Override

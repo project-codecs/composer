@@ -1,4 +1,6 @@
-package com.codex.composer.api.v1.tooltips;
+package com.codex.composer.api.v1.tooltips.layout;
+
+import com.codex.composer.api.v1.tooltips.TooltipContext;
 
 import java.util.Locale;
 

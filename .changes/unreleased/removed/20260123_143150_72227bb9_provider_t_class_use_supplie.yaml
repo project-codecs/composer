@@ -1,7 +1,0 @@
-# ChangeLog Pro Entry
-# Created: 2026-01-23 14:31
-
-type: removed
-description: "Provider<T> class, use Supplier<T>"
-author: "lilbrocodes"
-timestamp: 1769175110768

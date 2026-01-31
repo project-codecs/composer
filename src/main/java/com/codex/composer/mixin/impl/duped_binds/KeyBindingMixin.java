@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class KeyBindingMixin {
     @Inject(method = "onKeyPressed", at = @At("TAIL"))
     private static void flowed_combat$triggerOtherBinds(InputUtil.Key key, CallbackInfo ci, @Local KeyBinding keyBinding) {
-        if (!Composer.dupedBinds()) return;
+        if (Composer.disableDupedBinds()) return;
         if (BindTracker.bindAllowed(keyBinding)) {
             for (KeyBinding keyBinding2 : MinecraftClient.getInstance().options.allKeys) {
                 if (keyBinding != keyBinding2 && keyBinding.equals(keyBinding2) && BindTracker.bindAllowed(keyBinding2))
@@ -26,7 +26,7 @@ public class KeyBindingMixin {
 
     @Inject(method = "setKeyPressed", at = @At("TAIL"))
     private static void flowed_combat$toggleOtherBinds(InputUtil.Key key, boolean pressed, CallbackInfo ci, @Local KeyBinding keyBinding) {
-        if (!Composer.dupedBinds()) return;
+        if (Composer.disableDupedBinds()) return;
         if (BindTracker.bindAllowed(keyBinding)) {
             for (KeyBinding keyBinding2 : MinecraftClient.getInstance().options.allKeys) {
                 if (keyBinding != keyBinding2 && keyBinding.equals(keyBinding2) && BindTracker.bindAllowed(keyBinding2))

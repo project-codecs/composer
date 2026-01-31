@@ -30,7 +30,7 @@ public class RainbowColor {
     }
 
     public static void stepColor() {
-        if (!Composer.dupedBinds()) return;
+        if (Composer.disableDupedBinds()) return;
         if (tick >= 10 - ComposerConfig.INSTANCE.rainbowEffectSpeed.get()) {
             tick = 0;
             currentColor = getNextColor();

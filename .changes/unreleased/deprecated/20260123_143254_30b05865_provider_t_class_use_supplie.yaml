@@ -1,7 +1,0 @@
-# ChangeLog Pro Entry
-# Created: 2026-01-23 14:32
-
-type: deprecated
-description: "Provider<T> class. Use Supplier<T> instead."
-author: "lilbrocodes"
-timestamp: 1769175174446

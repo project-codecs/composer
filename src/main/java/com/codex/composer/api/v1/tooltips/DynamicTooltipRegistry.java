@@ -1,5 +1,6 @@
 package com.codex.composer.api.v1.tooltips;
 
+import com.codex.composer.api.v1.tooltips.layout.DynamicTooltip;
 import com.codex.composer.api.v1.util.misc.AbstractPseudoRegistry;
 import com.codex.composer.internal.Composer;
 

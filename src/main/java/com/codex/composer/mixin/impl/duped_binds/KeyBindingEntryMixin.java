@@ -26,7 +26,7 @@ public abstract class KeyBindingEntryMixin {
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"), index = 4)
     private int flowed_combat$recolorBinding(int value) {
-        if (!Composer.dupedBinds()) return value;
+        if (Composer.disableDupedBinds()) return value;
         if (BindTracker.bindAllowed(binding)) {
             RainbowColor.stepColor();
             this.update();
@@ -40,7 +40,7 @@ public abstract class KeyBindingEntryMixin {
 
     @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;setMessage(Lnet/minecraft/text/Text;)V", ordinal = 1))
     private Text flowed_combat$updateBindingColor(Text value) {
-        if (!Composer.dupedBinds()) return value;
+        if (Composer.disableDupedBinds()) return value;
         if (BindTracker.bindAllowed(binding)) {
             return ComposerConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds ?
                     binding.getBoundKeyLocalizedText().copy().setStyle(Style.EMPTY.withColor(RainbowColor.currentColor)) :

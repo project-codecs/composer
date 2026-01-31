@@ -3,18 +3,18 @@ package com.codex.composer.internal.runtime;
 import net.minecraft.server.MinecraftServer;
 import com.codex.composer.api.v1.feature.state.FeatureState;
 
-public enum ServerHolder implements com.codex.composer.api.v1.runtime.ServerHolder {
+public enum ServerHolderImpl implements com.codex.composer.api.v1.runtime.ServerHolder {
     INSTANCE;
 
     private MinecraftServer server;
     private FeatureState cachedFeatures;
 
-    void accept(MinecraftServer s) {
+    public void accept(MinecraftServer s) {
         server = s;
         reloadFeatures();
     }
 
-    public MinecraftServer get() {
+    public MinecraftServer server() {
         return server;
     }
 
@@ -31,7 +31,7 @@ public enum ServerHolder implements com.codex.composer.api.v1.runtime.ServerHold
         return cachedFeatures;
     }
 
-    void reloadFeatures() {
+    public void reloadFeatures() {
         if (server != null) {
             cachedFeatures = FeatureState.get(server);
         }

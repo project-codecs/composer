@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.codex.composer.api.v1.tooltips.DynamicTooltip.Location.*;
-import static com.codex.composer.api.v1.tooltips.DynamicTooltip.appendRegistered;
+import static com.codex.composer.api.v1.tooltips.layout.DynamicTooltip.Location.*;
+import static com.codex.composer.api.v1.tooltips.layout.DynamicTooltip.appendRegistered;
 
 import java.util.List;
 

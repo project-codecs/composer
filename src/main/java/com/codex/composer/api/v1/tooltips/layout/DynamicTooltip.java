@@ -1,5 +1,8 @@
-package com.codex.composer.api.v1.tooltips;
+package com.codex.composer.api.v1.tooltips.layout;
 
+import com.codex.composer.api.v1.tooltips.DynamicTooltipRegistry;
+import com.codex.composer.api.v1.tooltips.TooltipContext;
+import com.codex.composer.internal.client.config.ComposerConfig;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -14,6 +17,7 @@ public interface DynamicTooltip {
      * The main method that appends tooltip lines to a list of strings.
      */
     void appendTooltip(TooltipContext context, List<Text> out);
+    boolean isRelevant(TooltipContext context);
     Location where();
 
     static void appendRegistered(ItemStack stack, List<Text> list, DynamicTooltip.Location location) {
@@ -33,9 +37,10 @@ public interface DynamicTooltip {
                 Screen.hasAltDown()
         );
 
-        for (DynamicTooltip tooltip : tooltips) {
-            tooltip.appendTooltip(ctx, list);
-        }
+        tooltips
+                .stream()
+                .filter(t -> t.isRelevant(ctx) || ComposerConfig.INSTANCE.alwaysShowTooltips.get())
+                .forEach(t -> t.appendTooltip(ctx, list));
     }
 
     enum Location {

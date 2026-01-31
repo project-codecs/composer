@@ -3,7 +3,7 @@
   "id": "${id}",
   "version": "${version}",
   "name": "${name}",
-  "description": "Fairly light, multi-version library used by all of LilBroCodes's mods.",
+  "description": "A lightweight, multi-version Fabric library providing shared systems and utilities for mods built under Project Codex.",
   "authors": [],
   "contact": {},
   "license": "All-Rights-Reserved",
