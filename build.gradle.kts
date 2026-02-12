@@ -101,6 +101,7 @@ fabricApi {
 
 java {
     withSourcesJar()
+    withJavadocJar()
     targetCompatibility = requiredJava
     sourceCompatibility = requiredJava
 }
