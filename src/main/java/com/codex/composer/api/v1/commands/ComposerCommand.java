@@ -12,15 +12,13 @@ import com.codex.composer.api.v1.util.math.Math;
 
 /**
  * Base class for implementing Minecraft commands with convenient utilities.
- * <p>
- * Provides:
+ * <p> Provides:
  * <ul>
  *     <li>Feedback methods for sending messages to players or command sources.</li>
  *     <li>Pre-styled messages for success, warning, or error outputs.</li>
  *     <li>Prefix and bracket styling helpers.</li>
  *     <li>Utility methods for colored and styled text.</li>
  * </ul>
- * </p>
  * Extend this class to implement commands and provide a concrete {@link #buildPrefix()}.
  */
 @SuppressWarnings("SameReturnValue")

@@ -199,6 +199,10 @@ tasks {
             )
         }
     }
+
+    withType<Javadoc>().configureEach {
+        options.addStringOption("Xdoclint:none")
+    }
 }
 
 publishMods {
