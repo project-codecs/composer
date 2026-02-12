@@ -200,8 +200,11 @@ tasks {
         }
     }
 
-    withType<Javadoc>().configureEach {
-        options.addStringOption("Xdoclint:none")
+    javadoc {
+        options {
+            (this as CoreJavadocOptions).addBooleanOption("Xdoclint:none", true)
+            (this as CoreJavadocOptions).addStringOption("quiet")
+        }
     }
 }
 
