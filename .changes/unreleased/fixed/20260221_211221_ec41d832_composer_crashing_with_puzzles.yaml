@@ -1,0 +1,7 @@
+# ChangeLog Pro Entry
+# Created: 2026-02-21 21:12
+
+type: fixed
+description: "Composer crashing with PuzzlesLib installed due to some weird stuff happening with @Local captures"
+author: "lilbrocodes"
+timestamp: 1771704741854

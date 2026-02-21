@@ -1,0 +1,7 @@
+# ChangeLog Pro Entry
+# Created: 2026-02-21 21:13
+
+type: changed
+description: "Made DynamicTooltip.Location.AFTER_SEARCH_TAGS and AFTER_ITEM_GROUPS with AFTER_CREATIVE_TOOLTIP"
+author: "lilbrocodes"
+timestamp: 1771704785237
