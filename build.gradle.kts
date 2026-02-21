@@ -101,6 +101,7 @@ fabricApi {
 
 java {
     withSourcesJar()
+    withJavadocJar()
     targetCompatibility = requiredJava
     sourceCompatibility = requiredJava
 }
@@ -196,6 +197,13 @@ tasks {
                 "$buildNum-mc${sc.current.version}" +
                 if (name == "remapSourcesJar") "-sources.jar" else ".jar"
             )
+        }
+    }
+
+    javadoc {
+        options {
+            (this as CoreJavadocOptions).addBooleanOption("Xdoclint:none", true)
+            (this as CoreJavadocOptions).addStringOption("quiet")
         }
     }
 }

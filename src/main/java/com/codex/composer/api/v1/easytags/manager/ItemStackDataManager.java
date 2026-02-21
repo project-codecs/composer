@@ -11,14 +11,12 @@ import java.util.function.Function;
 /**
  * Utility class for managing serialization and deserialization of custom
  * item stack data.
- * <p>
- * Provides static methods to:
+ * <p> Provides static methods to:
  * <ul>
  *     <li>Register deserializers for specific classes.</li>
  *     <li>Save {@link NbtSerializable} data to an {@link ItemStack}.</li>
  *     <li>Retrieve previously saved data from an {@link ItemStack}.</li>
  * </ul>
- * </p>
  */
 public class ItemStackDataManager {
     private static final Map<Class<?>, Function<NbtCompound, ?>> deserializers = new HashMap<>();
