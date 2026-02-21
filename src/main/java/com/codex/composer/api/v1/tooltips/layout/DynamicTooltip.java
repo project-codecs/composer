@@ -80,7 +80,6 @@ public interface DynamicTooltip {
         TAIL,
 
         // ---- Creative Inventory Only Locations ----
-        AFTER_ITEM_GROUPS,
-        AFTER_SEARCH_TAGS
+        AFTER_CREATIVE_TOOLTIP
     }
 }
