@@ -60,7 +60,7 @@ public class ToastManager {
         for (Corner corner : Corner.values()) {
             List<AbstractToast> toasts = toastMap.get(corner);
             if (!toasts.isEmpty()) {
-                AbstractToast toast = toasts.getFirst();
+                AbstractToast toast = toasts.get(0);
                 int centerX;
                 int centerY = switch (corner) {
                     case TOP_LEFT -> {
