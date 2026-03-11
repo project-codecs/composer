@@ -42,3 +42,4 @@ replay_*.log
 # misc
 latest.log
 /artifacts/
+.env
