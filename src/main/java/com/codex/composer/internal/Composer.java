@@ -26,7 +26,6 @@ import com.codex.composer.internal.command.RegistryCommand;
 import com.codex.composer.internal.command.ToastCommand;
 import com.codex.composer.internal.data.loader.FeatureStateLoader;
 import com.codex.composer.internal.data.loader.SimpleItemFixerLoader;
-import com.codex.composer.api.v1.util.exception.InvalidMetadataException;
 import com.codex.composer.internal.networking.ScrollActionPayload;
 import com.codex.composer.internal.networking.TargetBlockPayload;
 import com.codex.composer.internal.networking.TargetEntityPayload;
@@ -54,14 +53,7 @@ public class Composer implements ModInitializer {
             }
         }
 
-        for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
-            ModMetadata meta = mod.getMetadata();
-            String modId = meta.getId();
-            CustomValue section = meta.getCustomValue("composer-features");
-
-            if (section != null && section.getType() == CustomValue.CvType.ARRAY)
-                throw new InvalidMetadataException("Mod " + modId + " is using the deprecated feature registration system. Update the mod, contact the developer or downgrade composer if possible.");
-        }
+        // Check for old feature system removed as it is not needed.
 
         ComposerCompositeEvents.initialize();
         ModDynamicTooltips.initialize();

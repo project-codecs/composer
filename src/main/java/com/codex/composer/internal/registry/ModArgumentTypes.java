@@ -1,13 +1,13 @@
 package com.codex.composer.internal.registry;
 
-import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
-import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
-import net.minecraft.util.Identifier;
 import com.codex.composer.api.v1.util.command.AnimatedOverlayAnimationArgumentType;
 import com.codex.composer.api.v1.util.command.ColorArgumentType;
 import com.codex.composer.api.v1.util.command.OverlayAnchorArgumentType;
 import com.codex.composer.api.v1.util.command.ToastCornerArgumentType;
 import com.codex.composer.internal.Composer;
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
+import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
+import net.minecraft.util.Identifier;
 
 public class ModArgumentTypes {
     public static final Identifier COLOR = Composer.identify("color");

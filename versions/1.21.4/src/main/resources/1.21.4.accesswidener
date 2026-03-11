@@ -7,3 +7,6 @@ accessible class net/minecraft/client/data/ModelProvider$ModelSuppliers
 accessible field net/minecraft/client/gui/DrawContext vertexConsumers Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;
 accessible field net/minecraft/registry/Registries ROOT Lnet/minecraft/registry/MutableRegistry;
 accessible method net/minecraft/client/gui/DrawContext drawTexturedQuad (Ljava/util/function/Function;Lnet/minecraft/util/Identifier;IIIIFFFFI)V
+accessible class net/minecraft/item/ItemGroup$EntriesImpl
+accessible method net/minecraft/client/data/Model createTextureMap (Lnet/minecraft/client/data/TextureMap;)Ljava/util/Map;
+accessible field net/minecraft/client/data/Model parent Ljava/util/Optional;

@@ -1,23 +1,33 @@
-package org.echotech.util;
+package com.codex.composer.api.v1.datagen.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.data.client.Model;
-import net.minecraft.data.client.TextureKey;
 import net.minecraft.util.Identifier;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+
+//? if minecraft: <=1.21.3 {
+/*import net.minecraft.data.client.Model;
+import net.minecraft.data.client.TextureKey;
+*///? } else {
+import net.minecraft.client.data.Model;
+import net.minecraft.client.data.TextureKey;
+import net.minecraft.client.data.ModelSupplier;
+import net.minecraft.client.data.TextureMap;
+//? }
 
 public class DisplayModel extends Model {
     private final DisplayBuilder<?> display;
 
     public DisplayModel(DisplayBuilder<?> display) {
-        super(Optional.of(new Identifier("minecraft", "item/generated")), Optional.empty(), TextureKey.LAYER0);
+        super(Optional.of(Identifier.of("minecraft", "item/generated")), Optional.empty(), TextureKey.LAYER0);
         this.display = display;
     }
 
-    @Override
+    //? if minecraft: <=1.21.3 {
+    /*@Override
     public JsonObject createJson(Identifier id, Map<TextureKey, Identifier> textures) {
         JsonObject json = super.createJson(id, textures);
 
@@ -27,6 +37,28 @@ public class DisplayModel extends Model {
 
         return json;
     }
+    *///? } else {
+    @Override
+    public Identifier upload(Identifier id, TextureMap textures, BiConsumer<Identifier, ModelSupplier> modelCollector) {
+        Map<TextureKey, Identifier> map = this.createTextureMap(textures);
+        modelCollector.accept(id, () -> {
+            JsonObject jsonObject = new JsonObject();
+            this.parent.ifPresent((identifier) -> jsonObject.addProperty("parent", identifier.toString()));
+            if (!map.isEmpty()) {
+                JsonObject jsonObject2 = new JsonObject();
+                map.forEach((textureKey, identifier) -> jsonObject2.addProperty(textureKey.getName(), identifier.toString()));
+                jsonObject.add("textures", jsonObject2);
+            }
+
+            if (display != null && !display.isEmpty()) {
+                jsonObject.add("display", display.toJson());
+            }
+
+            return jsonObject;
+        });
+        return id;
+    }
+    //? }
 
     public static DisplayBuilder<Builder> builder() {
         return new Builder().displayBuilder;
@@ -53,6 +85,7 @@ public class DisplayModel extends Model {
             this.parent = parent;
         }
 
+        @SuppressWarnings("SizeReplaceableByIsEmpty") // We disable this because this is introduced with a 1.20.6 version bump
         public boolean isEmpty() {
             return display.size() == 0;
         }
