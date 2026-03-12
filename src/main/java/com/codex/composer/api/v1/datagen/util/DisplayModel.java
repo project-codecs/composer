@@ -22,7 +22,7 @@ public class DisplayModel extends Model {
     private final DisplayBuilder<?> display;
 
     public DisplayModel(DisplayBuilder<?> display) {
-        super(Optional.of(Identifier.of("minecraft", "item/generated")), Optional.empty(), TextureKey.LAYER0);
+        super(Optional.of(display.model), Optional.empty(), TextureKey.LAYER0);
         this.display = display;
     }
 
@@ -80,6 +80,7 @@ public class DisplayModel extends Model {
     public static class DisplayBuilder<T> {
         private final T parent;
         private final JsonObject display = new JsonObject();
+        private Identifier model = Identifier.of("minecraft", "item/generated");
 
         public DisplayBuilder(T parent) {
             this.parent = parent;
@@ -124,6 +125,11 @@ public class DisplayModel extends Model {
 
         public TransformBuilder<T> next(DisplayKey key) {
             return new TransformBuilder<>(this, key.key);
+        }
+
+        public DisplayBuilder<T> model(Model model) {
+            model.parent.ifPresent(id -> this.model = id);
+            return this;
         }
 
         private void add(String key, JsonObject obj) {

@@ -132,7 +132,7 @@ tasks {
         filesMatching("fabric.mod.json") { expand(props) }
 
         val mixinJava = "JAVA_${requiredJava.majorVersion}"
-        filesMatching("*.mixins.json") { expand("java" to mixinJava, "ItemGroupEntriesMixin" to $$"$ItemGroupEntriesMixin") } // TODO: Fix this issue later
+        filesMatching("*.mixins.json") { expand("java" to mixinJava) }
     }
 
     register<Delete>("cleanArtifacts") {

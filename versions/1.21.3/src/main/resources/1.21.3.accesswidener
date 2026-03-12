@@ -6,4 +6,4 @@ accessible class net/minecraft/client/texture/ResourceTexture$TextureData
 accessible field net/minecraft/client/texture/ResourceTexture$TextureData image Lnet/minecraft/client/texture/NativeImage;
 accessible method net/minecraft/client/texture/ResourceTexture loadTextureData (Lnet/minecraft/resource/ResourceManager;)Lnet/minecraft/client/texture/ResourceTexture$TextureData;
 accessible method net/minecraft/client/gui/DrawContext drawTexturedQuad (Ljava/util/function/Function;Lnet/minecraft/util/Identifier;IIIIFFFFI)V
-accessible class net/minecraft/item/ItemGroup$EntriesImpl
+accessible field net/minecraft/data/client/Model parent Ljava/util/Optional;

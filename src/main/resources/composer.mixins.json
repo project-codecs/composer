@@ -7,8 +7,6 @@
         "access.MinecraftServerMixin",
         "datafix.ItemStackMixin",
         "dynamic_tooltips.ItemStackMixin",
-        "item_group_modifications.ItemGroupMixin",
-        "item_group_modifications.ItemGroupMixin$ItemGroupEntriesMixin",
         "local.CampfireBlockEntityMixin",
         "soul_binding.ItemMixin",
         "soul_binding.PlayerEntityMixin",

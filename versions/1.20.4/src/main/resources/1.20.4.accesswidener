@@ -8,4 +8,4 @@ accessible field net/minecraft/registry/Registries ROOT Lnet/minecraft/registry/
 accessible class net/minecraft/client/texture/ResourceTexture$TextureData
 accessible field net/minecraft/client/texture/ResourceTexture$TextureData image Lnet/minecraft/client/texture/NativeImage;
 accessible method net/minecraft/client/texture/ResourceTexture loadTextureData (Lnet/minecraft/resource/ResourceManager;)Lnet/minecraft/client/texture/ResourceTexture$TextureData;
-accessible class net/minecraft/item/ItemGroup$EntriesImpl
+accessible field net/minecraft/data/client/Model parent Ljava/util/Optional;
