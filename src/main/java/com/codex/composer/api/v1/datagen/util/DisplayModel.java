@@ -22,7 +22,7 @@ public class DisplayModel extends Model {
     private final DisplayBuilder<?> display;
 
     public DisplayModel(DisplayBuilder<?> display) {
-        super(Optional.of(display.model), Optional.empty(), TextureKey.LAYER0);
+        super(Optional.of(display.model), Optional.empty(), display.textureKeys == null ? new TextureKey[]{TextureKey.LAYER0} : display.textureKeys);
         this.display = display;
     }
 
@@ -81,6 +81,7 @@ public class DisplayModel extends Model {
         private final T parent;
         private final JsonObject display = new JsonObject();
         private Identifier model = Identifier.of("minecraft", "item/generated");
+        private TextureKey[] textureKeys = null;
 
         public DisplayBuilder(T parent) {
             this.parent = parent;
@@ -129,6 +130,11 @@ public class DisplayModel extends Model {
 
         public DisplayBuilder<T> model(Model model) {
             model.parent.ifPresent(id -> this.model = id);
+            return this;
+        }
+
+        public DisplayBuilder<T> textureKeys(TextureKey... requiredTextureKeys) {
+            this.textureKeys = requiredTextureKeys;
             return this;
         }
 
