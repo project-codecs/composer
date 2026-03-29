@@ -43,11 +43,11 @@ public class OverlayCommand extends ComposerCommand {
                 literal("clear_overlays")
                         .requires(PredicateVoid::always)
                         .then(
-                                argument("visible", BoolArgumentType.bool()).then(
-                                        argument("queue", BoolArgumentType.bool()).executes(ctx -> {
+                                argument("credits", BoolArgumentType.bool()).then(
+                                        argument("poem", BoolArgumentType.bool()).executes(ctx -> {
                                             ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-                                            boolean visible = ctx.getArgument("visible", Boolean.class);
-                                            boolean queue = ctx.getArgument("queue", Boolean.class);
+                                            boolean visible = ctx.getArgument("credits", Boolean.class);
+                                            boolean queue = ctx.getArgument("poem", Boolean.class);
                                             ServerPlayNetworking.send(player, new ClearOverlaysPayload(visible, queue));
                                             if (visible && queue) return success(ctx, Text.translatable("composer.overlay.cleared_all"));
                                             else if (visible) return success(ctx, Text.translatable("composer.overlay.cleared_all_visible"));
@@ -65,8 +65,8 @@ public class OverlayCommand extends ComposerCommand {
     private ArgumentBuilder<ServerCommandSource, ?> constructClear() {
         return literal("clear").then(
                 who().then(
-                        argument("visible", BoolArgumentType.bool()).then(
-                                argument("queue", BoolArgumentType.bool()).executes(this::clear)
+                        argument("credits", BoolArgumentType.bool()).then(
+                                argument("poem", BoolArgumentType.bool()).executes(this::clear)
                         )
                 )
         );
@@ -149,8 +149,8 @@ public class OverlayCommand extends ComposerCommand {
     private int clear(CommandContext<ServerCommandSource> ctx) {
         try {
             ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-            boolean visible = ctx.getArgument("visible", Boolean.class);
-            boolean queue = ctx.getArgument("queue", Boolean.class);
+            boolean visible = ctx.getArgument("credits", Boolean.class);
+            boolean queue = ctx.getArgument("poem", Boolean.class);
             ServerPlayNetworking.send(player, new ClearOverlaysPayload(visible, queue));
             if (visible && queue) return success(ctx, Text.translatable("composer.overlay.cleared_all_for", player.getName()));
             else if (visible) return success(ctx, Text.translatable("composer.overlay.cleared_all_visible_for", player.getName()));

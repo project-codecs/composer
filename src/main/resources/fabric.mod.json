@@ -42,6 +42,36 @@
     "modmenu": {
       "badges": [ "library" ],
       "update_checker": false
-    }
+    },
+    "composer-credits": [
+      {
+        "after": "-",
+        "section": "Composer",
+        "disciplines": [
+          {
+            "discipline": "Development",
+            "titles": [
+              {
+                "title": "Author",
+                "names": [
+                  "LilBroCodes"
+                ]
+              }
+            ]
+          },
+          {
+            "discipline": "Concept",
+            "titles": [
+              {
+                "title": "Overlay System Idea",
+                "names": [
+                  "Max (maxmag_change)"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

@@ -1,5 +1,6 @@
 package com.codex.composer.api.v1.commands;
 
+import com.codex.composer.internal.registry.ModFeatures;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.entity.player.PlayerEntity;
@@ -239,4 +240,16 @@ public abstract class ComposerCommand implements CommandRegistrationCallback {
      * @return the prefix text
      */
     protected abstract Text buildPrefix();
+
+    protected boolean debugOnly() {
+        return false;
+    }
+
+    protected final boolean shouldCancel() {
+        return debugOnly() && !ModFeatures.debug();
+    }
+
+    protected final int throwOnNonDebug(CommandContext<ServerCommandSource> ctx) {
+        return error(ctx, Text.translatable("composer.command.exception.debug_not_enabled"));
+    }
 }

@@ -10,3 +10,4 @@ accessible method net/minecraft/client/gui/DrawContext drawTexturedQuad (Ljava/u
 accessible class net/minecraft/item/ItemGroup$EntriesImpl
 accessible method net/minecraft/client/data/Model createTextureMap (Lnet/minecraft/client/data/TextureMap;)Ljava/util/Map;
 accessible field net/minecraft/client/data/Model parent Ljava/util/Optional;
+accessible field net/minecraft/client/option/KeyBinding boundKey Lnet/minecraft/client/util/InputUtil$Key;

@@ -20,6 +20,7 @@ public class ClearOverlaysHandler implements ClientPlayNetworking.PlayPayloadHan
     *///? } else {
     public void receive(ClearOverlaysPayload payload, ClientPlayNetworking.Context context) {
     //? }
-        OverlayManager.getInstance().clearQueue();
+        if (payload.queue()) OverlayManager.getInstance().clearQueue();
+        if (payload.visible()) OverlayManager.getInstance().clearVisible();
     }
 }

@@ -1,6 +1,7 @@
 package com.codex.composer.internal.registry;
 
 import com.codex.composer.api.v1.feature.FeatureBuilder;
+import com.codex.composer.api.v1.feature.FeatureHandle;
 import com.codex.composer.api.v1.registry.lazy.DeferredFeatureRegistry;
 import com.codex.composer.api.v1.registry.lazy.feature.Feature;
 import com.codex.composer.internal.Composer;
@@ -33,6 +34,11 @@ public class ModFeatures {
         public static int bFreq() {
             return BLOCK.getHandle().getInt(FREQ_KEY);
         }
+    }
+
+    public static final FeatureHandle DEBUG = FEATURES.register("debug", false);
+    public static boolean debug() {
+        return DEBUG.enabled();
     }
 
     public static void initialize() {

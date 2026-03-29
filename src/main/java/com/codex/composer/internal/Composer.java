@@ -1,5 +1,6 @@
 package com.codex.composer.internal;
 
+import com.codex.composer.internal.command.*;
 import com.codex.composer.internal.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -20,10 +21,6 @@ import com.codex.composer.internal.runtime.ServerHolderImpl;
 import com.codex.composer.api.v1.util.misc.AbstractPseudoRegistry;
 import com.codex.composer.api.v1.util.misc.EventStacker;
 import com.codex.composer.internal.client.config.ComposerConfig;
-import com.codex.composer.internal.command.FeatureCommand;
-import com.codex.composer.internal.command.OverlayCommand;
-import com.codex.composer.internal.command.RegistryCommand;
-import com.codex.composer.internal.command.ToastCommand;
 import com.codex.composer.internal.data.loader.FeatureStateLoader;
 import com.codex.composer.internal.data.loader.SimpleItemFixerLoader;
 import com.codex.composer.internal.networking.ScrollActionPayload;
@@ -84,7 +81,8 @@ public class Composer implements ModInitializer {
                 new FeatureCommand(),
                 new ToastCommand(),
                 new OverlayCommand(),
-                new RegistryCommand()
+                new RegistryCommand(),
+                new CreditsCommand()
         );
 
         EventStacker.registerAll(

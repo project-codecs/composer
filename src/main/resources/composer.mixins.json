@@ -14,6 +14,9 @@
         "targeting.WorldMixin"
     ],
     "client": [
+        "credits.ClientPlayNetworkHandlerMixin",
+        "credits.CreditsAndAttributionScreenMixin",
+        "credits.CreditsScreenMixin",
         "duped_binds.GameOptionsMixin",
         "duped_binds.KeyBindingEntryMixin",
         "duped_binds.KeyBindingMixin",
