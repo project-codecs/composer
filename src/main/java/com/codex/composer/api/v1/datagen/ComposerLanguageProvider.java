@@ -33,11 +33,11 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
     protected TranslationBuilder builder;
 
     //? if minecraft: <=1.20.4 {
-    /*protected ComposerLanguageProvider(FabricDataOutput dataOutput) {
+    /*public ComposerLanguageProvider(FabricDataOutput dataOutput) {
         super(dataOutput);
     }
     *///? } else {
-    protected ComposerLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public ComposerLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         super(dataOutput, registryLookup);
     }
     //?}

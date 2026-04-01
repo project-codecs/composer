@@ -1,4 +1,4 @@
-package com.codex.composer.api.v1.datagen;
+package com.codex.composer.api.v1.datagen.lang;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.data.DataOutput;
@@ -29,11 +29,11 @@ public abstract class ComposerMultiLanguageProvider implements DataProvider {
     public CompletableFuture<?> run(DataWriter writer) {
         Map<String, Map<String, String>> allLanguageKeys = new HashMap<>();
 
-        for (Map.Entry<String, List<ComposerLanguageProvider>> entry : languagePack.languageMap.entrySet()) {
+        for (Map.Entry<String, List<ComposerSemiLanguageProvider>> entry : languagePack.languageMap.entrySet()) {
             String langCode = entry.getKey();
             Map<String, String> translations = new HashMap<>();
-            for (ComposerLanguageProvider provider : entry.getValue()) {
-                provider.generateTranslations(registryLookup.join(), (key, value) -> {
+            for (ComposerSemiLanguageProvider provider : entry.getValue()) {
+                provider.setBuilder((key, value) -> {
                     Objects.requireNonNull(key);
                     Objects.requireNonNull(value);
 
@@ -43,6 +43,7 @@ public abstract class ComposerMultiLanguageProvider implements DataProvider {
 
                     translations.put(key, value);
                 });
+                provider.generate(registryLookup);
             }
             allLanguageKeys.put(langCode, translations);
         }
@@ -104,9 +105,15 @@ public abstract class ComposerMultiLanguageProvider implements DataProvider {
         private final Map<String, List<ComposerSemiLanguageProvider>> languageMap = new HashMap<>();
         @Nullable private String baseLanguage;
 
-        public <T extends ComposerSemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider) {
+        public <T extends ComposerSemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider, boolean setDefault) {
+            if (setDefault) baseLanguage = languageCode;
             languageMap.computeIfAbsent(languageCode, k -> new ArrayList<>()).add(provider.get());
             return provider.get();
+        }
+
+        @SuppressWarnings("UnusedReturnValue")
+        public <T extends ComposerSemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider) {
+            return addProvider(languageCode, provider, false);
         }
 
         public void setBaseLanguage(@Nullable String languageCode) {

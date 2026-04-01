@@ -1,36 +1,21 @@
-package com.codex.composer.internal.data.assets;
+package com.codex.composer.internal.data.assets.languages;
 
+import com.codex.composer.api.v1.datagen.lang.ComposerSemiLanguageProvider;
 import com.codex.composer.internal.registry.ModBlocks;
 import com.codex.composer.internal.registry.ModItemGroups;
 import com.codex.composer.internal.registry.ModSounds;
 import com.codex.composer.internal.registry.ModStatistics;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import com.codex.composer.api.v1.datagen.ComposerLanguageProvider;
 import com.codex.composer.internal.client.config.ComposerConfig;
-
-//? minecraft: >=1.20.6 {
 import net.minecraft.registry.RegistryWrapper;
+
 import java.util.concurrent.CompletableFuture;
-//? }
 
 import static com.codex.composer.internal.registry.ModFeatures.*;
 
-public class ModLanguageProvider extends ComposerLanguageProvider {
-    //? if minecraft: <=1.20.4 {
-    /*public ModLanguageProvider(FabricDataOutput output) {
-        super(output);
-    }
-    *///? } else {
-    public ModLanguageProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
-        super(output, registryLookup);
-    }
-    //? }
-
+public class ModEnglishProvider extends ComposerSemiLanguageProvider {
     @Override
-    public void generate() {
+    public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         block(ModBlocks.PLUSH, "LilBro Plush");
-        //? if minecraft: >=1.21.3
-        item(ModBlocks.PLUSH, "LilBro Plush");
         stat(ModStatistics.PLUSH_BOOP, "LilBro Plushies Booped");
         group(ModItemGroups.COMPOSER, "Composer's Silly Little Additions");
 
@@ -70,10 +55,10 @@ public class ModLanguageProvider extends ComposerLanguageProvider {
         prefix("toast.prefix", "Composer Toasts");
 
         prefix("overlay.prefix", "Composer Overlays");
-        prefix("overlay.cleared_all", "Successfully cleared all credits and queued overlays.");
-        prefix("overlay.cleared_all_for", "Successfully cleared all credits and queued overlays for %s.");
-        prefix("overlay.cleared_all_visible", "Successfully cleared all credits overlays.");
-        prefix("overlay.cleared_all_visible_for", "Successfully cleared all credits overlays for %s.");
+        prefix("overlay.cleared_all", "Successfully cleared all visible and queued overlays.");
+        prefix("overlay.cleared_all_for", "Successfully cleared all visible and queued overlays for %s.");
+        prefix("overlay.cleared_all_visible", "Successfully cleared all visible overlays.");
+        prefix("overlay.cleared_all_visible_for", "Successfully cleared all visible overlays for %s.");
         prefix("overlay.cleared_all_queued", "Successfully cleared all queued overlays.");
         prefix("overlay.cleared_all_queued_for", "Successfully cleared all queued overlays for %s.");
         prefix("overlay.invalid_texture", "Invalid texture identifier.");

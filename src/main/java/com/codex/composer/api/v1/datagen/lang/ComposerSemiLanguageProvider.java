@@ -1,4 +1,4 @@
-package com.codex.composer.api.v1.datagen;
+package com.codex.composer.api.v1.datagen.lang;
 
 import me.fzzyhmstrs.fzzy_config.util.EnumTranslatable;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -10,21 +10,28 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Identifier;
 import com.codex.composer.api.v1.feature.FeatureHandle;
 import com.codex.composer.api.v1.registry.lazy.feature.Feature;
 import com.codex.composer.api.v1.util.misc.Translatable;
-import net.minecraft.registry.entry.RegistryEntry;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
+
+//? if minecraft: <=1.20.4
+//import com.codex.composer.api.v1.util.misc.TranslatableSoundEvent;
+
+//? if minecraft: >=1.20.6
+import net.minecraft.registry.entry.RegistryEntry;
 
 public abstract class ComposerSemiLanguageProvider {
     protected FabricLanguageProvider.TranslationBuilder builder;
 
-    public abstract void generate();
+    public abstract void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup);
 
     public void setBuilder(FabricLanguageProvider.TranslationBuilder builder) {
         this.builder = builder;
