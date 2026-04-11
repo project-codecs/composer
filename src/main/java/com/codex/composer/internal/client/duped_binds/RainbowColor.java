@@ -1,6 +1,5 @@
 package com.codex.composer.internal.client.duped_binds;
 
-import com.codex.composer.internal.Composer;
 import com.codex.composer.internal.client.config.ComposerConfig;
 
 import java.awt.*;
@@ -30,7 +29,6 @@ public class RainbowColor {
     }
 
     public static void stepColor() {
-        if (Composer.disableDupedBinds()) return;
         if (tick >= 10 - ComposerConfig.INSTANCE.rainbowEffectSpeed.get()) {
             tick = 0;
             currentColor = getNextColor();

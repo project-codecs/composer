@@ -50,8 +50,6 @@ public class Composer implements ModInitializer {
             }
         }
 
-        // Check for old feature system removed as it is not needed.
-
         ComposerCompositeEvents.initialize();
         ModDynamicTooltips.initialize();
         ModBlockEntities.initialize();
