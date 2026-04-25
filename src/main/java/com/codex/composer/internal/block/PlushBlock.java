@@ -15,11 +15,11 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 //? if minecraft: >=1.20.4 {
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.BlockWithEntity;
-import org.jetbrains.annotations.Nullable;
 //? }
 
 public class PlushBlock extends AbstractPlushieBlock {
