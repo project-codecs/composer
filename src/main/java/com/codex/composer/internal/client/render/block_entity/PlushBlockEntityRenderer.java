@@ -1,5 +1,6 @@
 package com.codex.composer.internal.client.render.block_entity;
 
+import com.codex.composer.api.v1.block.entity.PlushieBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.BlockEntity;
@@ -11,7 +12,6 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
-import com.codex.composer.internal.block.entity.PlushBlockEntity;
 import com.codex.composer.mixin.impl.local.BlockRenderManagerAccessor;
 
 @SuppressWarnings("ClassCanBeRecord")
@@ -25,7 +25,7 @@ public class PlushBlockEntityRenderer<T extends BlockEntity> implements BlockEnt
 
     public void render(@NotNull T entity, float tickDelta, @NotNull MatrixStack matrices, @NotNull VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
-        var squish = entity instanceof PlushBlockEntity plushie ? plushie.squash : 0;
+        var squish = entity instanceof PlushieBlockEntity plushie ? plushie.squash : 0;
         var lastSquish = squish * 3;
         var squash = (float) Math.pow(1 - 1f / (1f + MathHelper.lerp(tickDelta, lastSquish, squish)), 2);
         matrices.scale(1, 1 - squash, 1);

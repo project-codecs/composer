@@ -1,8 +1,9 @@
-package com.codex.composer.internal.block.entity;
+package com.codex.composer.api.v1.block.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -12,18 +13,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.codex.composer.internal.registry.ModBlockEntities;
 
-public class PlushBlockEntity extends BlockEntity {
+public class PlushieBlockEntity extends BlockEntity {
     private static final float SQUASH = 3f;
     private static final float SQUASH_EPS = 0.01f;
     public double squash;
 
-    public PlushBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.PLUSH, pos, state);
+    public PlushieBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, @NotNull PlushBlockEntity spark) {
+    public static void tick(World world, BlockPos pos, BlockState state, @NotNull PlushieBlockEntity spark) {
         if (spark.squash > 0) {
             spark.squash /= SQUASH;
             if (spark.squash < SQUASH_EPS) {
