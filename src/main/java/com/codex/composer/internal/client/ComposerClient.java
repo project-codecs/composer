@@ -1,6 +1,5 @@
 package com.codex.composer.internal.client;
 
-import com.codex.composer.api.v1.toast.ToastManager;
 import com.codex.composer.internal.networking.*;
 import com.codex.composer.internal.overlay.OverlayHandler;
 import net.fabricmc.api.ClientModInitializer;
@@ -30,18 +29,14 @@ public class ComposerClient implements ClientModInitializer {
         BlockEntityRendererFactories.register(ModBlockEntities.PLUSH, PlushBlockEntityRenderer::new);
 
         //? if minecraft: >=1.21.4 {
-        HudLayerRegistrationCallback.EVENT.register(w -> addLayer(w, "toasts", ToastManager.getInstance()::render));
         HudLayerRegistrationCallback.EVENT.register(w -> addLayer(w, "overlays", OverlayHandler::render));
         //? } else {
-        /*HudRenderCallback.EVENT.register(ToastManager.getInstance()::render);
-        HudRenderCallback.EVENT.register(OverlayHandler::render);
+        /*HudRenderCallback.EVENT.register(OverlayHandler::render);
         *///? }
 
         ClientTickEvents.START_CLIENT_TICK.register(OverlayHandler::tick);
 
-        ClearToastsPayload.registerHandler();
         ClearOverlaysPayload.registerHandler();
-        TriggerToastPayload.registerHandler();
         ShowOverlayPayload.registerHandler();
         ShowCreditsPayload.registerHandler();
     }

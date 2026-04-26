@@ -2,7 +2,7 @@ package com.codex.composer.api.v1.tooltips.layout;
 
 import com.codex.composer.api.v1.tooltips.DynamicTooltipRegistry;
 import com.codex.composer.api.v1.tooltips.TooltipContext;
-import com.codex.composer.internal.client.config.ComposerConfig;
+import com.codex.composer.internal.client.config.ComposerClientConfig;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -39,7 +39,7 @@ public interface DynamicTooltip {
 
         tooltips
                 .stream()
-                .filter(t -> t.isRelevant(ctx) || ComposerConfig.INSTANCE.alwaysShowTooltips.get())
+                .filter(t -> t.isRelevant(ctx) || ComposerClientConfig.INSTANCE.alwaysShowTooltips.get())
                 .forEach(t -> t.appendTooltip(ctx, list));
     }
 

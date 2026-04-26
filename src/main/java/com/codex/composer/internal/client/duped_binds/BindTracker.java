@@ -3,7 +3,7 @@ package com.codex.composer.internal.client.duped_binds;
 import net.minecraft.client.option.KeyBinding;
 import org.jetbrains.annotations.ApiStatus;
 import com.codex.composer.internal.Composer;
-import com.codex.composer.internal.client.config.ComposerConfig;
+import com.codex.composer.internal.client.config.ComposerClientConfig;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,7 +16,7 @@ public class BindTracker {
     public static boolean bindAllowed(KeyBinding keyBinding) {
         if (Composer.disableDupedBinds()) return false;
         if (keyBinding == null) return false;
-        return switch (ComposerConfig.INSTANCE.allowDuplicateKeybinds) {
+        return switch (ComposerClientConfig.INSTANCE.allowDuplicateKeybinds) {
             case NONE -> false;
             case MC_AND_CM -> MC_CM_BINDS.contains(keyBinding);
             case ALL -> true;

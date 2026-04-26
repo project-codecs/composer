@@ -6,7 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import com.codex.composer.internal.Composer;
-import com.codex.composer.internal.client.config.ComposerConfig;
+import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.client.duped_binds.BindTracker;
 import com.codex.composer.internal.client.duped_binds.RainbowColor;
 import org.spongepowered.asm.mixin.Final;
@@ -30,7 +30,7 @@ public abstract class KeyBindingEntryMixin {
         if (BindTracker.bindAllowed(binding)) {
             RainbowColor.stepColor();
             this.update();
-            return ComposerConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds ?
+            return ComposerClientConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds ?
                     RainbowColor.currentColor :
                     Formatting.AQUA.getColorValue() == null ? 0xFF000000 : Formatting.AQUA.getColorValue();
         } else {
@@ -42,7 +42,7 @@ public abstract class KeyBindingEntryMixin {
     private Text flowed_combat$updateBindingColor(Text value) {
         if (Composer.disableDupedBinds()) return value;
         if (BindTracker.bindAllowed(binding)) {
-            return ComposerConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds ?
+            return ComposerClientConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds ?
                     binding.getBoundKeyLocalizedText().copy().setStyle(Style.EMPTY.withColor(RainbowColor.currentColor)) :
                     binding.getBoundKeyLocalizedText().copy().formatted(Formatting.AQUA);
         } else {

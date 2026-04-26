@@ -12,6 +12,7 @@ public abstract class AbstractPseudoRegistry<V> {
     protected final Map<Identifier, V> values;
     protected final Map<Identifier, V> fileValues;
     private boolean loadingFiles = false;
+    private boolean locked = false;
 
     protected AbstractPseudoRegistry() {
         this.values = new HashMap<>();
@@ -20,6 +21,7 @@ public abstract class AbstractPseudoRegistry<V> {
     }
 
     public <T extends V> T register(Identifier id, T value) {
+        if (locked) throw new RuntimeException(new IllegalAccessException("This registry is already locked!"));
         values.put(id, value);
         if (loadingFiles) fileValues.put(id, value);
         return value;
@@ -60,6 +62,11 @@ public abstract class AbstractPseudoRegistry<V> {
     public void clear() {
         values.clear();
         fileValues.clear();
+        locked = false;
+    }
+
+    public void lock() {
+        locked = true;
     }
 
     public Identifier find(V recipe) {

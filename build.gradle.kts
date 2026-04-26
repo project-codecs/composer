@@ -63,9 +63,11 @@ dependencies {
 
     modImplementation("${cca()}.cardinal-components-api:cardinal-components-base:${property("deps.cca")}")
     modImplementation("${cca()}.cardinal-components-api:cardinal-components-entity:${property("deps.cca")}")
+    modImplementation("${cca()}.cardinal-components-api:cardinal-components-world:${property("deps.cca")}")
 
     include("${cca()}.cardinal-components-api:cardinal-components-base:${property("deps.cca")}")
     include("${cca()}.cardinal-components-api:cardinal-components-entity:${property("deps.cca")}")
+    include("${cca()}.cardinal-components-api:cardinal-components-world:${property("deps.cca")}")
     modRuntimeOnly("${cca()}.cardinal-components-api:cardinal-components-api:${property("deps.cca")}")
 //    modLocalRuntime("com.terraformersmc:modmenu:${property("r.deps.mod_menu")}")
 
@@ -203,7 +205,7 @@ tasks {
     javadoc {
         options {
             (this as CoreJavadocOptions).addBooleanOption("Xdoclint:none", true)
-            (this as CoreJavadocOptions).addStringOption("quiet")
+            this.addStringOption("quiet")
         }
     }
 }

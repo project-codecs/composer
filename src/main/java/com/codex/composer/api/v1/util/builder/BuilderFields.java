@@ -1,6 +1,5 @@
 package com.codex.composer.api.v1.util.builder;
 
-import com.codex.composer.api.v1.util.annotation.Optional;
 import com.codex.composer.api.v1.util.exception.NotAllFieldsFilledException;
 
 import java.lang.reflect.Field;

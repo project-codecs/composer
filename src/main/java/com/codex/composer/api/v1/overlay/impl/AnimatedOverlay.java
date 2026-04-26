@@ -8,7 +8,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.StringIdentifiable;
 import org.joml.Vector2i;
 import com.codex.composer.api.v1.util.math.Vec2;
-import static com.codex.composer.api.v1.util.interpolate.CubicInterpolation.*;
+import static com.codex.composer.api.v1.util.math.CubicInterpolation.*;
 
 import java.util.Locale;
 

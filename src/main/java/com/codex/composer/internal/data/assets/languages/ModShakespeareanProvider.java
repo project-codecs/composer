@@ -1,7 +1,7 @@
 package com.codex.composer.internal.data.assets.languages;
 
 import com.codex.composer.api.v1.datagen.lang.ComposerSemiLanguageProvider;
-import com.codex.composer.internal.client.config.ComposerConfig;
+import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.registry.ModBlocks;
 import com.codex.composer.internal.registry.ModItemGroups;
 import com.codex.composer.internal.registry.ModSounds;
@@ -10,7 +10,6 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.codex.composer.internal.registry.ModFeatures.DEBUG;
 import static com.codex.composer.internal.registry.ModFeatures.TargetSynchronization;
 
 public class ModShakespeareanProvider extends ComposerSemiLanguageProvider {
@@ -21,7 +20,7 @@ public class ModShakespeareanProvider extends ComposerSemiLanguageProvider {
         group(ModItemGroups.COMPOSER, "The Composer's Merry Trifling Additions");
 
         enumTranslatable(
-                ComposerConfig.BindsMode.class,
+                ComposerClientConfig.BindsMode.class,
                 "None Whatsoever",
                 "Vanilla & Such Mods as Doth Employ Composer",
                 "All Manner of Things"
@@ -31,11 +30,10 @@ public class ModShakespeareanProvider extends ComposerSemiLanguageProvider {
 
         feature(TargetSynchronization.ENTITY, "Doth synchronise the target entities of players unto the client. The frequency governeth how oft (in ticks) updates are dispatched. To alter this or to disable it may bring ruin upon other mods.");
         feature(TargetSynchronization.BLOCK, "Doth synchronise the target blocks of players unto the client. The frequency governeth how oft (in ticks) updates are dispatched. To alter this or to disable it may bring ruin upon other mods.");
-        feature(DEBUG, "Doth enable certain debug commands and features not ordinarily accessible. Commands require a world reload to appear or vanish, yet shall remain disabled whensoever this option is altered.");
 
         prefix("command.exception.player_not_found", "The player hath not been found.");
         prefix("command.exception.no_players_found", "No players hath been found.");
-        prefix("command.exception.debug_not_enabled", "This command requireth debug mode, which is not presently enabled! Re-log or execute /reload that this command may vanish, or enable debug mode by means of /features.");
+        prefix("command.exception.debug_not_enabled", "This command requireth developer mode, which is not presently enabled! Thou can enable it in Composer's server config from mod menu or using /configure.");
 
         prefix("credits.success_both", "Displaying credits & the end poem unto %s players.");
         prefix("credits.success_credits", "Displaying credits unto %s players.");
@@ -47,13 +45,6 @@ public class ModShakespeareanProvider extends ComposerSemiLanguageProvider {
         prefix("feature.missing", "Feature %s is unknown to us");
         prefix("feature.description.missing", "No description hath been provided.");
         prefix("feature.prefix", "Composer's Features");
-
-        prefix("toast.cleared_for_player", "Toasts for %s hath been cleared.");
-        prefix("toast.cleared_all", "All toasts hath been most successfully cleared.");
-        prefix("toast.invalid_icon_texture", "The identifier for the icon texture is most invalid.");
-        prefix("toast.sent_simple", "Toast dispatched: %s\n | Icon texture: %s\n | Background colour: %s\n | Border colour: %s");
-        prefix("toast.sent_notify", "Notify toast dispatched: %s\n | Background colour: %s\n | Border colour: %s");
-        prefix("toast.prefix", "Composer's Toasts");
 
         prefix("overlay.prefix", "Composer's Utilities");
         prefix("overlay.cleared_all", "All credits and queued overlays hath been most successfully cleared.");

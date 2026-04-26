@@ -1,7 +1,7 @@
 package com.codex.composer.internal.data.assets.languages;
 
 import com.codex.composer.api.v1.datagen.lang.ComposerSemiLanguageProvider;
-import com.codex.composer.internal.client.config.ComposerConfig;
+import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.registry.ModBlocks;
 import com.codex.composer.internal.registry.ModItemGroups;
 import com.codex.composer.internal.registry.ModSounds;
@@ -10,7 +10,6 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.codex.composer.internal.registry.ModFeatures.DEBUG;
 import static com.codex.composer.internal.registry.ModFeatures.TargetSynchronization;
 
 public class ModLolcatProvider extends ComposerSemiLanguageProvider {
@@ -21,7 +20,7 @@ public class ModLolcatProvider extends ComposerSemiLanguageProvider {
         group(ModItemGroups.COMPOSER, "Composer's Silly Lil Addishuns (iz funni)");
 
         enumTranslatable(
-                ComposerConfig.BindsMode.class,
+                ComposerClientConfig.BindsMode.class,
                 "Nun",
                 "Vanilla & Modz Dat Use Composer",
                 "ALL TEH THINGZ"
@@ -31,11 +30,10 @@ public class ModLolcatProvider extends ComposerSemiLanguageProvider {
 
         feature(TargetSynchronization.ENTITY, "Makez playerz's target entitiez go to teh client. Frequency iz how often (in tickz) updatez iz sended. Changing dis or turning it off mite brek other modz (oh noes).");
         feature(TargetSynchronization.BLOCK, "Makez playerz's target blockz go to teh client. Frequency iz how often (in tickz) updatez iz sended. Changing dis or turning it off mite brek other modz (rip).");
-        feature(DEBUG, "Turnz on sum debug commandz an feachurz dat iz usually hidden. Commandz need a world reload to show/disappear, but will still be off when u change dis option (iz complicated ok).");
 
         prefix("command.exception.player_not_found", "Dat player iz not founded. :(");
         prefix("command.exception.no_players_found", "No playerz iz founded. :(");
-        prefix("command.exception.debug_not_enabled", "Dis command needz debug mode, which iz not on!! Re-log or run /reload to make dis command go away, or turn on debug mode with /features.");
+        prefix("command.exception.debug_not_enabled", "Dis command needz developr mode, which iz not on!! U canz enablez it in Composer'servr config from Mod Menu or uzing /configure!!");
 
         prefix("credits.success_both", "Showing creditz & end poem to %s playerz!! :3");
         prefix("credits.success_credits", "Showing creditz to %s playerz!");
@@ -47,13 +45,6 @@ public class ModLolcatProvider extends ComposerSemiLanguageProvider {
         prefix("feature.missing", "Idk wat feachur %s iz??");
         prefix("feature.description.missing", "Nobody wroted a descripshun. lazy.");
         prefix("feature.prefix", "Composer's Feachurz");
-
-        prefix("toast.cleared_for_player", "Toastz for %s iz all gone now.");
-        prefix("toast.cleared_all", "All toastz iz gone!! (no more toastz)");
-        prefix("toast.invalid_icon_texture", "Dat icon texchur identifier iz WRONG.");
-        prefix("toast.sent_simple", "Sended toast: %s\n | Icon texchur: %s\n | Background color: %s\n | Border color: %s");
-        prefix("toast.sent_notify", "Sended notify toast: %s\n | Background color: %s\n | Border color: %s");
-        prefix("toast.prefix", "Composer Toastz");
 
         prefix("overlay.prefix", "Composer Overlays (ooh shiny)");
         prefix("overlay.cleared_all", "All creditz and queued overlays iz gone now!!");

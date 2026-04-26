@@ -14,7 +14,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.apache.commons.io.function.IOConsumer;
-import com.codex.composer.api.v1.commands.ComposerCommand;
+import com.codex.composer.api.v1.util.commands.ComposerCommand;
 import com.codex.composer.api.v1.util.misc.AbstractPseudoRegistry;
 
 import java.io.BufferedWriter;

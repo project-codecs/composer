@@ -1,6 +1,12 @@
 package com.codex.composer.internal;
 
+import com.codex.composer.api.v1.util.misc.CachedLogger;
+import com.codex.composer.internal.cca.ModCardinalComponents;
+import com.codex.composer.internal.cca.chunk.MultiblocksComponent;
 import com.codex.composer.internal.command.*;
+import com.codex.composer.internal.config.ComposerServerConfig;
+import com.codex.composer.internal.data.loader.MultiblockLoader;
+import com.codex.composer.internal.multiblock.MultiblockUpdateHandler;
 import com.codex.composer.internal.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -20,7 +26,7 @@ import com.codex.composer.api.v1.feature.ComposerFeatures;
 import com.codex.composer.internal.runtime.ServerHolderImpl;
 import com.codex.composer.api.v1.util.misc.AbstractPseudoRegistry;
 import com.codex.composer.api.v1.util.misc.EventStacker;
-import com.codex.composer.internal.client.config.ComposerConfig;
+import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.data.loader.FeatureStateLoader;
 import com.codex.composer.internal.data.loader.SimpleItemFixerLoader;
 import com.codex.composer.internal.networking.ScrollActionPayload;
@@ -29,6 +35,7 @@ import com.codex.composer.internal.networking.TargetEntityPayload;
 
 public class Composer implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(Composer.class);
+    public static final CachedLogger CACHED_LOGGER = new CachedLogger(LOGGER);
     public static final String MOD_ID = "composer";
     private static boolean dupedKeybindsEnabled = false;
 
@@ -50,6 +57,7 @@ public class Composer implements ModInitializer {
             }
         }
 
+        ComposerServerConfig.initialize();
         ComposerCompositeEvents.initialize();
         ModDynamicTooltips.initialize();
         ModBlockEntities.initialize();
@@ -64,10 +72,9 @@ public class Composer implements ModInitializer {
         //? if minecraft: >=1.20.6
         ModDataComponentTypes.initialize();
 
-        ComposerConfig.initialize();
+        ComposerClientConfig.initialize();
         ModRegistries.initialize();
         ModOverlaySerializers.initialize();
-        ModToastSerializers.initialize();
         DefaultSerializers.initialize();
 
         TargetEntityPayload.registerHandler();
@@ -77,7 +84,6 @@ public class Composer implements ModInitializer {
         EventStacker.registerAll(
                 CommandRegistrationCallback.EVENT,
                 new FeatureCommand(),
-                new ToastCommand(),
                 new OverlayCommand(),
                 new RegistryCommand(),
                 new CreditsCommand()
@@ -90,6 +96,15 @@ public class Composer implements ModInitializer {
                 ComposerFeatures.getInstance()::afterInitialization
         );
 
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> server.getWorlds().forEach(world -> {
+                MultiblocksComponent component = ModCardinalComponents.MULTIBLOCKS.get(world);
+                if (component.multiblocks.isEmpty()) return;
+
+                MultiblockUpdateHandler.runUpdates(world, component, null);
+            })
+        );
+
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MultiblockLoader());
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleItemFixerLoader());
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FeatureStateLoader());
     }

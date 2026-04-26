@@ -46,7 +46,7 @@ public abstract class MinecraftClientMixin {
         Vec3d cameraRot = camera.getRotationVec(1.0F);
         Vec3d cameraTarget = cameraPos.add(cameraRot.multiply(distanceCap));
         Box box = camera.getBoundingBox().stretch(cameraTarget).expand(1.0, 1.0, 1.0);
-        Predicate<Entity> predicate = entity -> Targeting.isValidTarget(entity, TargetingContext.getIgnoring(player));
+        Predicate<Entity> predicate = entity -> Targeting.isValidTarget(entity, TargetingContext.getIgnoring());
         EntityHitResult hitResult = Targeting.raycast(this.player, box, predicate, 1.5f);
         BlockHitResult blockHitResult = BlockTargeting.raycastBlocks(player, box);
         if (hitResult != null) {

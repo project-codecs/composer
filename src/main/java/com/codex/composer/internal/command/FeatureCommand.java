@@ -14,7 +14,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import com.codex.composer.api.v1.commands.ComposerCommand;
+import com.codex.composer.api.v1.util.commands.ComposerCommand;
 import com.codex.composer.api.v1.feature.ComposerFeatures;
 import com.codex.composer.api.v1.feature.FeatureHandle;
 import com.codex.composer.api.v1.feature.FeatureNode;

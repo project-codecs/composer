@@ -1,5 +1,6 @@
 package com.codex.composer.internal.targeting;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -15,15 +16,16 @@ import java.util.function.Predicate;
 
 public class Targeting {
     public static boolean isValidTarget(@Nullable Entity target, TargetingContext options) {
+        MinecraftClient client = MinecraftClient.getInstance();
         if (target == null) return false;
-        if (options.player == null) return false;
-        if (target == options.player) return false;
-        if (!options.player.canSee(target)) return false;
+        if (client.player == null) return false;
+        if (target == client.player) return false;
+        if (!client.player.canSee(target)) return false;
         if (!(target instanceof LivingEntity) && !options.targetNonLiving) return false;
         if (target instanceof LivingEntity living && living.isDead() && !options.targetDead) return false;
         if (target.isRemoved()) return false;
         if (!EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(target)) return false;
-        if (target instanceof TameableEntity tamed && tamed.isOwner(options.player) && !options.targetTamed) return false;
+        if (target instanceof TameableEntity tamed && tamed.isOwner(client.player) && !options.targetTamed) return false;
 
         return target.canHit();
     }

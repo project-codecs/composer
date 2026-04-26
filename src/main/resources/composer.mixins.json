@@ -8,6 +8,7 @@
         "datafix.ItemStackMixin",
         "dynamic_tooltips.ItemStackMixin",
         "local.CampfireBlockEntityMixin",
+        "multiblocks.WorldChunkMixin",
         "soul_binding.ItemMixin",
         "soul_binding.PlayerEntityMixin",
         "soul_binding.ServerPlayerEntityMixin",

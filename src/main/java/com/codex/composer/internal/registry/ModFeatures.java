@@ -1,7 +1,6 @@
 package com.codex.composer.internal.registry;
 
 import com.codex.composer.api.v1.feature.FeatureBuilder;
-import com.codex.composer.api.v1.feature.FeatureHandle;
 import com.codex.composer.api.v1.registry.lazy.DeferredFeatureRegistry;
 import com.codex.composer.api.v1.registry.lazy.feature.Feature;
 import com.codex.composer.internal.Composer;
@@ -14,6 +13,14 @@ public class ModFeatures {
 
         public static final Feature ENTITY = FEATURES.hang("entity", TargetSynchronization::config);
         public static final Feature BLOCK = FEATURES.hang("block", TargetSynchronization::config);
+
+        static {
+            FEATURES.group(
+                    "target_synchronization",
+                    BLOCK,
+                    ENTITY
+            );
+        }
 
         private static void config(FeatureBuilder builder) {
             builder.defaultEnabled(true).configInt(FREQ_KEY, 1);
@@ -36,16 +43,7 @@ public class ModFeatures {
         }
     }
 
-    public static final FeatureHandle DEBUG = FEATURES.register("debug", false);
-    public static boolean debug() {
-        return DEBUG.enabled();
-    }
-
     public static void initialize() {
-        FEATURES.group(
-                "target_synchronization",
-                TargetSynchronization.BLOCK,
-                TargetSynchronization.ENTITY
-        );
+
     }
 }

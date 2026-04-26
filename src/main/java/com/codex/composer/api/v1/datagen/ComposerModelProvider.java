@@ -7,13 +7,14 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataWriter;
 
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import net.minecraft.registry.Registries;
 
 //? if minecraft: <=1.21.3 {
 /*import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -21,29 +22,25 @@ import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.BlockStateSupplier;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.item.Item;
+import net.minecraft.data.client.Model;
 import net.minecraft.util.Identifier;
 import java.util.HashSet;
 import java.util.Set;
 *///? } else {
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ItemAsset;
 import net.minecraft.client.render.item.model.ItemModel;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
 import net.minecraft.client.data.*;
+import org.apache.commons.lang3.NotImplementedException;
 //? }
 
 //? if minecraft: <=1.21.3 {
 /*public abstract class ComposerModelProvider implements DataProvider {
+    private ItemModelGenerator itemModelGenerator;
     private final DataOutput.PathResolver blockstatesPathResolver;
     private final DataOutput.PathResolver modelsPathResolver;
 
@@ -52,9 +49,13 @@ import net.minecraft.client.data.*;
         this.modelsPathResolver = output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "models");
     }
 
-
     public abstract void generateBlocks(BlockStateModelGenerator generator);
     public abstract void generateItems(ItemModelGenerator generator);
+
+    public void blockItemModelFor(Item item, Block from) {
+        Identifier id = Registries.BLOCK.getId(from);
+        itemModelGenerator.register(item, new Model(Optional.ofNullable(Identifier.of(id.getNamespace(), "block/" + id.getPath())), Optional.empty()));
+    }
 
     @Override
     public CompletableFuture<?> run(DataWriter writer) {
@@ -78,7 +79,7 @@ import net.minecraft.client.data.*;
         Consumer<Item> itemConsumer = itemModels::add;
 
         BlockStateModelGenerator blockStateModelGenerator = new BlockStateModelGenerator(blockConsumer, modelConsumer, itemConsumer);
-        ItemModelGenerator itemModelGenerator = new ItemModelGenerator(modelConsumer);
+        itemModelGenerator = new ItemModelGenerator(modelConsumer);
 
         generateBlocks(blockStateModelGenerator);
         generateItems(itemModelGenerator);
@@ -88,6 +89,11 @@ import net.minecraft.client.data.*;
                 writeJsons(writer, blockStates, b -> blockstatesPathResolver.resolveJson(b.getRegistryEntry().registryKey().getValue())),
                 writeJsons(writer, models, modelsPathResolver::resolveJson)
         );
+    }
+
+    @Override
+    public String getName() {
+        return "Models";
     }
 
     private <T> CompletableFuture<?> writeJsons(DataWriter writer, Map<T, ? extends Supplier<JsonElement>> map, Function<T, Path> pathGetter) {
@@ -100,22 +106,24 @@ import net.minecraft.client.data.*;
 @SuppressWarnings("deprecation")
 @Environment(EnvType.CLIENT)
 public abstract class ComposerModelProvider implements DataProvider {
-
+    private ItemModelGenerator itemModelGenerator;
     private final DataOutput.PathResolver blockstatesPathResolver;
     private final DataOutput.PathResolver itemsPathResolver;
     private final DataOutput.PathResolver modelsPathResolver;
 
     public ComposerModelProvider(DataOutput output) {
-        this.blockstatesPathResolver =
-                output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "blockstates");
-        this.itemsPathResolver =
-                output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "items");
-        this.modelsPathResolver =
-                output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "models");
+        this.blockstatesPathResolver = output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "blockstates");
+        this.itemsPathResolver = output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "items");
+        this.modelsPathResolver = output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "models");
     }
 
     public abstract void generateBlocks(BlockStateModelGenerator generator);
     public abstract void generateItems(ItemModelGenerator generator);
+
+    public void blockItemModelFor(Item item, Block from) {
+        Identifier id = Registries.BLOCK.getId(from);
+        itemModelGenerator.register(item, new Model(Optional.of(Identifier.of(id.getNamespace(), "block/" + id.getPath())), Optional.empty()));
+    }
 
     @Override
     public CompletableFuture<?> run(DataWriter writer) {
@@ -124,13 +132,10 @@ public abstract class ComposerModelProvider implements DataProvider {
         ModelSuppliers modelSuppliers = new ModelSuppliers();
 
         BlockStateModelGenerator blockGenerator = new BlockStateModelGenerator(blockStateSuppliers, itemAssets, modelSuppliers);
-        ItemModelGenerator itemGenerator = new ItemModelGenerator(itemAssets, modelSuppliers);
+        itemModelGenerator = new ItemModelGenerator(itemAssets, modelSuppliers);
 
         generateBlocks(blockGenerator);
-        generateItems(itemGenerator);
-
-        blockStateSuppliers.validate();
-        itemAssets.resolveAndValidate();
+        generateItems(itemModelGenerator);
 
         return CompletableFuture.allOf(
                 blockStateSuppliers.writeAllToPath(writer, blockstatesPathResolver),
@@ -139,6 +144,10 @@ public abstract class ComposerModelProvider implements DataProvider {
         );
     }
 
+    @Override
+    public String getName() {
+        return "Models";
+    }
 
     @Environment(EnvType.CLIENT)
     public static class ModelSuppliers implements BiConsumer<Identifier, ModelSupplier> {
@@ -175,14 +184,6 @@ public abstract class ComposerModelProvider implements DataProvider {
             }
         }
 
-        public void validate() {
-            Stream<RegistryEntry.Reference<Block>> stream = Registries.BLOCK.streamEntries();
-            List<Identifier> list = stream.filter((entry) -> !this.blockStateSuppliers.containsKey(entry.value())).map((e) -> e.registryKey().getValue()).toList();
-            if (!list.isEmpty()) {
-                throw new IllegalStateException("Missing blockstate definitions for: " + list);
-            }
-        }
-
         public CompletableFuture<?> writeAllToPath(DataWriter writer, DataOutput.PathResolver pathResolver) {
             return ComposerModelProvider.writeAllToPath(writer, (block) -> pathResolver.resolveJson(block.getRegistryEntry().registryKey().getValue()), this.blockStateSuppliers);
         }
@@ -191,7 +192,6 @@ public abstract class ComposerModelProvider implements DataProvider {
     @Environment(EnvType.CLIENT)
     public static class ItemAssets implements ItemModelOutput {
         private final Map<Item, ItemAsset> itemAssets = new HashMap<>();
-        private final Map<Item, Item> aliasedAssets = new HashMap<>();
 
         ItemAssets() {
         }
@@ -208,34 +208,7 @@ public abstract class ComposerModelProvider implements DataProvider {
         }
 
         public void acceptAlias(Item base, Item alias) {
-            this.aliasedAssets.put(alias, base);
-        }
-
-        public void resolveAndValidate() {
-            Registries.ITEM.forEach((item) -> {
-                if (!this.aliasedAssets.containsKey(item)) {
-                    if (item instanceof BlockItem blockItem) {
-                        if (!this.itemAssets.containsKey(blockItem)) {
-                            Identifier identifier = ModelIds.getBlockModelId(blockItem.getBlock());
-                            this.accept(blockItem, ItemModels.basic(identifier));
-                        }
-                    }
-
-                }
-            });
-            this.aliasedAssets.forEach((base, alias) -> {
-                ItemAsset itemAsset = this.itemAssets.get(alias);
-                if (itemAsset == null) {
-                    String itemString = String.valueOf(alias);
-                    throw new IllegalStateException("Missing donor: " + itemString + " -> " + base);
-                } else {
-                    this.accept(base, itemAsset);
-                }
-            });
-            List<Identifier> list = Registries.ITEM.streamEntries().filter((entry) -> !this.itemAssets.containsKey(entry.value())).map((entryx) -> entryx.registryKey().getValue()).toList();
-            if (!list.isEmpty()) {
-                throw new IllegalStateException("Missing item model definitions for: " + list);
-            }
+            throw new NotImplementedException();
         }
 
         public CompletableFuture<?> writeAllToPath(DataWriter writer, DataOutput.PathResolver pathResolver) {

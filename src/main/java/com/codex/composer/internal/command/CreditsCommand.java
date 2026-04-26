@@ -1,6 +1,6 @@
 package com.codex.composer.internal.command;
 
-import com.codex.composer.api.v1.commands.ComposerCommand;
+import com.codex.composer.api.v1.util.commands.ComposerCommand;
 import com.codex.composer.internal.networking.ShowCreditsPayload;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -31,12 +31,11 @@ public class CreditsCommand extends ComposerCommand {
     }
 
     private int roll(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
+        if (shouldCancel()) return throwOnNonDebug(ctx);
         CreditsType type = CreditsTypeArgumentType.get(ctx, "type");
         List<ServerPlayerEntity> players = (List<ServerPlayerEntity>) EntityArgumentType.getPlayers(ctx, "for"); // Safe to type cast because internally it is an ArrayList<SPE>
 
-        players.forEach(player -> {
-            ServerPlayNetworking.send(player, new ShowCreditsPayload(type.credits, type.poem));
-        });
+        players.forEach(player -> ServerPlayNetworking.send(player, new ShowCreditsPayload(type.credits, type.poem)));
 
         return success(ctx, Text.translatable("composer.credits.success" + type.suffix, players.size()));
     }

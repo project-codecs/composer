@@ -12,7 +12,6 @@ public class ModRegistries {
 
     @ApiStatus.Internal
     public static void initialize() {
-        TOAST_SERIALIZERS = REGISTRY.create(TOAST_SERIALIZERS_KEY, ModToastSerializers::registerAndGetDefault);
         OVERLAY_SERIALIZERS = REGISTRY.create(OVERLAY_SERIALIZERS_KEY, ModOverlaySerializers::registerAndGetDefault);
 
         REGISTRY.finalizeRegistries();
