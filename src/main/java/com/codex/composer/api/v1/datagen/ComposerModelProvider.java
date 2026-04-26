@@ -1,7 +1,9 @@
 package com.codex.composer.api.v1.datagen;
 
+import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
 import net.minecraft.block.Block;
+import net.minecraft.client.render.model.json.BlockModelDefinition;
 import net.minecraft.data.DataOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataWriter;
@@ -170,23 +172,31 @@ public abstract class ComposerModelProvider implements DataProvider {
     }
 
     @Environment(EnvType.CLIENT)
-    public static class BlockStateSuppliers implements Consumer<BlockStateSupplier> {
-        private final Map<Block, BlockStateSupplier> blockStateSuppliers = new HashMap<>();
+    public static class BlockStateSuppliers implements Consumer</*? if minecraft: <=1.21.4 { *//*BlockStateSupplier*//*? } else {*/BlockModelDefinitionCreator/*?}*/> {
+        private final Map<Block, /*? if minecraft: <=1.21.4 { *//*BlockStateSupplier*//*? } else {*/BlockModelDefinitionCreator/*?}*/> blockStateSuppliers = new HashMap<>();
 
         BlockStateSuppliers() {
         }
 
-        public void accept(BlockStateSupplier blockStateSupplier) {
+        public void accept(/*? if minecraft: <=1.21.4 { *//*BlockStateSupplier*//*? } else {*/BlockModelDefinitionCreator/*?}*/ blockStateSupplier) {
             Block block = blockStateSupplier.getBlock();
-            BlockStateSupplier blockStateSupplier2 = this.blockStateSuppliers.put(block, blockStateSupplier);
+            /*? if minecraft: <=1.21.4 { *//*BlockStateSupplier*//*? } else {*/BlockModelDefinitionCreator/*?}*/ blockStateSupplier2 = this.blockStateSuppliers.put(block, blockStateSupplier);
             if (blockStateSupplier2 != null) {
                 throw new IllegalStateException("Duplicate blockstate definition for " + block);
             }
         }
 
-        public CompletableFuture<?> writeAllToPath(DataWriter writer, DataOutput.PathResolver pathResolver) {
+        //? if minecraft: <=1.21.4 {
+        /*public CompletableFuture<?> writeAllToPath(DataWriter writer, DataOutput.PathResolver pathResolver) {
             return ComposerModelProvider.writeAllToPath(writer, (block) -> pathResolver.resolveJson(block.getRegistryEntry().registryKey().getValue()), this.blockStateSuppliers);
         }
+        *///? } else {
+        public CompletableFuture<?> writeAllToPath(DataWriter dataWriter, DataOutput.PathResolver pathResolver) {
+            Map<Block, BlockModelDefinition> map = Maps.transformValues(this.blockStateSuppliers, BlockModelDefinitionCreator::createBlockModelDefinition);
+            Function<Block, Path> function = (block) -> pathResolver.resolveJson(block.getRegistryEntry().registryKey().getValue());
+            return DataProvider.writeAllToPath(dataWriter, BlockModelDefinition.CODEC, function, map);
+        }
+        //? }
     }
 
     @Environment(EnvType.CLIENT)

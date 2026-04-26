@@ -8,7 +8,8 @@ import java.util.function.BiConsumer;
 public class Opacitator {
     public static void drawWithOpacity(float opacity, boolean apply, BiConsumer<Float, Integer> call) {
         if (apply) {
-            RenderSystem.enableBlend();
+            //? if minecraft: <=1.21.4
+            //RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1f, 1f, 1f, opacity);
         }
 
@@ -16,7 +17,8 @@ public class Opacitator {
 
         if (apply) {
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-            RenderSystem.disableBlend();
+            //? if minecraft: <=1.21.4
+            //RenderSystem.disableBlend();
         }
     }
 

@@ -86,7 +86,6 @@ public class Overlays {
             init();
         }
 
-        @Contract(mutates = "this")
         private void remove() {
             this.removed = true;
         }
@@ -100,7 +99,8 @@ public class Overlays {
         protected void init() {
             if (!shouldLoadTextures) return;
 
-            MinecraftClient client = MinecraftClient.getInstance();
+            //? if minecraft: <=1.21.4 {
+            /*MinecraftClient client = MinecraftClient.getInstance();
             if (client.player == null) return;
 
             AbstractTexture tex = client.getTextureManager().getTexture(texture);
@@ -121,14 +121,43 @@ public class Overlays {
 
             size = shape.mul(scale);
             if (size == null) remove();
+            *///? } else {
+            size = new Vec2(0, 0);
+            //? }
         }
 
         @Override
         protected void render(DrawContext context,/*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f, int x, int y) {
-            if (size == null) {
+            //? if minecraft: <=1.21.4 {
+            /*if (size == null) {
                 remove();
                 return;
             }
+            *///? } else {
+            if (size.x == 0 && size.y == 0) {
+                MinecraftClient client = MinecraftClient.getInstance();
+                if (client.player == null) return;
+
+                AbstractTexture tex = client.getTextureManager().getTexture(texture);
+                if (tex == null) {
+                    client.player.sendMessage(Text.literal("§cInvalid texture for overlay: " + texture), false);
+                    remove();
+                    return;
+                }
+
+                Vec2 shape;
+                try {
+                    shape = loadSize(tex);
+                } catch (Exception e) {
+                    client.player.sendMessage(Text.literal("§cFailed to load overlay texture: " + texture), false);
+                    remove();
+                    return;
+                }
+
+                size = shape.mul(scale);
+                if (size == null) remove();
+            }
+            //? }
 
             Opacitator.drawWithOpacity(
                     getOpacity(f),

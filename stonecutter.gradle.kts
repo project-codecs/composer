@@ -4,7 +4,7 @@
     id("me.modmuss50.mod-publish-plugin") version "1.0.+" apply false
 }
 
-stonecutter active "1.21.4"
+stonecutter active "1.21.5"
 
 stonecutter parameters {
     swaps["mod_version"] = "\"${property("mod.version")}\";"

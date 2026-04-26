@@ -2,7 +2,6 @@ package com.codex.composer.internal.cca.entity;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 import com.codex.composer.internal.cca.ModCardinalComponents;
@@ -49,13 +48,13 @@ public class TargetedBlockComponent implements AutoSyncedComponent, ServerTickin
     }
 
     public void readFromNbt(NbtCompound tag /*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
-        this.pos = /*? if minecraft: >= 1.20.6 { */NbtHelper.toBlockPos(tag, POS_KEY).orElse(null)/*? } else {*//*tag.contains(POS_KEY) ? NbtHelper.toBlockPos(tag.getCompound(POS_KEY)) : null*//*?}*/;
-        ticks = tag.getInt(TICKS_KEY);
+        this.pos = BlockPos.fromLong(tag.getLong(POS_KEY)/*? if minecraft: >=1.21.5 {*/.orElse(BlockPos.ORIGIN.asLong())/*? }*/);
+        ticks = tag.getInt(TICKS_KEY)/*? if minecraft: >=1.21.5 {*/.orElse(0)/*? }*/;
     }
 
     public void writeToNbt(NbtCompound tag /*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
         if (this.pos != null) {
-            tag.put(POS_KEY, NbtHelper.fromBlockPos(pos));
+            tag.putLong(POS_KEY, pos.asLong());
         }
         tag.putInt(TICKS_KEY, ticks);
     }

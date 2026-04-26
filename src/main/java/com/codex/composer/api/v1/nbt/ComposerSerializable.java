@@ -15,7 +15,7 @@ public interface ComposerSerializable<T extends NbtSerializable<T>> extends NbtS
 
     @Override
     default NbtCompound writeNbt(NbtCompound tag) {
-        return writeNbt(ComposerCompound.copy(tag));
+        return writeNbt(ComposerCompound.copy(tag)).asVanilla();
     }
 
     /**

@@ -20,7 +20,6 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.codex.composer.api.v1.easytags.impl.DefaultSerializers;
 import com.codex.composer.api.v1.events.composite.ComposerCompositeEvents;
 import com.codex.composer.api.v1.feature.ComposerFeatures;
 import com.codex.composer.internal.runtime.ServerHolderImpl;
@@ -75,7 +74,6 @@ public class Composer implements ModInitializer {
         ComposerClientConfig.initialize();
         ModRegistries.initialize();
         ModOverlaySerializers.initialize();
-        DefaultSerializers.initialize();
 
         TargetEntityPayload.registerHandler();
         TargetBlockPayload.registerHandler();

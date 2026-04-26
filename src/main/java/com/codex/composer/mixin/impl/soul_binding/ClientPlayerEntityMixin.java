@@ -23,7 +23,10 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity {
     @Inject(method = "dropSelectedItem", at = @At("HEAD"), cancellable = true)
     public void composer$preventDroppingSoulbound(boolean entireStack, CallbackInfoReturnable<Boolean> cir) {
         PlayerInventory inv = getInventory();
-        ItemStack stack = inv.getStack(inv.selectedSlot);
+        //? if minecraft: <=1.21.4
+        //ItemStack stack = inv.getStack(inv.selectedSlot);
+        //? if minecraft: >=1.21.5
+        ItemStack stack = inv.getStack(inv.getSelectedSlot());
 
         if (shouldNotDrop(stack)) cir.cancel();
     }

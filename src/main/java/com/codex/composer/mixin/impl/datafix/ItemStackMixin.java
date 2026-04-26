@@ -34,7 +34,7 @@ public class ItemStackMixin {
     @Inject(method = "fromNbt", at = @At(value = "RETURN"), cancellable = true)
     private static void composer$runDataFixers(RegistryWrapper.WrapperLookup registries, NbtElement nbt, CallbackInfoReturnable<Optional<ItemStack>> cir) {
         if (cir.getReturnValue().isPresent() || !(nbt instanceof NbtCompound tag)) return;
-        if (tag.contains("id", NbtElement.STRING_TYPE)) {
+        if (tag.contains("id"/*? if minecraft: <=1.21.4 {*//*, NbtElement.STRING_TYPE*//*? }*/)) {
             for (DataFixerRegistry.Item fixer : DataFixerRegistry.ITEM.getAll().values()) {
                 Optional<ItemStack> opt = fixer.process(tag);
 

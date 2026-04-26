@@ -1,7 +1,6 @@
 package com.codex.composer.internal.cca.chunk;
 
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
@@ -60,11 +59,11 @@ public class MultiblocksComponent implements AutoSyncedComponent {
     public void readFromNbt(NbtCompound tag/*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
         multiblocks.clear();
 
-        tag.getList(MULTIBLOCKS_KEY, NbtElement.COMPOUND_TYPE).forEach(element -> {
+        tag.getList(MULTIBLOCKS_KEY/*? if minecraft: <=1.21.4 {*//*, NbtElement.COMPOUND_TYPE*//*? }*/)/*? if minecraft: >=1.21.5 {*/.orElse(new NbtList())/*? }*/.forEach(element -> {
             if (element instanceof NbtCompound compound) {
                 multiblocks.add(new Pair<>(
-                        BlockPos.fromLong(compound.getLong("pos")),
-                        new Pair<>(Identifier.tryParse(compound.getString("id")), compound.getBoolean("complete"))
+                        BlockPos.fromLong(compound.getLong("pos")/*? if minecraft: >=1.21.5 {*/.orElse(BlockPos.ORIGIN.asLong())/*? }*/),
+                        new Pair<>(Identifier.tryParse(compound.getString("id")/*? if minecraft: >=1.21.5 {*/.orElse("")/*? }*/), compound.getBoolean("complete")/*? if minecraft: >=1.21.5 {*/.orElse(false)/*? }*/)
                 ));
             }
         });

@@ -47,7 +47,7 @@ public class PlushieBlockEntity extends BlockEntity {
 
     @Override
     public void readNbt(@NotNull NbtCompound nbt /*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
-        this.squash = nbt.getDouble("squash");
+        this.squash = nbt.getDouble("squash")/*? if minecraft: >=1.21.5 {*/.orElse(0d)/*? }*/;
     }
 
     @Override

@@ -40,7 +40,7 @@ public class DataFixerRegistry {
         Optional<ItemStack> process(String id, NbtCompound tag);
 
         default Optional<ItemStack> process(NbtCompound raw) {
-            return process(raw.getString("id"), raw);
+            return process(raw.getString("id")/*? if minecraft: >=1.21.5 {*/.orElse("")/*? }*/, raw);
         }
     }
 }
