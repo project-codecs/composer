@@ -23,10 +23,10 @@ public abstract class WorldChunkMixin {
 
     @Inject(method = "setBlockState", at = @At("HEAD"))
     //? if minecraft: <=1.21.4 {
-    //private void composer$saveBlockState(BlockPos pos, BlockState state, boolean moved, CallbackInfoReturnable<BlockState> cir) {
+    private void composer$saveBlockState(BlockPos pos, BlockState state, boolean moved, CallbackInfoReturnable<BlockState> cir) {
     //? } else {
-    private void composer$saveBlockState(BlockPos pos, BlockState state, int flags, CallbackInfoReturnable<BlockState> cir) {
-    //? }
+    /*private void composer$saveBlockState(BlockPos pos, BlockState state, int flags, CallbackInfoReturnable<BlockState> cir) {
+    *///? }
         World world = getWorld();
         BlockState previous = world.getBlockState(pos);
 
@@ -38,10 +38,10 @@ public abstract class WorldChunkMixin {
 
     @Inject(method = "setBlockState", at = @At("TAIL"))
     //? if minecraft: <=1.21.4 {
-    //private void composer$onBlockUpdate(BlockPos pos, BlockState state, boolean moved, CallbackInfoReturnable<BlockState> cir) {
+    private void composer$onBlockUpdate(BlockPos pos, BlockState state, boolean moved, CallbackInfoReturnable<BlockState> cir) {
     //? } else {
-    private void composer$onBlockUpdate(BlockPos pos, BlockState state, int flags, CallbackInfoReturnable<BlockState> cir) {
-        //? }
+    /*private void composer$onBlockUpdate(BlockPos pos, BlockState state, int flags, CallbackInfoReturnable<BlockState> cir) {
+        *///? }
         World world = getWorld();
 
         if (executeOnPlaced) {

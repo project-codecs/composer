@@ -1,8 +1,5 @@
 package com.codex.composer.internal.cca.chunk;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,8 +14,23 @@ import java.util.concurrent.CopyOnWriteArrayList;
 //? if minecraft: >=1.20.6
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
+//? if minecraft: <=1.21.4
+import net.minecraft.nbt.NbtElement;
+
+//? if minecraft: <=1.21.5 {
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.RegistryWrapper;
+//? } else {
+/*import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
+*///? }
+
 public class MultiblocksComponent implements AutoSyncedComponent {
-    private static final String MULTIBLOCKS_KEY = "multiblocks";
+    private static final String MULTIBLOCKS = "multiblocks";
+    private static final String POS = "pos";
+    private static final String COMPLETE = "complete";
+    private static final String ID = "id";
 
     public final List<Pair<BlockPos, Pair<Identifier, Boolean>>> multiblocks = new CopyOnWriteArrayList<>();
 
@@ -55,15 +67,16 @@ public class MultiblocksComponent implements AutoSyncedComponent {
                 .orElse(false);
     }
 
+    //? if minecraft: <=1.21.5 {
     @Override
     public void readFromNbt(NbtCompound tag/*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
         multiblocks.clear();
 
-        tag.getList(MULTIBLOCKS_KEY/*? if minecraft: <=1.21.4 {*//*, NbtElement.COMPOUND_TYPE*//*? }*/)/*? if minecraft: >=1.21.5 {*/.orElse(new NbtList())/*? }*/.forEach(element -> {
+        tag.getList(MULTIBLOCKS/*? if minecraft: <=1.21.4 {*/, NbtElement.COMPOUND_TYPE/*? }*/)/*? if minecraft: >=1.21.5 {*//*.orElse(new NbtList())*//*? }*/.forEach(element -> {
             if (element instanceof NbtCompound compound) {
                 multiblocks.add(new Pair<>(
-                        BlockPos.fromLong(compound.getLong("pos")/*? if minecraft: >=1.21.5 {*/.orElse(BlockPos.ORIGIN.asLong())/*? }*/),
-                        new Pair<>(Identifier.tryParse(compound.getString("id")/*? if minecraft: >=1.21.5 {*/.orElse("")/*? }*/), compound.getBoolean("complete")/*? if minecraft: >=1.21.5 {*/.orElse(false)/*? }*/)
+                        BlockPos.fromLong(compound.getLong(POS)/*? if minecraft: >=1.21.5 {*//*.orElse(BlockPos.ORIGIN.asLong())*//*? }*/),
+                        new Pair<>(Identifier.tryParse(compound.getString(ID)/*? if minecraft: >=1.21.5 {*//*.orElse("")*//*? }*/), compound.getBoolean(COMPLETE)/*? if minecraft: >=1.21.5 {*//*.orElse(false)*//*? }*/)
                 ));
             }
         });
@@ -75,12 +88,37 @@ public class MultiblocksComponent implements AutoSyncedComponent {
 
         multiblocks.forEach(pair -> {
             NbtCompound compound = new NbtCompound();
-            compound.putLong("pos", pair.getA().asLong());
-            compound.putString("id", pair.getB().getA().toString());
-            compound.putBoolean("complete", pair.getB().getB());
+            compound.putLong(POS, pair.getA().asLong());
+            compound.putString(ID, pair.getB().getA().toString());
+            compound.putBoolean(COMPLETE, pair.getB().getB());
             list.add(compound);
         });
 
-        tag.put(MULTIBLOCKS_KEY, list);
+        tag.put(MULTIBLOCKS, list);
     }
+    //? } else {
+    /*@Override
+    public void readData(ReadView tag) {
+        multiblocks.clear();
+
+        for (ReadView element : tag.getListReadView(MULTIBLOCKS)) {
+            multiblocks.add(new Pair<>(
+                    BlockPos.fromLong(element.getLong(POS, BlockPos.ORIGIN.asLong())),
+                    new Pair<>(Identifier.tryParse(element.getString(ID, "minecraft:air")), element.getBoolean(COMPLETE, false))
+            ));
+        }
+    }
+
+    @Override
+    public void writeData(WriteView tag) {
+        WriteView.ListView list = tag.getList(MULTIBLOCKS);
+
+        multiblocks.forEach(pair -> {
+            WriteView nbt = list.add();
+            nbt.putLong(POS, pair.getA().asLong());
+            nbt.putString(ID, pair.getB().getA().toString());
+            nbt.putBoolean(COMPLETE, pair.getB().getB());
+        });
+    }
+    *///? }
 }

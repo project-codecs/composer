@@ -8,7 +8,7 @@ public class SerializableBoolean implements Comparable<Boolean>, NbtSerializable
     private boolean value;
 
     public SerializableBoolean(NbtCompound tag) {
-        this(tag.getBoolean("value")/*? if minecraft: >=1.21.5 {*/.orElse(false)/*? }*/);
+        this(tag.getBoolean("value")/*? if minecraft: >=1.21.5 {*//*.orElse(false)*//*? }*/);
     }
 
     public SerializableBoolean(boolean b) {

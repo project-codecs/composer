@@ -27,7 +27,6 @@ import com.codex.composer.api.v1.util.misc.AbstractPseudoRegistry;
 import com.codex.composer.api.v1.util.misc.EventStacker;
 import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.data.loader.FeatureStateLoader;
-import com.codex.composer.internal.data.loader.SimpleItemFixerLoader;
 import com.codex.composer.internal.networking.ScrollActionPayload;
 import com.codex.composer.internal.networking.TargetBlockPayload;
 import com.codex.composer.internal.networking.TargetEntityPayload;
@@ -103,7 +102,6 @@ public class Composer implements ModInitializer {
         );
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MultiblockLoader());
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleItemFixerLoader());
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FeatureStateLoader());
     }
 

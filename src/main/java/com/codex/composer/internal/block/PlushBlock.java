@@ -2,7 +2,7 @@ package com.codex.composer.internal.block;
 
 import com.codex.composer.api.v1.block.AbstractPlushieBlock;
 
-import com.codex.composer.api.v1.block.entity.PlushieBlockEntity;
+import com.codex.composer.api.v1.block.entity.AbstractPlushieBlockEntity;
 import com.codex.composer.internal.block.entity.LilBroPlushBlockEntity;
 import com.codex.composer.internal.registry.ModBlockEntities;
 import com.codex.composer.internal.registry.ModSounds;
@@ -41,7 +41,7 @@ public class PlushBlock extends AbstractPlushieBlock {
     }
 
     @Override
-    protected BlockEntityType<PlushieBlockEntity> getType() {
+    protected BlockEntityType<AbstractPlushieBlockEntity> getType() {
         return ModBlockEntities.PLUSH;
     }
 

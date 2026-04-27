@@ -5,7 +5,6 @@
     "compatibilityLevel": "${java}",
     "mixins": [
         "access.MinecraftServerMixin",
-        "datafix.ItemStackMixin",
         "dynamic_tooltips.ItemStackMixin",
         "local.CampfireBlockEntityMixin",
         "multiblocks.WorldChunkMixin",

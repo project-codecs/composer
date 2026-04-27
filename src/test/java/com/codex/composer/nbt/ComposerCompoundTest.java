@@ -22,7 +22,7 @@ class ComposerCompoundTest {
         }
 
         TestSerializable(NbtCompound tag) {
-            this.value = tag.getString("value")/*? if minecraft: >=1.21.5 {*/.orElse("")/*? }*/;
+            this.value = tag.getString("value")/*? if minecraft: >=1.21.5 {*//*.orElse("")*//*? }*/;
         }
 
         @Override
@@ -79,8 +79,8 @@ class ComposerCompoundTest {
         ComposerCompound clone = compound.clone();
         ComposerCompound copy = ComposerCompound.copy(compound.asVanilla());
 
-        assertEquals("value", clone.asVanilla().getString("key")/*? if minecraft: >=1.21.5 {*/.orElse("")/*? }*/);
-        assertEquals("value", copy.asVanilla().getString("key")/*? if minecraft: >=1.21.5 {*/.orElse("")/*? }*/);
+        assertEquals("value", clone.asVanilla().getString("key")/*? if minecraft: >=1.21.5 {*//*.orElse("")*//*? }*/);
+        assertEquals("value", copy.asVanilla().getString("key")/*? if minecraft: >=1.21.5 {*//*.orElse("")*//*? }*/);
     }
 
     @Test

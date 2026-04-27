@@ -25,6 +25,11 @@ import net.minecraft.client.render.RenderTickCounter;
 //? if minecraft: >=1.21.3
 import net.minecraft.client.render.RenderLayer;
 
+//? if minecraft: >=1.21.6 {
+/*import com.mojang.blaze3d.pipeline.RenderPipeline;
+import net.minecraft.client.gl.RenderPipelines;
+*///? }
+
 public class Overlays {
     public static <T extends Overlay> void send(ServerPlayerEntity player, T overlay) {
         ServerPlayNetworking.send(player, new ShowOverlayPayload<>(overlay));
@@ -100,7 +105,7 @@ public class Overlays {
             if (!shouldLoadTextures) return;
 
             //? if minecraft: <=1.21.4 {
-            /*MinecraftClient client = MinecraftClient.getInstance();
+            MinecraftClient client = MinecraftClient.getInstance();
             if (client.player == null) return;
 
             AbstractTexture tex = client.getTextureManager().getTexture(texture);
@@ -121,20 +126,20 @@ public class Overlays {
 
             size = shape.mul(scale);
             if (size == null) remove();
-            *///? } else {
-            size = new Vec2(0, 0);
-            //? }
+            //? } else {
+            /*size = new Vec2(0, 0);
+            *///? }
         }
 
         @Override
         protected void render(DrawContext context,/*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f, int x, int y) {
             //? if minecraft: <=1.21.4 {
-            /*if (size == null) {
+            if (size == null) {
                 remove();
                 return;
             }
-            *///? } else {
-            if (size.x == 0 && size.y == 0) {
+            //? } else {
+            /*if (size.x == 0 && size.y == 0) {
                 MinecraftClient client = MinecraftClient.getInstance();
                 if (client.player == null) return;
 
@@ -157,7 +162,7 @@ public class Overlays {
                 size = shape.mul(scale);
                 if (size == null) remove();
             }
-            //? }
+            *///? }
 
             Opacitator.drawWithOpacity(
                     getOpacity(f),
@@ -181,7 +186,7 @@ public class Overlays {
                     )
                     *///? } else {
                     (ignored, alpha) -> context.drawTexturedQuad(
-                            RenderLayer::getGuiTextured,
+                            /*? if minecraft: <=1.21.5 {*/RenderLayer::getGuiTextured,/*? } else { *//*RenderPipelines.GUI_TEXTURED,*//*? } */
                             texture,
                             x, x + getSize().x(),
                             y, y + getSize().y(),

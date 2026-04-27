@@ -8,7 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
 import java.util.List;
-import java.util.function.Consumer;
+
+//? if minecraft: >=1.21.5
+//import java.util.function.Consumer;
 
 /**
  * Represents a tooltip section, which can have nested content sections.
@@ -18,16 +20,16 @@ public interface DynamicTooltip {
      * The main method that appends tooltip lines to a list of strings.
      */
     //? if minecraft: <=1.21.4
-    //void appendTooltip(TooltipContext context, List<Text> out);
+    void appendTooltip(TooltipContext context, List<Text> out);
     //? if minecraft: >=1.21.5
-    void appendTooltip(TooltipContext context, Consumer<Text> out);
+    //void appendTooltip(TooltipContext context, Consumer<Text> out);
     boolean isRelevant(TooltipContext context);
     Location where();
 
     //? if minecraft: <=1.21.4
-    //static void appendRegistered(ItemStack stack, List<Text> text, DynamicTooltip.Location location) {
+    static void appendRegistered(ItemStack stack, List<Text> text, DynamicTooltip.Location location) {
     //? if minecraft: >=1.21.5
-    static void appendRegistered(ItemStack stack, Consumer<Text> text, DynamicTooltip.Location location) {
+    //static void appendRegistered(ItemStack stack, Consumer<Text> text, DynamicTooltip.Location location) {
         List<DynamicTooltip> tooltips = DynamicTooltipRegistry.getInstance()
                 .getAll()
                 .values()

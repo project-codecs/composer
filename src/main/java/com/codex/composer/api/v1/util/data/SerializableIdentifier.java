@@ -14,7 +14,7 @@ public class SerializableIdentifier implements Comparable<SerializableIdentifier
     }
 
     public SerializableIdentifier(NbtCompound tag) {
-        this(tag.getString("namespace")/*? if minecraft: >=1.21.5 {*/.orElse("")/*? }*/, tag.getString("path")/*? if minecraft: >=1.21.5 {*/.orElse("")/*? }*/);
+        this(tag.getString("namespace")/*? if minecraft: >=1.21.5 {*//*.orElse("")*//*? }*/, tag.getString("path")/*? if minecraft: >=1.21.5 {*//*.orElse("")*//*? }*/);
     }
 
     public SerializableIdentifier(JsonObject object) {

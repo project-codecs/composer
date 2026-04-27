@@ -32,7 +32,7 @@ public class CreativeInventoryScreenMixin {
     @Inject(method = "getTooltipFromItem", at = @At("RETURN"), cancellable = true)
     public void composer$appendTooltip(ItemStack stack, CallbackInfoReturnable<List<Text>> cir) {
         List<Text> tooltip = new ArrayList<>(cir.getReturnValue());
-        DynamicTooltip.appendRegistered(stack, tooltip/*? if minecraft: >=1.21.5*/::add/*? }*/, DynamicTooltip.Location.AFTER_CREATIVE_TOOLTIP);
+        DynamicTooltip.appendRegistered(stack, tooltip/*? if minecraft: >=1.21.5 {*//*::add*//*? }*/, DynamicTooltip.Location.AFTER_CREATIVE_TOOLTIP);
         cir.setReturnValue(tooltip);
     }
 }
