@@ -3,7 +3,6 @@ package com.codex.composer.api.v1.tooltips.layout;
 import com.codex.composer.api.v1.tooltips.DynamicTooltipRegistry;
 import com.codex.composer.api.v1.tooltips.TooltipContext;
 import com.codex.composer.internal.client.config.ComposerClientConfig;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
@@ -11,6 +10,12 @@ import java.util.List;
 
 //? if minecraft: >=1.21.5
 //import java.util.function.Consumer;
+
+//? if minecraft: <=1.21.6
+import net.minecraft.client.gui.screen.Screen;
+
+//? if minecraft: >=1.21.9
+//import net.minecraft.client.MinecraftClient;
 
 /**
  * Represents a tooltip section, which can have nested content sections.
@@ -41,9 +46,9 @@ public interface DynamicTooltip {
 
         TooltipContext ctx = new TooltipContext(
                 stack,
-                Screen.hasShiftDown(),
-                Screen.hasControlDown(),
-                Screen.hasAltDown()
+                /*? if minecraft: <=1.21.6 { */Screen.hasShiftDown()/*?} else {*//*MinecraftClient.getInstance().isShiftPressed()*//*?}*/,
+                /*? if minecraft: <=1.21.6 { */Screen.hasControlDown()/*?} else {*//*MinecraftClient.getInstance().isCtrlPressed()*//*?}*/,
+                /*? if minecraft: <=1.21.6 { */Screen.hasAltDown()/*?} else {*//*MinecraftClient.getInstance().isAltPressed()*//*?}*/
         );
 
         tooltips

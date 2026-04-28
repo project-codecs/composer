@@ -34,7 +34,7 @@ public class Targeting {
      * Method based on the raycast method of Mialeemisc by AmyMialee (<a href="https://github.com/AmyMialeeMods/">AmyMialeeMods</a>)
      */
     public static EntityHitResult raycast(Entity player, Box box, Predicate<Entity> predicate, float hitboxScale) {
-        World world = player.getWorld();
+        World world = player./*? if minecraft: <=1.21.6 { */getWorld/*?} else {*//*getEntityWorld*//*?}*/();
         Vec3d start = player.getEyePos();
         Vec3d direction = player.getRotationVec(1.0F);
         Vec3d end = start.add(direction.multiply(box./*? if minecraft: <=1.20.1 { *//*getXLength*//*?} else {*/getLengthX/*?}*/()));

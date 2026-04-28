@@ -63,7 +63,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
      *///? } else {
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         //?}
-        if (!world.isClient) {
+        if (!world.isClient/*? if minecraft: >=1.21.9 { *//*()*//*?}*/) {
             playSound(world, state, pos, player);
 
             if (world.getBlockEntity(pos) instanceof AbstractPlushieBlockEntity plushie) plushie.squish(1);
@@ -82,7 +82,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
 
     @Override
     public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        if (!world.isClient) {
+        if (!world.isClient/*? if minecraft: >=1.21.9 { *//*()*//*?}*/) {
             if (world.getBlockEntity(pos) instanceof AbstractPlushieBlockEntity plushie) plushie.squish(24);
         }
     }

@@ -23,7 +23,7 @@ public abstract class CampfireBlockEntityMixin {
     @Inject(method = "litServerTick", at = @At("HEAD"), cancellable = true)
     //? if minecraft: <=1.21 {
     /*private static void composer$explodePlushies(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci) {
-    *///? } else {
+    *///? } else  {
     private static void composer$explodePlushies(ServerWorld world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, ServerRecipeManager.MatchGetter<SingleStackRecipeInput, CampfireCookingRecipe> recipeMatchGetter, CallbackInfo ci) {
     //? }
         for (ItemStack stack : campfire.getItemsBeingCooked()) {

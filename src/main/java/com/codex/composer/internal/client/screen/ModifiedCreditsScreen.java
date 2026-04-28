@@ -6,6 +6,9 @@ import net.minecraft.client.gui.screen.CreditsScreen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+//? if minecraft: >=1.21.9
+//import net.minecraft.client.input.KeyInput;
+
 public class ModifiedCreditsScreen extends CreditsScreen {
     private final boolean showCredits;
 
@@ -21,19 +24,27 @@ public class ModifiedCreditsScreen extends CreditsScreen {
     }
 
     @Override
+    //? if minecraft: <=1.21.6 {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == MinecraftClient.getInstance().options.inventoryKey.boundKey.getCode()) {
+    //? } else {
+    /*public boolean keyPressed(KeyInput input) {
+    *///? }
+        if (/*? if minecraft: <=1.21.6 { */keyCode/*?} else {*//*input.getKeycode()*//*?}*/ == MinecraftClient.getInstance().options.inventoryKey.boundKey.getCode()) {
             holdingCloseKey = true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(/*? if minecraft: <=1.21.6 { */keyCode, scanCode, modifiers/*?} else {*//*input*//*?}*/);
     }
 
     @Override
+    //? if minecraft: <=1.21.6 {
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == MinecraftClient.getInstance().options.inventoryKey.boundKey.getCode()) {
+    //? } else {
+    /*public boolean keyReleased(KeyInput input) {
+    *///? }
+        if (/*? if minecraft: <=1.21.6 { */keyCode/*?} else {*//*input.getKeycode()*//*?}*/ == MinecraftClient.getInstance().options.inventoryKey.boundKey.getCode()) {
             holdingCloseKey = false;
         }
-        return super.keyReleased(keyCode, scanCode, modifiers);
+        return super.keyReleased(/*? if minecraft: <=1.21.6 { */keyCode, scanCode, modifiers/*?} else {*//*input*//*?}*/);
     }
 
     @Override

@@ -12,10 +12,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.metadata.CustomValue;
-import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -31,6 +27,13 @@ import com.codex.composer.internal.networking.ScrollActionPayload;
 import com.codex.composer.internal.networking.TargetBlockPayload;
 import com.codex.composer.internal.networking.TargetEntityPayload;
 
+//? if minecraft: <=1.21.6 {
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.metadata.CustomValue;
+import net.fabricmc.loader.api.metadata.ModMetadata;
+//? }
+
 public class Composer implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(Composer.class);
     public static final CachedLogger CACHED_LOGGER = new CachedLogger(LOGGER);
@@ -39,6 +42,7 @@ public class Composer implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        //? if minecraft: <=1.21.6 {
         for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
             ModMetadata meta = mod.getMetadata();
 
@@ -54,6 +58,7 @@ public class Composer implements ModInitializer {
                 dupedKeybindsEnabled = true;
             }
         }
+        //? }
 
         ComposerServerConfig.initialize();
         ComposerCompositeEvents.initialize();

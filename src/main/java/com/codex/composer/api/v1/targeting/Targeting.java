@@ -29,7 +29,7 @@ public class Targeting {
         UUID uuid = ModCardinalComponents.TARGETED_ENTITY.get(player).getUuid();
         if (uuid == null) return null;
 
-        if (!(player.getWorld() instanceof WorldMethodAccessor worldMethodAccessor)) return null;
+        if (!(player./*? if minecraft: <=1.21.6 { */getWorld/*?} else {*//*getEntityWorld*//*?}*/() instanceof WorldMethodAccessor worldMethodAccessor)) return null;
         Entity entity = worldMethodAccessor.composer$getEntityByUuid(uuid);
         if (entity == null) return null;
         if (!options.targetNonLiving && !(entity instanceof LivingEntity)) return null;
