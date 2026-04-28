@@ -209,9 +209,15 @@ public abstract class ComposerModelProvider implements DataProvider {
         ItemAssets() {
         }
 
+        //? if minecraft: >=1.21.11 {
+        /*public void accept(Item item, ItemModel.Unbaked model, ItemAsset.Properties properties) {
+            this.accept(item, new ItemAsset(model, properties));
+        }
+        *///? } else {
         public void accept(Item item, ItemModel.Unbaked model) {
             this.accept(item, new ItemAsset(model, ItemAsset.Properties.DEFAULT));
         }
+        //? }
 
         private void accept(Item item, ItemAsset asset) {
             ItemAsset itemAsset = this.itemAssets.put(item, asset);

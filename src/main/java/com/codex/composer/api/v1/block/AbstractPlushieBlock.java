@@ -75,9 +75,11 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
     public BlockRenderType getRenderType(BlockState state) {
         //? if minecraft: <=1.20.6 {
         /*return BlockRenderType.ENTITYBLOCK_ANIMATED;
-         *///? } else {
+         *///? } else if minecraft: >=1.21.9 {
+        /*return BlockRenderType.MODEL;
+        *///? } else {
         return BlockRenderType.INVISIBLE;
-        //?}
+        //? }
     }
 
     @Override

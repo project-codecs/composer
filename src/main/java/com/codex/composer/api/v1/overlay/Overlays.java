@@ -312,7 +312,7 @@ public class Overlays {
         @Override
         protected Vec2 getSize() {
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-            return new Vec2(textRenderer.getWidth(text), textRenderer.getWrappedLinesHeight(text, Integer.MAX_VALUE));
+            return new Vec2(textRenderer.getWidth(text), textRenderer.getWrappedLinesHeight(Text.literal(text), Integer.MAX_VALUE));
         }
 
         @Override

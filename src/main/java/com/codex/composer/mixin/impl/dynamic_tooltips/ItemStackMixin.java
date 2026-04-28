@@ -126,22 +126,22 @@ public abstract class ItemStackMixin {
         appendRegistered(copy(), textConsumer, AFTER_CAN_PLACE_ON);
     }
 
-    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", shift = At.Shift.AFTER, ordinal = 5))
+    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", shift = At.Shift.AFTER, ordinal = 5/^? if minecraft: >=1.21.11 {^/ /^- 1^//^? }^/))
     private void composer$append$16(Item.TooltipContext context, TooltipDisplayComponent displayComponent, PlayerEntity player, TooltipType type, Consumer<Text> textConsumer, CallbackInfo ci) {
         appendRegistered(copy(), textConsumer, AFTER_DURABILITY);
     }
 
-    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", shift = At.Shift.AFTER, ordinal = 6))
+    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", shift = At.Shift.AFTER, ordinal = 6/^? if minecraft: >=1.21.11 {^/ /^- 1^//^? }^/))
     private void composer$append$17(Item.TooltipContext context, TooltipDisplayComponent displayComponent, PlayerEntity player, TooltipType type, Consumer<Text> textConsumer, CallbackInfo ci) {
         appendRegistered(copy(), textConsumer, AFTER_ITEM_ID);
     }
 
-    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", shift = At.Shift.AFTER, ordinal = 7))
+    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", shift = At.Shift.AFTER, ordinal = 7/^? if minecraft: >=1.21.11 {^/ /^- 1^//^? }^/))
     private void composer$append$18(Item.TooltipContext context, TooltipDisplayComponent displayComponent, PlayerEntity player, TooltipType type, Consumer<Text> textConsumer, CallbackInfo ci) {
         appendRegistered(copy(), textConsumer, AFTER_COMPONENTS);
     }
 
-    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", shift = At.Shift.AFTER, ordinal = 8))
+    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", shift = At.Shift.AFTER, ordinal = 8/^? if minecraft: >=1.21.11 {^/ /^- 1^//^? }^/))
     private void composer$append$19(Item.TooltipContext context, TooltipDisplayComponent displayComponent, PlayerEntity player, TooltipType type, Consumer<Text> textConsumer, CallbackInfo ci) {
         appendRegistered(copy(), textConsumer, AFTER_DISABLED_TEXT);
     }

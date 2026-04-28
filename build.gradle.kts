@@ -19,6 +19,7 @@ version = "${property("mod.version")}+mc${sc.current.version}"
 base.archivesName = property("mod.archives_base_name").toString()
 
 val requiredJava = when {
+    sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
     sc.current.parsed >= "1.20.6" -> JavaVersion.VERSION_21
     sc.current.parsed >= "1.18" -> JavaVersion.VERSION_17
     sc.current.parsed >= "1.17" -> JavaVersion.VERSION_16
@@ -69,7 +70,7 @@ dependencies {
     include("${cca()}.cardinal-components-api:cardinal-components-entity:${property("deps.cca")}")
     include("${cca()}.cardinal-components-api:cardinal-components-world:${property("deps.cca")}")
     modRuntimeOnly("${cca()}.cardinal-components-api:cardinal-components-api:${property("deps.cca")}")
-//    modLocalRuntime("com.terraformersmc:modmenu:${property("r.deps.mod_menu")}")
+    modLocalRuntime("com.terraformersmc:modmenu:${property("r.deps.mod_menu")}")
 
     implementation("org.lilbrocodes:constructive-core:${property("constructive_version")}")
     include("org.lilbrocodes:constructive-core:${property("constructive_version")}")
@@ -93,6 +94,8 @@ loom {
         ideConfigGenerated(true)
         runDir = "../../run"
     }
+
+    useIntermediateMappings = sc.current.version > "26.1.2"
 }
 
 fabricApi {

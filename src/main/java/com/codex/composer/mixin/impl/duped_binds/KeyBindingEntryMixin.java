@@ -33,7 +33,7 @@ public abstract class KeyBindingEntryMixin {
     private int flowed_combat$recolorBinding(int value) {
         if (Composer.disableDupedBinds()) return value;
         if (BindTracker.bindAllowed(binding)) {
-            RainbowColor.stepColor();
+            RainbowColor.stepColor(ComposerClientConfig.INSTANCE.rainbowEffectSpeed.get());
             this.update();
             return ComposerClientConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds ?
                     RainbowColor.currentColor :

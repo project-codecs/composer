@@ -32,7 +32,6 @@ public class FeatureCommand extends ComposerCommand {
 
         dispatcher.register(
                 CommandManager.literal("feature")
-                        .requires(src -> src.hasPermissionLevel(2))
                         .then(CommandManager.argument("mod", StringArgumentType.word())
                                 .suggests(this::mods)
                                 .then(CommandManager.literal("enable").then(feature(this::enable)))

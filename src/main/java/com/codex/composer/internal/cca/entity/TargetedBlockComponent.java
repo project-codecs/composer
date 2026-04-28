@@ -24,8 +24,8 @@ import net.minecraft.storage.WriteView;
 *///? }
 
 public class TargetedBlockComponent implements AutoSyncedComponent, ServerTickingComponent {
-    private static final String POS_KEY = "pos";
-    private static final String TICKS_KEY = "ticks";
+    private static final String POS = "pos";
+    private static final String TICKS = "ticks";
 
     private final PlayerEntity player;
     private BlockPos pos = null;
@@ -56,28 +56,26 @@ public class TargetedBlockComponent implements AutoSyncedComponent, ServerTickin
     //? if minecraft: <=1.21.5 {
     @Override
     public void readFromNbt(NbtCompound tag /*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
-        this.pos = BlockPos.fromLong(tag.getLong(POS_KEY)/*? if minecraft: >=1.21.5 {*//*.orElse(BlockPos.ORIGIN.asLong())*//*? }*/);
-        ticks = tag.getInt(TICKS_KEY)/*? if minecraft: >=1.21.5 {*//*.orElse(0)*//*? }*/;
+        this.pos = BlockPos.fromLong(tag.getLong(POS)/*? if minecraft: >=1.21.5 {*//*.orElse(BlockPos.ORIGIN.asLong())*//*? }*/);
+        ticks = tag.getInt(TICKS)/*? if minecraft: >=1.21.5 {*//*.orElse(0)*//*? }*/;
     }
 
     @Override
     public void writeToNbt(NbtCompound tag /*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
-        if (this.pos != null) {
-            tag.putLong(POS_KEY, pos.asLong());
-        }
-        tag.putInt(TICKS_KEY, ticks);
+        tag.putLong(POS, (pos == null ? BlockPos.ORIGIN : pos).asLong());
+        tag.putInt(TICKS, ticks);
     }
     //? } else {
     /*@Override
     public void readData(ReadView tag) {
-        pos = BlockPos.fromLong(tag.getLong(POS_KEY, BlockPos.ORIGIN.asLong()));
-        ticks = tag.getInt(TICKS_KEY, 0);
+        pos = BlockPos.fromLong(tag.getLong(POS, BlockPos.ORIGIN.asLong()));
+        ticks = tag.getInt(TICKS, 0);
     }
 
     @Override
     public void writeData(WriteView tag) {
-        tag.putLong(POS_KEY, pos.asLong());
-        tag.putInt(TICKS_KEY, ticks);
+        tag.putLong(POS, (pos == null ? BlockPos.ORIGIN : pos).asLong());
+        tag.putInt(TICKS, ticks);
     }
     *///? }
 

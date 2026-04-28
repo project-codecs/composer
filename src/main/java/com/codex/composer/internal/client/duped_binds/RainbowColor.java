@@ -1,7 +1,5 @@
 package com.codex.composer.internal.client.duped_binds;
 
-import com.codex.composer.internal.client.config.ComposerClientConfig;
-
 import java.awt.*;
 
 public class RainbowColor {
@@ -28,8 +26,8 @@ public class RainbowColor {
         return argb;
     }
 
-    public static void stepColor() {
-        if (tick >= 10 - ComposerClientConfig.INSTANCE.rainbowEffectSpeed.get()) {
+    public static void stepColor(int speed) {
+        if (tick >= 10 - speed) {
             tick = 0;
             currentColor = getNextColor();
         } else {
