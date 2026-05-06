@@ -2,7 +2,7 @@ package com.codex.composer.api.v1.feature.state;
 
 import com.google.gson.*;
 import net.minecraft.server.MinecraftServer;
-import com.codex.composer.api.v1.nbt.GsonSerializer;
+import com.codex.composer.api.v1.data.GsonSerializer;
 import com.codex.composer.mixin.accessor.MinecraftServerMethodAccessor;
 
 import java.io.*;

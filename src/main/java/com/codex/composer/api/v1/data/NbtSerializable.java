@@ -1,5 +1,6 @@
-package com.codex.composer.api.v1.nbt;
+package com.codex.composer.api.v1.data;
 
+//? if minecraft: <=1.21.5 {
 import net.minecraft.nbt.NbtCompound;
 
 /**
@@ -25,3 +26,4 @@ public interface NbtSerializable<T extends NbtSerializable<T>> {
         return writeNbt(new NbtCompound());
     }
 }
+//? }

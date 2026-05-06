@@ -78,7 +78,6 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:${property("junit_version")}"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.mockito:mockito-core:${property("mockito_version")}")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -94,8 +93,6 @@ loom {
         ideConfigGenerated(true)
         runDir = "../../run"
     }
-
-    useIntermediateMappings = sc.current.version > "26.1.2"
 }
 
 fabricApi {

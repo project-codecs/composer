@@ -64,7 +64,8 @@ public class ModHungarianProvider extends ComposerSemiLanguageProvider {
         prefix("overlay.sent_text_fade", "Szöveges átfedés elküldve: \"%s\" (%s) (elhalványulás: %d/%d/%d).");
 
         prefix("registry.prefix", "Composer segédeszközök");
-        prefix("dynamic_tooltips.hidden", "Nyomd meg: %s hogy látsd %s");
+        prefix("dynamic_tooltips.hidden", "Nyomd meg a(z) %s-t hogy látsd %s");
+        prefix("dynamic_tooltips.details", "a részleteket");
 
         prefix("tooltips.soulbound", "Ez a tárgy lélekhez kötött");
         prefix("tooltips.soulbound.not", "Ez a tárgy nincs lélekhez kötve");

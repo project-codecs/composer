@@ -65,6 +65,7 @@ public class ModEnglishProvider extends ComposerSemiLanguageProvider {
 
         prefix("registry.prefix", "Composer Utilities");
         prefix("dynamic_tooltips.hidden", "Press %s to show %s");
+        prefix("dynamic_tooltips.details", "details");
 
         prefix("tooltips.soulbound", "This item is soulbound");
         prefix("tooltips.soulbound.not", "This item is not soulbound");

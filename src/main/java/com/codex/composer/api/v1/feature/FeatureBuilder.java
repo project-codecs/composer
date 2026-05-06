@@ -4,7 +4,7 @@ import com.codex.composer.api.v1.feature.config.BooleanConfigSerializer;
 import com.codex.composer.api.v1.feature.config.DoubleConfigSerializer;
 import com.codex.composer.api.v1.feature.config.IntConfigSerializer;
 import com.codex.composer.api.v1.feature.config.StringConfigSerializer;
-import com.codex.composer.api.v1.nbt.GsonSerializer;
+import com.codex.composer.api.v1.data.GsonSerializer;
 
 @SuppressWarnings("UnusedReturnValue")
 public class FeatureBuilder {

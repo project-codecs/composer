@@ -10,6 +10,7 @@
   "composer.credits.success_both": "Showing credits & end poem to %s players.",
   "composer.credits.success_credits": "Showing credits to %s players.",
   "composer.credits.success_poem": "Showing end poem to %s players.",
+  "composer.dynamic_tooltips.details": "details",
   "composer.dynamic_tooltips.hidden": "Press %s to show %s",
   "composer.feature.description.missing": "No description was provided.",
   "composer.feature.disable": "Disabled feature %s",

@@ -65,6 +65,7 @@ public class ModShakespeareanProvider extends ComposerSemiLanguageProvider {
 
         prefix("registry.prefix", "Composer's Utilities");
         prefix("dynamic_tooltips.hidden", "Press %s to reveal %s");
+        prefix("dynamic_tooltips.details", "ye particulars");
 
         prefix("tooltips.soulbound", "This item is bound to thy soul");
         prefix("tooltips.soulbound.not", "This item is not bound to thy soul");

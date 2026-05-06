@@ -65,6 +65,7 @@ public class ModLolcatProvider extends ComposerSemiLanguageProvider {
 
         prefix("registry.prefix", "Composer Utilitiez (very useful, much wow)");
         prefix("dynamic_tooltips.hidden", "Press %s to see %s (iz hidden rn)");
+        prefix("dynamic_tooltips.details", "da detailz");
 
         prefix("tooltips.soulbound", "Dis item iz soulbound (iz yours 4evr)");
         prefix("tooltips.soulbound.not", "Dis item iz NOT soulbound");

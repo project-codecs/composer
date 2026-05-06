@@ -8,7 +8,7 @@ import com.codex.composer.api.v1.feature.config.DoubleConfigSerializer;
 import com.codex.composer.api.v1.feature.config.IntConfigSerializer;
 import com.codex.composer.api.v1.feature.config.StringConfigSerializer;
 import com.codex.composer.api.v1.feature.state.FeatureState;
-import com.codex.composer.api.v1.nbt.GsonSerializer;
+import com.codex.composer.api.v1.data.GsonSerializer;
 import com.codex.composer.api.v1.util.misc.Translatable;
 
 import java.util.Optional;

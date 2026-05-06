@@ -19,15 +19,15 @@ import java.util.function.Function;
 @Constructive(builder = true)
 public class Section {
     private final String title;
-    @Default @NullCheck(check = "%f.isBlank()") private String details = "details";
+    @Default @NullCheck(check = "%f.getString().isBlank()") private Text details = Text.translatable("composer.dynamic_tooltips.details");
     @Name(name = "keyCombo") private final Function<TooltipContext, Modifier> requiredButtonProvider;
-    private final ContentProvider content;
+    private final Function<TooltipContext, List<Text>> content;
     @Builder @Name(name = "children") private final List<Section> nestedSections;
     @Builder private final List<Formatting> titleFormat;
     @Builder @Default private List<Formatting> contentFormat = List.of(Formatting.GRAY);
     @Builder @Default private List<Formatting> hiddenFormat = List.of(Formatting.GRAY);
 
-    Section(String title, String details, Function<TooltipContext, Modifier> requiredButtonProvider, ContentProvider content, List<Section> nestedSections, List<Formatting> titleFormat, List<Formatting> contentFormat, List<Formatting> hiddenFormat) {
+    Section(String title, Text details, Function<TooltipContext, Modifier> requiredButtonProvider, Function<TooltipContext, List<Text>> content, List<Section> nestedSections, List<Formatting> titleFormat, List<Formatting> contentFormat, List<Formatting> hiddenFormat) {
         this.title = title;
         this.details = details;
         this.requiredButtonProvider = requiredButtonProvider;
@@ -50,16 +50,16 @@ public class Section {
         boolean buttonsPressed = requiredButtons == null || requiredButtons.matches(context);
 
         if (!buttonsPressed) {
-            out./*? if minecraft: <=1.21.4 {*/add/*? } else {*//*accept*//*? }*/(Text.translatable("composer.dynamic_tooltips.hidden", requiredButtons.toString(), Text.translatable(details)).formatted(hiddenFormat.toArray(new Formatting[]{})));
+            out./*? if minecraft: <=1.21.4 {*/add/*? } else {*//*accept*//*? }*/(Text.translatable("composer.dynamic_tooltips.hidden", requiredButtons.toString(), details).formatted(hiddenFormat.toArray(new Formatting[]{})));
             return;
         }
 
         if (!title.isBlank()) out./*? if minecraft: <=1.21.4 {*/add/*? } else {*//*accept*//*? }*/(Text.translatable(title).formatted(titleFormat.toArray(new Formatting[]{})));
 
         if (content != null) {
-            String main = content.get(context);
-            if (main != null && !main.isEmpty()) {
-                out./*? if minecraft: <=1.21.4 {*/add/*? } else {*//*accept*//*? }*/(Text.translatable(main).formatted(contentFormat.toArray(new Formatting[]{})));
+            List<Text> ct = content.apply(context);
+            if (ct != null && !ct.isEmpty()) {
+                for (Text line : ct) out./*? if minecraft: <=1.21.4 {*/add/*? } else {*//*accept*//*? }*/(line.copy().formatted(contentFormat.toArray(new Formatting[]{})));
             }
         }
 

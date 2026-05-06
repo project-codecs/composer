@@ -1,7 +1,7 @@
 package com.codex.composer.api.v1.feature.config;
 
-import com.codex.composer.api.v1.nbt.EnumSerializer;
-import com.codex.composer.api.v1.nbt.GsonSerializer;
+import com.codex.composer.api.v1.data.EnumSerializer;
+import com.codex.composer.api.v1.data.GsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;

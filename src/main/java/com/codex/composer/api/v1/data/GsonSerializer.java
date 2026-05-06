@@ -1,4 +1,4 @@
-package com.codex.composer.api.v1.nbt;
+package com.codex.composer.api.v1.data;
 
 import com.google.gson.JsonElement;
 

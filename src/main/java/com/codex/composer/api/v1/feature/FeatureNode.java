@@ -1,7 +1,7 @@
 package com.codex.composer.api.v1.feature;
 
 import net.minecraft.util.Identifier;
-import com.codex.composer.api.v1.nbt.GsonSerializer;
+import com.codex.composer.api.v1.data.GsonSerializer;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
