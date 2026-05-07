@@ -19,7 +19,6 @@ version = "${property("mod.version")}+mc${sc.current.version}"
 base.archivesName = property("mod.archives_base_name").toString()
 
 val requiredJava = when {
-    sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
     sc.current.parsed >= "1.20.6" -> JavaVersion.VERSION_21
     sc.current.parsed >= "1.18" -> JavaVersion.VERSION_17
     sc.current.parsed >= "1.17" -> JavaVersion.VERSION_16
