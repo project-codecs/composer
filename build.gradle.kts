@@ -2,6 +2,7 @@ plugins {
     id("com.modrinth.minotaur") version "2+"
     id("me.modmuss50.mod-publish-plugin")
     id("net.fabricmc.fabric-loom-remap")
+    id("org.moddedmc.wiki.toolkit")
 
     id("maven-publish")
     id("java")
@@ -41,7 +42,6 @@ repositories {
         forRepository { maven(url) { name = alias } }
         filter { groups.forEach(::includeGroup) }
     }
-    strictMaven("https://dl.cloudsmith.io/public/lilbrocodes/constructive/maven/", "Constructive Maven")
     strictMaven("https://www.cursemaven.com", "CurseForge", "curse.maven")
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
     strictMaven("https://maven.ladysnake.org/releases", "Ladysnake")
@@ -49,6 +49,7 @@ repositories {
     strictMaven("https://maven.terraformersmc.com/", "Terraformers")
     strictMaven("https://maven.nucleoid.xyz/", "Nucleoid")
     strictMaven("https://repo.codemc.io/repository/relativitymc/", "RelativityMc")
+    strictMaven("https://maven.sinytra.org", "Sinytra")
 }
 
 dependencies {
@@ -64,25 +65,31 @@ dependencies {
     modImplementation("me.fzzyhmstrs:fzzy_config:${property("deps.fzzy")}")
 
     modImplementation("${cca()}.cardinal-components-api:cardinal-components-base:${property("deps.cca")}")
-    modImplementation("${cca()}.cardinal-components-api:cardinal-components-entity:${property("deps.cca")}")
     modImplementation("${cca()}.cardinal-components-api:cardinal-components-${ccaWorld()}:${property("deps.cca")}")
     include("${cca()}.cardinal-components-api:cardinal-components-base:${property("deps.cca")}")
-    include("${cca()}.cardinal-components-api:cardinal-components-entity:${property("deps.cca")}")
     include("${cca()}.cardinal-components-api:cardinal-components-${ccaWorld()}:${property("deps.cca")}")
-
-    modLocalRuntime("com.terraformersmc:modmenu:${property("r.deps.mod_menu")}")
-
-    implementation("org.lilbrocodes:constructive-core:${property("constructive_version")}")
-    include("org.lilbrocodes:constructive-core:${property("constructive_version")}")
-    annotationProcessor("org.lilbrocodes:constructive-processor:${property("constructive_version")}")
 
     testImplementation(platform("org.junit:junit-bom:${property("junit_version")}"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    sc.constants["release"]?.let {
+        if (!it) {
+            if (sc.current.parsed >= "1.21.11") modRuntimeOnly("org.sinytra:wiki-exporter-fabric:${property("r.deps.wiki_exporter")}")
+            modLocalRuntime("com.terraformersmc:modmenu:${property("r.deps.mod_menu")}")
+            modLocalRuntime("${cca()}.cardinal-components-api:cardinal-components-api:${property("deps.cca")}")
+        }
+    }
+}
+
+wiki {
+    docs.create("composer") {
+        root = rootProject.file("docs/")
+    }
+    wikiAccessToken = env("WIKI_PUBLISH_KEY")
 }
 
 loom {
-//    fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
     accessWidenerPath = project.file("src/main/resources/${property("mod.mc_title")}.accesswidener")
 
     decompilerOptions.named("vineflower") {
@@ -211,11 +218,15 @@ tasks {
     }
 }
 
+val changelogText = rootProject.file("CHANGELOG.md").readText()
+val regex = Regex("""## \[\d+(?:\.\d+)*\] - \d{4}-\d{2}-\d{2}[\s\S]*?(?=\n## \[|$)""")
+val latestChange = regex.find(changelogText)?.value ?: "No changelog available"
+
 publishMods {
     file = tasks.remapJar.map { it.archiveFile.get() }
     displayName = "${property("mod.version")} for ${property("mod.mc_title")}"
     version = "${property("mod.version")}-$buildNum+mc${sc.current.version}"
-    changelog = rootProject.file("CHANGES.md").readText()
+    changelog = latestChange
     type = STABLE
     modLoaders.add("fabric")
 

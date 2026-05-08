@@ -20,9 +20,7 @@ public class ModModelProvider extends ComposerModelProvider {
     }
 
     @Override
-    public void generateBlocks(BlockStateModelGenerator generator) {
-
-    }
+    public void generateBlocks(BlockStateModelGenerator generator) {}
 
     @Override
     public void generateItems(ItemModelGenerator generator) {

@@ -1,0 +1,24 @@
+---
+title: Item Extensions
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.item.settings <br/>
+Canonical Name: com.codex.composer.api.v1.item.settings.ComposerItemSettings & component.SoulbouldComponent
+
+Composer currently offers one extension to the vanilla items, making them soulbound. You can do this through two[^1] ways, either through ComposerItemSettings
+or through a data component. Soulbound currently just makes the item stack return to the player's inventory upon death. While it does have a boolean for disabling
+the dropping of the item, but it's not implemented very well and it is still very easy to get rid of the item. (Chests, or dropping out of GUI) This is TODO, and
+will be implemented properly at some future time, but it isn't really an essential feature.
+
+You can do this directly in [DeferredItemRegistry](../registry/lazy) as well:
+```java
+private static final DeferredItemRegistry REGISTRY = new DeferredItemRegistry(Composer.MOD_ID, ModItemGroups.COMPOSER);
+
+public static final BlockItem PLUSHIE = REGISTRY.register(
+        ModBlocks.PLUSH,
+        "plush",
+        new ComposerItemSettings().soulbound(true)
+);
+```
+
+[^1]: The data component is only available in 1.20.6 and above, and replaces the mixin boolean in Item.Settings. In either case, you can use component.SoulboundComponent
+to check if an item is soulbound should you have to do that.

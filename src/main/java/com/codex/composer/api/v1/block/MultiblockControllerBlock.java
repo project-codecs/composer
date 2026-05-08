@@ -13,6 +13,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -21,7 +22,12 @@ public interface MultiblockControllerBlock {
     default void onMultiblockFormed() { }
     default void onMultiblockBroken() { }
 
-    default Direction getOrientation(BlockState state) {
+    /**
+     * Checks the horizontal facing of the given blockstate, and inverts it if NORTH or SOUTH.
+     * @param state Block state to check.
+     * @return {@link Direction} value based on the {@link Properties#HORIZONTAL_FACING} value of the given blockstate.
+     */
+    default Direction getOrientation(@NotNull BlockState state) {
         return switch (state.getOrEmpty(Properties.HORIZONTAL_FACING).orElse(Direction.NORTH)) {
             case EAST -> Direction.EAST;
             case WEST -> Direction.WEST;

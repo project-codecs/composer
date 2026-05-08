@@ -35,8 +35,6 @@
   },
   "custom": {
     "cardinal-components": [
-      "composer:targeted_block",
-      "composer:targeted_entity",
       "composer:multiblocks"
     ],
     "modmenu": {

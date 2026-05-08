@@ -13,8 +13,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Identifier;
-import com.codex.composer.api.v1.feature.FeatureHandle;
-import com.codex.composer.api.v1.registry.lazy.feature.Feature;
 import com.codex.composer.api.v1.util.misc.Translatable;
 
 //? if minecraft: <=1.20.4 {
@@ -69,14 +67,6 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
     }
 
     // Custom
-
-    public void feature(FeatureHandle feature, String translation) {
-        if (feature.id() != null) add(feature.getTranslationKey(), translation);
-    }
-
-    public void feature(Feature feature, String translation) {
-        feature(feature.getHandle(), translation);
-    }
 
     public void stat(Identifier identifier, String value) {
         add("stat.%s.%s".formatted(identifier.getNamespace(), identifier.getPath()), value);

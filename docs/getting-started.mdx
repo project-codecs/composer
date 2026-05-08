@@ -1,0 +1,75 @@
+---
+title: Getting Started
+---
+This is a guide for getting started with using Composer for mod development! If you're not looking for that, [go back](./) where you came from!
+
+Installing composer is as streamline as any other maven package, except it also needs some extra care to handle. This documentation will be for Composer 3 and up,
+so if you are using any version older than that, please switch to a newer version as those versions have many bugs, or consult the [GitHub README](https://github.com/project-codecs/composer/blob/main/README.md#development-usage) for the legacy docs.
+
+Anyway, here's install guides for all your favourite package managers: <br/>
+Replace `(latest_version)` with the latest Composer version compatible with your Minecraft version.
+
+<details>
+<summary>Gradle (Groovy DSL) - build.gradle</summary>
+
+```properties
+# gradle.properties
+composer_version = (latest_version)
+```
+
+```groovy
+// build.gradle
+
+repositories {
+    maven {
+        name = "Composer Maven"
+        url = "https://dl.cloudsmith.io/public/project-codex/composer/maven/"
+    }
+    maven {
+        name = "Cardinal Components"
+        url = "https://maven.ladysnake.org/releases"
+    }
+    maven {
+        name "Fuzzy Hamsters"
+        url "https://maven.fzzyhmstrs.me/"
+    }
+}
+
+dependencies {
+    modImplementation "com.codex:composer:$composer_version+mc$minecraft_version"
+}
+```
+
+</details>
+
+<details>
+<summary>Gradle (Kotlin DSL) - build.gradle.kts</summary>
+
+```properties
+# gradle.properties
+composer_version = (latest_version)
+```
+
+```groovy
+// build.gradle.kts
+
+repositories {
+    maven("https://dl.cloudsmith.io/public/project-codex/composer/maven/") {
+        name = "Composer Maven"
+    }
+    maven("https://maven.ladysnake.org/releases") {
+        name = "Cardinal Components"
+    }
+    maven("https://maven.fzzyhmstrs.me/") {
+        name = "Fuzzy Hamsters"
+    }
+}
+
+dependencies {
+    modImplementation("com.codex:composer:$composer_version+mc$minecraft_version")
+}
+```
+
+</details>
+
+After installation, take a look at the API docs, or just browse the code, or do whatever you want because to be honest I have no power over you.

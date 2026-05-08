@@ -17,7 +17,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import com.codex.composer.api.v1.util.commands.ComposerCommand;
+import com.codex.composer.api.v1.util.command.ComposerCommand;
 import com.codex.composer.api.v1.overlay.impl.AnimatedOverlay;
 import com.codex.composer.api.v1.overlay.impl.Overlay;
 import com.codex.composer.api.v1.util.misc.PredicateVoid;

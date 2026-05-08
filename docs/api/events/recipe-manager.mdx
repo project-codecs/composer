@@ -1,0 +1,26 @@
+---
+title: Server Recipe Manager events
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.event <br/>
+Canonical Name: com.codex.composer.api.v1.event.ServerRecipeManagerEvents
+
+These events are used by the [DeferredRecipeRegistry](../registry/lazy) to register recipe property sets post 1.21.3. These property sets are used by,
+among many other things probably, handled screens when shift-clicking items into input slots, and if there isn't one registered
+for the proper recipe type, then you will not be able to quick-move the items. This event exists, because recipe property sets are not
+actually registered anywhere, and are rather just stored in a constant static field in ServerRecipeManager, thus this event to modify it.
+
+I don't recommend using this event by itself as using a [DeferredRecipeRegistry](../registry/lazy) to create and register the property set is much easier, but
+if you really want to, here is documentation:
+
+```java
+/* Method called on the creation of the static map. Modify the values map in place.
+   All other callbacks use the same Map instance, so try not to clear it please :) */
+void append(Map<RegistryKey<RecipePropertySet>, ServerRecipeManager.SoleIngredientGetter> values);
+```
+### As used in DeferredRecipeRegistry:
+```java
+public RegistryKey<RecipePropertySet> registerPropertySet(String name, ServerRecipeManager.SoleIngredientGetter ingredientGetter) {
+    RegistryKey<RecipePropertySet> key = RegistryKey.of(...);
+    ServerRecipeManagerEvents.PROPERTY_SET_REGISTRATION.register(map -> map.put(key, ingredientGetter));
+    return key;
+}

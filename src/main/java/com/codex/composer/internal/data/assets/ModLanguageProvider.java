@@ -26,9 +26,4 @@ public class ModLanguageProvider extends ComposerMultiLanguageProvider {
         pack.addProvider("enws", ModShakespeareanProvider::new);
         pack.addProvider("hu_hu", ModHungarianProvider::new);
     }
-
-    @Override
-    public String getName() {
-        return "Composer Languages";
-    }
 }

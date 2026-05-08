@@ -49,7 +49,7 @@ public class MultiblockJsonLoader {
                 List<Key> keyRow = new ArrayList<>();
 
                 for (char c : row.toCharArray()) {
-                    JsonObject value = raw.pattern.get(String.valueOf(c));
+                    JsonPrimitive value = raw.pattern.get(String.valueOf(c));
 
                     keyRow.add(new Key(c, value));
                 }
@@ -61,7 +61,7 @@ public class MultiblockJsonLoader {
         }
 
         List<Key> keys = raw.pattern.entrySet().stream()
-                .map(entry -> new Key(entry.getKey().charAt(0), entry.getValue()))
+                .map(entry -> new Key(entry.getKey().charAt(0), entry.getValue().getAsJsonPrimitive()))
                 .toList();
 
         return new ParsedMultiblock(raw.id, processedLayers, keys, raw.controller_pos);
@@ -99,14 +99,14 @@ public class MultiblockJsonLoader {
 
     public record Layer(List<List<Key>> shape) {}
 
-    public record Key(char symbol, JsonObject value) {}
+    public record Key(char symbol, JsonPrimitive value) {}
 
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private static class RawMultiblock {
         Identifier id;
         List<List<String>> layers;
-        Map<String, JsonObject> pattern;
+        Map<String, JsonPrimitive> pattern;
         Vec3i controller_pos;
     }
 

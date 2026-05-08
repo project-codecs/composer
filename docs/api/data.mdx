@@ -1,0 +1,38 @@
+---
+title: Data Management
+---
+Package: com.codex.composer.api.v1.data
+
+The classes in this package are various interfaces used for serialization / deserialization.
+
+ComposerCompound only exists in 1.21.4 and earlier, as in 1.21.5+ raw nbt reading and writing was replaced with codecs, and dynamic operations.
+For the same reason, from 1.21.6 and onwards ComposerReadView and ComposerWriteView are available and offer the same features as ComposerCompound.
+
+This does however mean that there is an intermediate phase of 1.21.5, where neither utility is available; that I cannot do anything about, as in that version
+NbtCompound was made to be final, so ComposerCompound cannot extend it.
+
+## As an example, here's code from both versions that does the same thing:
+**From [Starstruck](https://github.com/LilBroCodes/starstruck) (Code currently private, sorry)**
+``` java
+// 1.21.11
+@Override
+public void writeData(@NonNull WriteView view) {
+    ComposerWriteView.begin(view).putList("value", Entry.CODEC, value);
+}
+
+@Override
+public void readData(@NonNull ReadView view) {
+    value = ComposerReadView.begin(view).getList("value", Entry.CODEC);
+}
+
+// 1.20.1
+@Override
+public void writeToNbt(NbtCompound nbt) {
+    nbt.copyFrom(new ComposerCompound().putListFluent("value", value));
+}
+
+@Override
+public void readFromNbt(NbtCompound nbt) {
+    value = ComposerCompound.copy(nbt).getList("value", Entry::new);
+}
+```

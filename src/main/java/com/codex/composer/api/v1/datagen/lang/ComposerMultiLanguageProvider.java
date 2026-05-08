@@ -105,6 +105,11 @@ public abstract class ComposerMultiLanguageProvider implements DataProvider {
                 .resolveJson(Identifier.of(dataOutput.getModId(), code));
     }
 
+    @Override
+    public String getName() {
+        return "Languages";
+    }
+
     public static class LanguagePack {
         private final Map<String, List<ComposerSemiLanguageProvider>> languageMap = new HashMap<>();
         @Nullable private String baseLanguage;

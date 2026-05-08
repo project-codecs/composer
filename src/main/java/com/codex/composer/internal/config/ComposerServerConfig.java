@@ -29,10 +29,8 @@ public class ComposerServerConfig extends Config {
     }
     //? }
 
-    //? if minecraft: <=1.20.1 || >=1.21 {
-    @Name("Developer Mode")
+    //? if minecraft: <=1.20.1 || >=1.21
     @Prefix("Adds some extra command functionality and other features to help with debugging the mod.")
-    //? }
     public ValidatedBoolean developerMode = new ValidatedBoolean(false);
 
     public static ComposerServerConfig INSTANCE;
