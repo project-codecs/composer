@@ -53,7 +53,7 @@ public record ClearOverlaysPayload(boolean visible, boolean queue) implements /*
     @Environment(EnvType.CLIENT)
     public static void registerHandler() {
         //? if minecraft: >=1.20.6 {
-        PayloadTypeRegistry.playS2C().register(ID, CODEC);
+        PayloadTypeRegistry./*? if legacy {*/playS2C/*? } else {*//*clientboundPlay*//*? }*/().register(ID, CODEC);
         ClientPlayNetworking.registerGlobalReceiver(ID, new ClearOverlaysHandler());
         //?} else {
         /*ClientPlayNetworking.registerGlobalReceiver(TYPE, new ClearOverlaysHandler());

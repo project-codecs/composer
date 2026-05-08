@@ -7,13 +7,8 @@ import com.codex.composer.internal.cca.ModCardinalComponents;
 
 import static com.codex.composer.internal.registry.ModFeatures.TargetSynchronization.*;
 
-//? if minecraft: <=1.20.4 {
-/*import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
- *///? } else {
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
-//?}
 
 //? if minecraft: <=1.21.5 {
 import net.minecraft.nbt.NbtCompound;

@@ -45,7 +45,7 @@ public abstract class ComposerCommand implements CommandRegistrationCallback {
 
     /** Sends feedback to a player with an optional success flag. */
     public int feedback(PlayerEntity player, Text message, boolean success) {
-        player.sendMessage(appendPrefix(message), false);
+        player.sendMessage(appendPrefix(message)/*? if legacy {*/, false/*? }*/);
         return success ? 1 : 0;
     }
 
@@ -103,7 +103,7 @@ public abstract class ComposerCommand implements CommandRegistrationCallback {
 
     /** Sends an informational message to a player. */
     public int info(PlayerEntity player, Text msg) {
-        player.sendMessage(msg, false);
+        player.sendMessage(msg/*? if legacy {*/, false/*? }*/);
         return 1;
     }
 

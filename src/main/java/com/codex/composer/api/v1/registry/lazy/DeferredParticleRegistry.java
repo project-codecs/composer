@@ -1,6 +1,5 @@
 package com.codex.composer.api.v1.registry.lazy;
 
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.Registries;
@@ -14,6 +13,11 @@ import com.mojang.serialization.MapCodec;
 //?} else {
 /*import com.mojang.serialization.Codec;
 *///?}
+
+//? legacy {
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+//? } else
+//import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 
 public class DeferredParticleRegistry extends EmptyDeferredRegistry {
     public DeferredParticleRegistry(String modId) {
@@ -61,7 +65,7 @@ public class DeferredParticleRegistry extends EmptyDeferredRegistry {
     *///?}
 
     public <T extends ParticleEffect> void registerClient(
-            ParticleType<T> type, ParticleFactoryRegistry.PendingParticleFactory<T> factory) {
-        ParticleFactoryRegistry.getInstance().register(type, factory);
+            ParticleType<T> type, /*? if legacy {*/ParticleFactoryRegistry.PendingParticleFactory/*? } else {*//*ParticleProviderRegistry.PendingParticleProvider*//*? }*/<T> factory) {
+        /*? if legacy {*/ParticleFactoryRegistry/*? } else {*//*ParticleProviderRegistry*//*? }*/.getInstance().register(type, factory);
     }
 }

@@ -51,7 +51,7 @@ public record TargetEntityPayload(UUID uuid)
 
     public static void registerHandler() {
         //? if minecraft: >=1.20.6 {
-        PayloadTypeRegistry.playC2S().register(ID, CODEC);
+        PayloadTypeRegistry./*? if legacy {*/playC2S/*? } else {*//*serverboundPlay*//*? }*/().register(ID, CODEC);
         ServerPlayNetworking.registerGlobalReceiver(ID, new TargetEntityHandler());
         //?} else {
         /*ServerPlayNetworking.registerGlobalReceiver(TYPE, new TargetEntityHandler());

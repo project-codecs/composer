@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "cookingtime": 10,
+  "experience": 0.0,
+  "ingredient": "composer:plush",
+  "result": {
+    "id": "composer:plush"
+  }
+}

@@ -1,7 +1,6 @@
 package com.codex.composer.api.v1.datagen;
 
 import me.fzzyhmstrs.fzzy_config.util.EnumTranslatable;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -26,6 +25,11 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.registry.entry.RegistryEntry;
 //?}
 
+//? legacy {
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+//? } else
+//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -37,10 +41,10 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
         super(dataOutput);
     }
     *///? } else {
-    public ComposerLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public ComposerLanguageProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         super(dataOutput, registryLookup);
     }
-    //?}
+    //? }
 
     //? if minecraft: <=1.20.4
     //@Override

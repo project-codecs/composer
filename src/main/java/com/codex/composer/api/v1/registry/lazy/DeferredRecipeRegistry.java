@@ -1,17 +1,15 @@
 package com.codex.composer.api.v1.registry.lazy;
 
 import com.codex.composer.api.v1.registry.lazy.struct.RecipeTypeEntry;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 //? if minecraft: >=1.21.3 {
-import net.minecraft.recipe.RecipePropertySet;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.registry.RegistryKey;
+import com.codex.composer.api.v1.events.ServerRecipeManagerEvents;
 //? }
 
 public class DeferredRecipeRegistry extends EmptyDeferredRegistry {
@@ -51,8 +49,10 @@ public class DeferredRecipeRegistry extends EmptyDeferredRegistry {
         );
     }
 
-    public RegistryKey<RecipePropertySet> registerPropertySet(String name) {
-        return RegistryKey.of(RecipePropertySet.REGISTRY, Identifier.of(modId, name));
+    public RegistryKey<RecipePropertySet> registerPropertySet(String name, ServerRecipeManager.SoleIngredientGetter ingredientGetter) {
+        RegistryKey<RecipePropertySet> key = RegistryKey.of(RecipePropertySet.REGISTRY, Identifier.of(modId, name));
+        ServerRecipeManagerEvents.PROPERTY_SET_REGISTRATION.register(map -> map.put(key, ingredientGetter));
+        return key;
     }
     //? }
 }

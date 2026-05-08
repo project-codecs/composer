@@ -5,13 +5,17 @@ import com.codex.composer.internal.data.assets.languages.ModEnglishProvider;
 import com.codex.composer.internal.data.assets.languages.ModHungarianProvider;
 import com.codex.composer.internal.data.assets.languages.ModLolcatProvider;
 import com.codex.composer.internal.data.assets.languages.ModShakespeareanProvider;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
+//? legacy {
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+//? } else
+//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+
 public class ModLanguageProvider extends ComposerMultiLanguageProvider {
-    public ModLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public ModLanguageProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         super(dataOutput, registryLookup);
     }
 

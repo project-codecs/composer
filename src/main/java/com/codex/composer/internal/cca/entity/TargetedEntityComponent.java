@@ -8,23 +8,18 @@ import java.util.UUID;
 
 import static com.codex.composer.internal.registry.ModFeatures.TargetSynchronization.*;
 
-//? if minecraft: <=1.20.4 {
-/*import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
-*///? } else {
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
-import net.minecraft.registry.RegistryWrapper;
-//?}
 
 //? if minecraft: <=1.21.5 {
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import java.util.Objects;
 //? } else {
 /*import net.minecraft.storage.ReadView;
-import java.util.Optional;
 import net.minecraft.storage.WriteView;
+import java.util.Optional;
 *///? }
 
 public class TargetedEntityComponent implements AutoSyncedComponent, ServerTickingComponent {

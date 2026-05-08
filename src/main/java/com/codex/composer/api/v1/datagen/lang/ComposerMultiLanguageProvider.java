@@ -1,6 +1,5 @@
 package com.codex.composer.api.v1.datagen.lang;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.data.DataOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataWriter;
@@ -12,12 +11,17 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
+//? legacy {
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+//? } else
+//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+
 public abstract class ComposerMultiLanguageProvider implements DataProvider {
-    private final FabricDataOutput dataOutput;
+    private final /*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ dataOutput;
     private final CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup;
     private final LanguagePack languagePack = new LanguagePack();
 
-    public ComposerMultiLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public ComposerMultiLanguageProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         this.dataOutput = dataOutput;
         this.registryLookup = registryLookup;
         init(languagePack);

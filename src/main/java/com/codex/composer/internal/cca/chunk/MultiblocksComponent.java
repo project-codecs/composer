@@ -1,5 +1,6 @@
 package com.codex.composer.internal.cca.chunk;
 
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -8,11 +9,6 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-//? if minecraft: <=1.20.4
-//import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-
-//? if minecraft: >=1.20.6
-import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 //? if minecraft: <=1.21.4
 import net.minecraft.nbt.NbtElement;

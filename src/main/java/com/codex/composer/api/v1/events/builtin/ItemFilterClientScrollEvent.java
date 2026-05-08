@@ -36,7 +36,7 @@ public abstract class ItemFilterClientScrollEvent implements ClientScrollEvents.
         if (player == null) return false;
 
         ItemStack stack = player.getStackInHand(hand);
-        if (stack.isOf(item)) return onScroll(client, stack, world, player, scrollAmount);
+        if (stack./*? if legacy {*/isOf/*? } else {*//*is*//*? }*/(item)) return onScroll(client, stack, world, player, scrollAmount);
 
         return false;
     }

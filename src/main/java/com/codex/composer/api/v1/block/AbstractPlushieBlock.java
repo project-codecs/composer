@@ -116,7 +116,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
         return this.getDefaultState()
                 .with(FACING, ctx.getHorizontalPlayerFacing().getOpposite())
-                .with(WATERLOGGED, fluidState.isOf(Fluids.WATER));
+                .with(WATERLOGGED, fluidState./*? if legacy {*/isOf/*? } else {*//*is*//*? }*/(Fluids.WATER));
     }
 
     @Override

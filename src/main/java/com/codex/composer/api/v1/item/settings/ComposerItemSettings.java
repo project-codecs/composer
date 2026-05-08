@@ -13,8 +13,8 @@ public class ComposerItemSettings extends Item.Settings {
 
     public ComposerItemSettings soulbound(boolean canDrop) {
         //? if minecraft: >=1.20.6 {
-        component(ModDataComponentTypes.SOULBOUND, true);
-        component(ModDataComponentTypes.SOULBOUND_CAN_DROP, canDrop);
+        /*? if legacy {*/component/*? } else {*//*withComponent*//*? }*/(ModDataComponentTypes.SOULBOUND, true);
+        /*? if legacy {*/component/*? } else {*//*withComponent*//*? }*/(ModDataComponentTypes.SOULBOUND_CAN_DROP, canDrop);
         //? } else {
         /*soulbound = true;
         soulboundCanDrop = canDrop;

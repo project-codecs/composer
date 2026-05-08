@@ -32,7 +32,7 @@ public abstract class WorldChunkMixin {
 
         BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof MultiblockControllerBlock ctrl) {
-            if (previous.isOf(be.getCachedState().getBlock()) && !state.isOf(be.getCachedState().getBlock())) ctrl.onBroken(world, pos);
+            if (previous./*? if legacy {*/isOf/*? } else {*//*is*//*? }*/(be.getCachedState().getBlock()) && !state./*? if legacy {*/isOf/*? } else {*//*is*//*? }*/(be.getCachedState().getBlock())) ctrl.onBroken(world, pos);
         } else executeOnPlaced = true;
     }
 

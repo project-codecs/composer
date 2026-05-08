@@ -28,11 +28,10 @@
     "composer.mixins.json"
   ],
   "depends": {
-    "fabric": "*",
     "fabricloader": ">=${loader}",
     "fabric-api": ">=${fapi}",
     "minecraft": "${minecraft}",
-    "cardinal-components": ">=${cca}"
+    "cardinal-components${cca_ext}": ">=${cca}"
   },
   "custom": {
     "cardinal-components": [

@@ -145,7 +145,7 @@ public class Overlays {
 
                 AbstractTexture tex = client.getTextureManager().getTexture(texture);
                 if (tex == null) {
-                    client.player.sendMessage(Text.literal("§cInvalid texture for overlay: " + texture), false);
+                    client.player.sendMessage(Text.literal("§cInvalid texture for overlay: " + texture)/^? if legacy {^/, false/^? }^/);
                     remove();
                     return;
                 }
@@ -154,7 +154,7 @@ public class Overlays {
                 try {
                     shape = loadSize(tex);
                 } catch (Exception e) {
-                    client.player.sendMessage(Text.literal("§cFailed to load overlay texture: " + texture), false);
+                    client.player.sendMessage(Text.literal("§cFailed to load overlay texture: " + texture)/^? if legacy {^/, false/^? }^/);
                     remove();
                     return;
                 }

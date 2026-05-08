@@ -2,7 +2,6 @@ package com.codex.composer.api.v1.datagen;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataWriter;
@@ -17,11 +16,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+//? legacy {
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+//? } else
+//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+
 public abstract class ComposerMultiblockProvider implements DataProvider {
     private final List<CompletableFuture<?>> futures = new ArrayList<>();
-    private final FabricDataOutput output;
+    private final /*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ output;
 
-    public ComposerMultiblockProvider(FabricDataOutput output) {
+    public ComposerMultiblockProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ output) {
         this.output = output;
     }
 
