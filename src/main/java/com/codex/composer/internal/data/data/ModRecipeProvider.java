@@ -1,6 +1,5 @@
 package com.codex.composer.internal.data.data;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 
 import net.minecraft.recipe.Ingredient;
@@ -40,13 +39,18 @@ import net.minecraft.data.recipe.RecipeGenerator;
 //? if minecraft: >=1.21.3
 import net.minecraft.registry.RegistryKeys;
 
+//? legacy {
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+//? } else
+//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+
 public class ModRecipeProvider extends FabricRecipeProvider {
     //? if minecraft: <=1.20.4 {
     /*public ModRecipeProvider(FabricDataOutput output) {
         super(output);
     }
     *///? } else {
-    public ModRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+    public ModRecipeProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
         super(output, completableFuture);
     }
 

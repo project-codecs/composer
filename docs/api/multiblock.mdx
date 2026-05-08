@@ -1,0 +1,54 @@
+---
+title: Multiblocks
+---
+Package: com.codex.composer.api.v1.multiblock
+
+Composer offers a fairly well-structured and somewhat data-based multiblock system. The easiest way to create these json files is with a [ComposerMultiblockProvider](../datagen/multiblock).
+
+Multiblock completeness is checked whenever a block changes in the world. Composer looks at every multiblock instance in the world, and if
+the updated state is within one of these multiblocks, the controller is found and used to update completion. No, this is not as efficient as
+it could be. Yes, it could be stored per-chunk instead of per-world, but that has it's own problems of crashing due to empty chunks (or chunks
+that just don't store components sometimes) or just breaking because of multiblocks in multiple chunks and/or on chunk borders.
+
+It is recommended to generate the multiblock JSON files with data generation, but for those who do
+not have that option (or chose not to for some reason), here is the specification:
+```json
+{
+  // Generic Identifier, required.
+  "id": "namespace:path",
+
+  // Controller position from the bottom-left of the multiblock.
+  // X = Horizontal position from left - -> + right
+  // Y = Vertical position from bottom - -> + top
+  // Z = "Depth" from front - -> + back
+  "controller_pos": { "x": 0, "y": 0, "z": 0 },
+
+  // List of layers from bottom to top
+  "layers": [
+    // A layer can be of any shape, but it must be consistent.
+    // All rows must be the same width, and all layers must have the same amount of rows.
+    [
+      "#X#",
+      "X#X",
+      "#X#"
+    ],
+
+    // Though they can be overridden, by default stars match any block and spaces match air.
+    [
+      "***",
+      "* *",
+      "***"
+    ]
+  ],
+
+  // Pattern specification similar to shaped crafting recipes.
+  "pattern": {
+    // Key must be a single character, value can be a block or a tag.
+    "#": "minecraft:bricks",
+    "X": "#minecraft:infiniburn_overworld",
+
+    "*": "...", // Can technically override, but not recommended.
+    " ": "..."  // Same here.
+  }
+}
+```

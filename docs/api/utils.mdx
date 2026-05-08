@@ -1,0 +1,74 @@
+---
+title: Miscellaneous Utilities
+---
+Package: com.codex.composer.api.v1.util
+
+Composer contains a very large amount of miscellaneous utilities in this package (37 classes to be exact), so they will not be documented separately.
+However, there are a few more notable utilities in here that are worth highlighting, as they are widely useful across a lot of projects.
+
+## ComposerCommand
+Gives you a bunch of utilities for sending messages to the player in a command. The class also extends the callback for the command registration callback,
+so if you use it, simply passing an instance of the inheritor class works.
+
+### Example Implementation
+**From Composer**
+```java
+public class CreditsCommand extends ComposerCommand {
+    @Override
+    public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
+        dispatcher.register(
+                CommandManager.literal("credits").then(
+                        CommandManager.argument("for", EntityArgumentType.players()).then(
+                                CommandManager.argument("type", CreditsTypeArgumentType.create()).executes(this::roll)
+                        )
+                )
+        );
+    }
+
+    private int roll(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
+        if (shouldCancel()) return throwOnNonDebug(ctx);
+        CreditsType type = CreditsTypeArgumentType.get(ctx, "type");
+        List<ServerPlayerEntity> players = (List<ServerPlayerEntity>) EntityArgumentType.getPlayers(ctx, "for");
+
+        players.forEach(player -> ServerPlayNetworking.send(player, new ShowCreditsPayload(type.credits, type.poem)));
+
+        return success(ctx, Text.translatable("composer.credits.success" + type.suffix, players.size()));
+    }
+
+    @Override
+    protected Text buildPrefix() {
+        return wrapBrackets(createGradient(Text.translatable("composer.registry.prefix"), 0xffaa00, 0xffff55));
+    }
+
+    [CreditsType enum & CreditsTypeArgumentType]
+}
+```
+## BindManager
+Below 1.21.6, duplicated keybinds only trigger the one that was registered first. Composer adds a configuration value which - by default -
+makes it so all keybinds registered with BindManager#register(KeyBinding) are always triggered, no matter if they are duplicates. There is a client-side
+configuration value to disable this feature completely, or make it work for every keybind. This feature is also disabled if the 'enchancement' mod is present,
+as it has the same feature and having both enabled can cause double-pressing of keybinds.
+
+Along with this, it also provides some methods which take a key binding and listener, and register an event handler which triggers the listener when the given
+keybind is or was pressed, so you don't have to manually check every tick.
+
+Methods are:
+```java
+/* checkPlayer and checkWorld let you ensure that the client player and/or the client world is not null */
+public static void whileHeld(KeyBinding bind, At when, BiConsumer<MinecraftClient, ClientWorld> method);
+public static void whileHeld(KeyBinding bind, At when, boolean checkPlayer, boolean checkWorld, BiConsumer<MinecraftClient, ClientWorld> method);
+public static void whenPressed(KeyBinding bind, At when, BiConsumer<MinecraftClient, ClientWorld> method);
+public static void whenPressed(KeyBinding bind, At when, boolean checkPlayer, boolean checkWorld, BiConsumer<MinecraftClient, ClientWorld> method);
+```
+### Example Implementation
+**From Starstruck**
+```java
+public void onInitializeClient() {
+    BindManager.whenPressed(
+            APPMAN_KEYBIND,
+            BindManager.At.END_WORLD,
+            (client, _) -> { // client, world
+                if (client.currentScreen == null) client.setScreen(new CAMScreen());
+            }
+    );
+}

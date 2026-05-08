@@ -22,18 +22,26 @@ public abstract class WorldChunkMixin {
     @Unique private boolean executeOnPlaced = false;
 
     @Inject(method = "setBlockState", at = @At("HEAD"))
+    //? if minecraft: <=1.21.4 {
     private void composer$saveBlockState(BlockPos pos, BlockState state, boolean moved, CallbackInfoReturnable<BlockState> cir) {
+    //? } else {
+    /*private void composer$saveBlockState(BlockPos pos, BlockState state, int flags, CallbackInfoReturnable<BlockState> cir) {
+    *///? }
         World world = getWorld();
         BlockState previous = world.getBlockState(pos);
 
         BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof MultiblockControllerBlock ctrl) {
-            if (previous.isOf(be.getCachedState().getBlock()) && !state.isOf(be.getCachedState().getBlock())) ctrl.onBroken(world, pos);
+            if (previous./*? if legacy {*/isOf/*? } else {*//*is*//*? }*/(be.getCachedState().getBlock()) && !state./*? if legacy {*/isOf/*? } else {*//*is*//*? }*/(be.getCachedState().getBlock())) ctrl.onBroken(world, pos);
         } else executeOnPlaced = true;
     }
 
     @Inject(method = "setBlockState", at = @At("TAIL"))
+    //? if minecraft: <=1.21.4 {
     private void composer$onBlockUpdate(BlockPos pos, BlockState state, boolean moved, CallbackInfoReturnable<BlockState> cir) {
+    //? } else {
+    /*private void composer$onBlockUpdate(BlockPos pos, BlockState state, int flags, CallbackInfoReturnable<BlockState> cir) {
+        *///? }
         World world = getWorld();
 
         if (executeOnPlaced) {

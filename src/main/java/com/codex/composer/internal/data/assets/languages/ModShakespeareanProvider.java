@@ -10,8 +10,6 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.codex.composer.internal.registry.ModFeatures.TargetSynchronization;
-
 public class ModShakespeareanProvider extends ComposerSemiLanguageProvider {
     @Override
     public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
@@ -27,9 +25,6 @@ public class ModShakespeareanProvider extends ComposerSemiLanguageProvider {
         );
 
         sound(ModSounds.LILBRO_SQUISH, "The Plush Effigy Hath Been Prodded");
-
-        feature(TargetSynchronization.ENTITY, "Doth synchronise the target entities of players unto the client. The frequency governeth how oft (in ticks) updates are dispatched. To alter this or to disable it may bring ruin upon other mods.");
-        feature(TargetSynchronization.BLOCK, "Doth synchronise the target blocks of players unto the client. The frequency governeth how oft (in ticks) updates are dispatched. To alter this or to disable it may bring ruin upon other mods.");
 
         prefix("command.exception.player_not_found", "The player hath not been found.");
         prefix("command.exception.no_players_found", "No players hath been found.");
@@ -65,6 +60,7 @@ public class ModShakespeareanProvider extends ComposerSemiLanguageProvider {
 
         prefix("registry.prefix", "Composer's Utilities");
         prefix("dynamic_tooltips.hidden", "Press %s to reveal %s");
+        prefix("dynamic_tooltips.details", "ye particulars");
 
         prefix("tooltips.soulbound", "This item is bound to thy soul");
         prefix("tooltips.soulbound.not", "This item is not bound to thy soul");

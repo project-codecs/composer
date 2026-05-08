@@ -11,6 +11,7 @@
   "composer.credits.success_credits": "Showing creditz to %s playerz!",
   "composer.credits.success_poem": "Showing end poem to %s playerz!",
   "composer.dynamic_tooltips.hidden": "Press %s to see %s (iz hidden rn)",
+  "composer.dynamic_tooltips.details": "da detailz",
   "composer.feature.description.missing": "Nobody wroted a descripshun. lazy.",
   "composer.feature.disable": "Feachur %s iz now off. :(",
   "composer.feature.enable": "Feachur %s iz now ON!! yay",

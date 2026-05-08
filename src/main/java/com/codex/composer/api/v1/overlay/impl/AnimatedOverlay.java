@@ -58,7 +58,7 @@ public abstract class AnimatedOverlay extends AlignedOverlay {
 
         Vec2 offset;
 
-        float time = Math.max(0f, age - 1 + /*? if minecraft: <=1.20.6 {*//*f*//*? } else {*/f.getTickDelta(false)/*? }*/);
+        float time = Math.max(0f, age - 1 + /*? if minecraft: <=1.20.6 {*//*f*//*? } else if minecraft: <=1.21.4 {*/f.getTickDelta(false)/*? } else {*//*f.getTickProgress(false)*//*? }*/);
 
         float slideInEnd = enter;
         float holdEnd = slideInEnd + hold;
@@ -87,10 +87,10 @@ public abstract class AnimatedOverlay extends AlignedOverlay {
         render(context, f, pos.x, pos.y);
     }
 
-    public float getOpacity(/*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ delta) {
+    public float getOpacity(/*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f) {
         if (!anims.fade) return 1f;
 
-        float time = Math.max(0f, age - 1 + /*? if minecraft: <=1.20.6 {*//*delta*//*? } else {*/delta.getTickDelta(false)/*? }*/);
+        float time = Math.max(0f, age - 1 + /*? if minecraft: <=1.20.6 {*//*f*//*? } else if minecraft: <=1.21.4 {*/f.getTickDelta(false)/*? } else {*//*f.getTickProgress(false)*//*? }*/);
 
         float fadeInEnd = enter;
         float holdEnd = fadeInEnd + hold;

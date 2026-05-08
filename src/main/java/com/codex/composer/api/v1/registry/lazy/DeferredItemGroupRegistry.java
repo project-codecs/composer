@@ -1,6 +1,5 @@
 package com.codex.composer.api.v1.registry.lazy;
 
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -11,6 +10,11 @@ import net.minecraft.util.Identifier;
 
 import java.util.function.Supplier;
 
+//? legacy {
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+//? } else
+//import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+
 public class DeferredItemGroupRegistry extends EmptyDeferredRegistry {
     public DeferredItemGroupRegistry(String modId) {
         super(modId);
@@ -20,7 +24,7 @@ public class DeferredItemGroupRegistry extends EmptyDeferredRegistry {
         Identifier id = Identifier.of(modId, name);
         RegistryKey<ItemGroup> key = RegistryKey.of(Registries.ITEM_GROUP.getKey(), id);
 
-        ItemGroup group = FabricItemGroup.builder()
+        ItemGroup group = /*? if legacy {*/FabricItemGroup/*? } else {*//*FabricCreativeModeTab*//*? }*/.builder()
                 .icon(iconSupplier)
                 .displayName(Text.translatable("itemGroup." + name))
                 .build();

@@ -5,13 +5,16 @@ import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import me.fzzyhmstrs.fzzy_config.config.Config;
 import me.fzzyhmstrs.fzzy_config.util.EnumTranslatable;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
-import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
 import org.jetbrains.annotations.NotNull;
 import com.codex.composer.internal.Composer;
 
 //? if minecraft: <=1.20.1 || >=1.21 {
 import me.fzzyhmstrs.fzzy_config.api.FileType;
 import me.fzzyhmstrs.fzzy_config.api.SaveType;
+//? }
+
+//? if minecraft: <=1.21.6 {
+import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
 //? }
 
 @SuppressWarnings("CanBeFinal")
@@ -39,6 +42,7 @@ public class ComposerClientConfig extends Config {
     }
     //? }
 
+    //? if minecraft: <=1.21.6 {
     //? if minecraft: <=1.20.1 || >=1.21
     @Name("Rainbow Effect on Duplicate Keybinds")
     public boolean rainbowEffectOnDuplicateKeybinds = false;
@@ -50,6 +54,7 @@ public class ComposerClientConfig extends Config {
     //? if minecraft: <=1.20.1 || >=1.21
     @Name("Allow Duplicate Keybinds")
     public BindsMode allowDuplicateKeybinds = BindsMode.MC_AND_CM;
+    //? }
 
     //? if minecraft: <=1.20.1 || >=1.21
     @Prefix("Always shows the \"Press <> to show <>\" in tooltips (or the tooltip if the keys are held) for all tooltips, regardless of them being relevant or not.")

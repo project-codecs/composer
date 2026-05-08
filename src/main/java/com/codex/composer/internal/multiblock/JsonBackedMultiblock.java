@@ -3,7 +3,7 @@ package com.codex.composer.internal.multiblock;
 import com.codex.composer.api.v1.multiblock.Multiblock;
 import com.codex.composer.api.v1.util.misc.PredicateVoid;
 import com.codex.composer.internal.data.loader.json.MultiblockJsonLoader;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.Registries;
@@ -33,17 +33,22 @@ public class JsonBackedMultiblock implements Multiblock {
         Map<Character, Predicate<BlockState>> pattern = new HashMap<>();
 
         parsed.getKeys().forEach(key -> {
-            JsonObject obj = key.value();
+            JsonPrimitive primitive = key.value();
 
-            if (obj.has("tag")) {
-                Identifier id = Identifier.tryParse(obj.get("tag").getAsString());
-                if (id == null) throw new IllegalStateException("Invalid block identifier: " + obj);
-                TagKey<Block> tag = TagKey.of(RegistryKeys.BLOCK, id);
-                pattern.put(key.symbol(), state -> state.isIn(tag));
-            } else if (obj.has("block")) {
-                Identifier id = Identifier.tryParse(obj.get("block").getAsString());
-                if (id == null) throw new IllegalStateException("Invalid block identifier: " + obj);
-                pattern.put(key.symbol(), state -> state.getBlock() == Registries.BLOCK.get(id));
+            if (primitive.isString()) {
+                String value = primitive.getAsString();
+
+                if (value.startsWith("#")) {
+                    value = value.substring(1);
+                    Identifier id = Identifier.tryParse(value);
+                    if (id == null) throw new IllegalStateException("Invalid block identifier: " + value);
+                    TagKey<Block> tag = TagKey.of(RegistryKeys.BLOCK, id);
+                    pattern.put(key.symbol(), state -> state.isIn(tag));
+                } else {
+                    Identifier id = Identifier.tryParse(value);
+                    if (id == null) throw new IllegalStateException("Invalid block identifier: " + value);
+                    pattern.put(key.symbol(), state -> state.getBlock() == Registries.BLOCK.get(id));
+                }
             }
         });
 
@@ -82,7 +87,6 @@ public class JsonBackedMultiblock implements Multiblock {
         return this.validWhen(pos).test(state);
     }
 
-    @SuppressWarnings("SequencedCollectionMethodCanBeUsed") // Java 21 thing that leaks into 17 syntax in IDEA. No IDEA why (haha), but it crashes on people using 17, so I will not use it.
     public Predicate<BlockState> validWhen(BlockPos pos) {
         int layerCount = this.blocks.size();
         int rowCount = this.blocks.get(0).size();
@@ -101,7 +105,6 @@ public class JsonBackedMultiblock implements Multiblock {
         return this.blocks.get(y).get(rowIndex).get(x);
     }
 
-    @SuppressWarnings("SequencedCollectionMethodCanBeUsed") // Same here
     public Vec3i shape() {
         int height = this.blocks.size();                  // Y: number of layers
         int depth = this.blocks.get(0).size();           // Z: number of rows per layer

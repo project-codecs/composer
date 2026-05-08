@@ -7,7 +7,8 @@ import net.minecraft.util.Identifier;
 
 public class AdvancementManager {
     public static void grantAdvancement(ServerPlayerEntity player, Identifier id) {
-        MinecraftServer server = player.getServer();
+        MinecraftServer server = player./*? if minecraft: <=1.21.6 { */getServer/*?} else {*//*getEntityWorld().getServer*//*?}*/();
+        //? if minecraft: <=1.21.6
         if (server == null) return;
         var advancement = server.getAdvancementLoader().get(id);
         if (advancement != null) {

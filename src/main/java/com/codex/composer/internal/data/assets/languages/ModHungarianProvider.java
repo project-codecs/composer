@@ -10,8 +10,6 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.codex.composer.internal.registry.ModFeatures.TargetSynchronization;
-
 public class ModHungarianProvider extends ComposerSemiLanguageProvider {
     @Override
     public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
@@ -27,9 +25,6 @@ public class ModHungarianProvider extends ComposerSemiLanguageProvider {
         );
 
         sound(ModSounds.LILBRO_SQUISH, "Plüss megbökve");
-
-        feature(TargetSynchronization.ENTITY, "Szinkronizálja a játékosok célentitásait a klienssel. A frekvencia azt szabályozza, milyen sűrűn (tick-enként) kerülnek elküldésre a frissítések. Ennek megváltoztatása vagy letiltása más modokat elronthat.");
-        feature(TargetSynchronization.BLOCK, "Szinkronizálja a játékosok célblokkjait a klienssel. A frekvencia azt szabályozza, milyen sűrűn (tick-enként) kerülnek elküldésre a frissítések. Ennek megváltoztatása vagy letiltása más modokat elronthat.");
 
         prefix("command.exception.player_not_found", "A játékos nem található.");
         prefix("command.exception.no_players_found", "Nem találhatók játékosok.");
@@ -64,7 +59,8 @@ public class ModHungarianProvider extends ComposerSemiLanguageProvider {
         prefix("overlay.sent_text_fade", "Szöveges átfedés elküldve: \"%s\" (%s) (elhalványulás: %d/%d/%d).");
 
         prefix("registry.prefix", "Composer segédeszközök");
-        prefix("dynamic_tooltips.hidden", "Nyomd meg: %s hogy látsd %s");
+        prefix("dynamic_tooltips.hidden", "Nyomd meg a(z) %s-t hogy látsd %s");
+        prefix("dynamic_tooltips.details", "a részleteket");
 
         prefix("tooltips.soulbound", "Ez a tárgy lélekhez kötött");
         prefix("tooltips.soulbound.not", "Ez a tárgy nincs lélekhez kötve");

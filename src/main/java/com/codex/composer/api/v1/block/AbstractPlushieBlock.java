@@ -1,6 +1,6 @@
 package com.codex.composer.api.v1.block;
 
-import com.codex.composer.api.v1.block.entity.PlushieBlockEntity;
+import com.codex.composer.api.v1.block.entity.AbstractPlushieBlockEntity;
 import com.codex.composer.internal.registry.ModStatistics;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -52,7 +52,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
     }
 
     protected abstract void playSound(World world, BlockState state, BlockPos pos, PlayerEntity player);
-    protected abstract BlockEntityType<PlushieBlockEntity> getType();
+    protected abstract BlockEntityType<AbstractPlushieBlockEntity> getType();
     protected Identifier boopStat() {
         return ModStatistics.PLUSH_BOOP;
     }
@@ -63,10 +63,10 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
      *///? } else {
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         //?}
-        if (!world.isClient) {
+        if (!world.isClient/*? if minecraft: >=1.21.9 { *//*()*//*?}*/) {
             playSound(world, state, pos, player);
 
-            if (world.getBlockEntity(pos) instanceof PlushieBlockEntity plushie) plushie.squish(1);
+            if (world.getBlockEntity(pos) instanceof AbstractPlushieBlockEntity plushie) plushie.squish(1);
             player.incrementStat(boopStat());
         }
         return ActionResult.SUCCESS;
@@ -75,21 +75,23 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
     public BlockRenderType getRenderType(BlockState state) {
         //? if minecraft: <=1.20.6 {
         /*return BlockRenderType.ENTITYBLOCK_ANIMATED;
-         *///? } else {
+         *///? } else if minecraft: >=1.21.9 {
+        /*return BlockRenderType.MODEL;
+        *///? } else {
         return BlockRenderType.INVISIBLE;
-        //?}
+        //? }
     }
 
     @Override
     public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        if (!world.isClient) {
-            if (world.getBlockEntity(pos) instanceof PlushieBlockEntity plushie) plushie.squish(24);
+        if (!world.isClient/*? if minecraft: >=1.21.9 { *//*()*//*?}*/) {
+            if (world.getBlockEntity(pos) instanceof AbstractPlushieBlockEntity plushie) plushie.squish(24);
         }
     }
 
     @Override
     protected void spawnBreakParticles(World world, PlayerEntity player, BlockPos pos, BlockState state) {
-        if (world.getBlockEntity(pos) instanceof PlushieBlockEntity plushie) plushie.squish(4);
+        if (world.getBlockEntity(pos) instanceof AbstractPlushieBlockEntity plushie) plushie.squish(4);
         super.spawnBreakParticles(world, player, pos, state);
     }
 
@@ -106,7 +108,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return /*? if minecraft: <=1.20.1 { *//*checkType*//*? } else {*/validateTicker/*?}*/(type, getType(), PlushieBlockEntity::tick);
+        return /*? if minecraft: <=1.20.1 { *//*checkType*//*? } else {*/validateTicker/*?}*/(type, getType(), AbstractPlushieBlockEntity::tick);
     }
 
     @Override
@@ -114,7 +116,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
         return this.getDefaultState()
                 .with(FACING, ctx.getHorizontalPlayerFacing().getOpposite())
-                .with(WATERLOGGED, fluidState.isOf(Fluids.WATER));
+                .with(WATERLOGGED, fluidState./*? if legacy {*/isOf/*? } else {*//*is*//*? }*/(Fluids.WATER));
     }
 
     @Override

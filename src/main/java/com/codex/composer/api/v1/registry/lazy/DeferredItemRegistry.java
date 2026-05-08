@@ -1,6 +1,5 @@
 package com.codex.composer.api.v1.registry.lazy;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -16,6 +15,11 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import org.jetbrains.annotations.NotNull;
+
+//? legacy {
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+//? } else
+//import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 
 //? if minecraft: >=1.20.6
 import net.minecraft.registry.RegistryKeys;
@@ -104,7 +108,7 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
 
     public void finalizeRegistration() {
         if (itemGroupKey != null) {
-            ItemGroupEvents.modifyEntriesEvent(itemGroupKey)
+            /*? if legacy {*/ItemGroupEvents.modifyEntriesEvent/*? } else {*//*CreativeModeTabEvents.modifyOutputEvent*//*? }*/(itemGroupKey)
                     .register(entries -> registeredItems.forEach(item -> entries.add(item.getDefaultStack())));
         }
     }

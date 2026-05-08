@@ -26,7 +26,6 @@ public class ServerScrollEvents {
 
     @FunctionalInterface
     public interface ServerScrollAction {
-
         /**
          * Called when a scroll action occurs on the server.
          *
@@ -38,13 +37,6 @@ public class ServerScrollEvents {
          */
         boolean onScroll(Identifier channel, ServerPlayerEntity player, PacketSender sender, double scrollAmount);
 
-        /**
-         * Checks whether this event is for the given channel.
-         *
-         * @param channel        the channel of the event
-         * @param correctChannel the channel to match
-         * @return true if they match, false otherwise
-         */
         default boolean onChannel(Identifier channel, Identifier correctChannel) {
             return channel.equals(correctChannel);
         }

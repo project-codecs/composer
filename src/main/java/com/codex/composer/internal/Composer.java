@@ -12,26 +12,22 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.metadata.CustomValue;
-import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.codex.composer.api.v1.easytags.impl.DefaultSerializers;
-import com.codex.composer.api.v1.events.composite.ComposerCompositeEvents;
-import com.codex.composer.api.v1.feature.ComposerFeatures;
 import com.codex.composer.internal.runtime.ServerHolderImpl;
 import com.codex.composer.api.v1.util.misc.AbstractPseudoRegistry;
 import com.codex.composer.api.v1.util.misc.EventStacker;
 import com.codex.composer.internal.client.config.ComposerClientConfig;
-import com.codex.composer.internal.data.loader.FeatureStateLoader;
-import com.codex.composer.internal.data.loader.SimpleItemFixerLoader;
 import com.codex.composer.internal.networking.ScrollActionPayload;
-import com.codex.composer.internal.networking.TargetBlockPayload;
-import com.codex.composer.internal.networking.TargetEntityPayload;
+
+//? if minecraft: <=1.21.6 {
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.metadata.CustomValue;
+import net.fabricmc.loader.api.metadata.ModMetadata;
+//? }
 
 public class Composer implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(Composer.class);
@@ -41,6 +37,7 @@ public class Composer implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        //? if minecraft: <=1.21.6 {
         for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
             ModMetadata meta = mod.getMetadata();
 
@@ -56,15 +53,14 @@ public class Composer implements ModInitializer {
                 dupedKeybindsEnabled = true;
             }
         }
+        //? }
 
         ComposerServerConfig.initialize();
-        ComposerCompositeEvents.initialize();
         ModDynamicTooltips.initialize();
         ModBlockEntities.initialize();
         ModArgumentTypes.initialize();
         ModStatistics.initialize();
         ModItemGroups.initialize();
-        ModFeatures.initialize();
         ModSounds.initialize();
         ModBlocks.initialize();
         ModItems.initialize();
@@ -75,15 +71,11 @@ public class Composer implements ModInitializer {
         ComposerClientConfig.initialize();
         ModRegistries.initialize();
         ModOverlaySerializers.initialize();
-        DefaultSerializers.initialize();
 
-        TargetEntityPayload.registerHandler();
-        TargetBlockPayload.registerHandler();
         ScrollActionPayload.registerHandler();
 
         EventStacker.registerAll(
                 CommandRegistrationCallback.EVENT,
-                new FeatureCommand(),
                 new OverlayCommand(),
                 new RegistryCommand(),
                 new CreditsCommand()
@@ -92,8 +84,7 @@ public class Composer implements ModInitializer {
         EventStacker.registerAll(
                 ServerLifecycleEvents.SERVER_STARTED,
                 ServerHolderImpl.INSTANCE::accept,
-                AbstractPseudoRegistry::runAfterInit,
-                ComposerFeatures.getInstance()::afterInitialization
+                AbstractPseudoRegistry::runAfterInit
         );
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> server.getWorlds().forEach(world -> {
@@ -105,8 +96,6 @@ public class Composer implements ModInitializer {
         );
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MultiblockLoader());
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleItemFixerLoader());
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FeatureStateLoader());
     }
 
     public static boolean disableDupedBinds() {

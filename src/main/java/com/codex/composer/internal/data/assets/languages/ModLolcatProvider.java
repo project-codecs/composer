@@ -10,8 +10,6 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.codex.composer.internal.registry.ModFeatures.TargetSynchronization;
-
 public class ModLolcatProvider extends ComposerSemiLanguageProvider {
     @Override
     public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
@@ -27,9 +25,6 @@ public class ModLolcatProvider extends ComposerSemiLanguageProvider {
         );
 
         sound(ModSounds.LILBRO_SQUISH, "Plushie Booped!! :3");
-
-        feature(TargetSynchronization.ENTITY, "Makez playerz's target entitiez go to teh client. Frequency iz how often (in tickz) updatez iz sended. Changing dis or turning it off mite brek other modz (oh noes).");
-        feature(TargetSynchronization.BLOCK, "Makez playerz's target blockz go to teh client. Frequency iz how often (in tickz) updatez iz sended. Changing dis or turning it off mite brek other modz (rip).");
 
         prefix("command.exception.player_not_found", "Dat player iz not founded. :(");
         prefix("command.exception.no_players_found", "No playerz iz founded. :(");
@@ -65,6 +60,7 @@ public class ModLolcatProvider extends ComposerSemiLanguageProvider {
 
         prefix("registry.prefix", "Composer Utilitiez (very useful, much wow)");
         prefix("dynamic_tooltips.hidden", "Press %s to see %s (iz hidden rn)");
+        prefix("dynamic_tooltips.details", "da detailz");
 
         prefix("tooltips.soulbound", "Dis item iz soulbound (iz yours 4evr)");
         prefix("tooltips.soulbound.not", "Dis item iz NOT soulbound");

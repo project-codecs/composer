@@ -1,0 +1,9 @@
+{
+    "composer:plush": {
+        "stack_size": 64,
+        "rarity": "common",
+        "blast_resistance": 0.8,
+        "hardness": 0.8,
+        "flammable": true
+    }
+}

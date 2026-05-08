@@ -1,0 +1,85 @@
+---
+title: Lazy Registration
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.registry.lazy <br/>
+Canonical Name: com.codex.composer.api.v1.registry.lazy.Deferred[...]Registry & util.BrewingRecipeUtils
+
+We all know one of the most boring and monotonous parts of making minecraft mods is dealing with registries. Handling item groups,
+blocks, block items and all that manually can get really repetitive and needs way too much boilerplate. Deferred registries exist
+to fix this exact issue. There are many of them, (14+1[^1] as of 4.0) so documentation will not be provided for all of them, except
+for a few which require special logic or work differently.
+
+There is also one of these classes in 'registry.util' called BrewingRecipeUtils, which - as you can probably guess - contains static
+utilities for registering brewing recipes. This class is not instantiatable and is intended to be used in a static context.
+
+[^1]: Counting EmptyDeferredRegistry, the base class for all of them
+
+One thing all of them deferred registries have in common, is that they take a mod id; this functionality is provided by EmptyDeferredRegistry,
+the class they all extend. While most registries do not take any extra arguments, there is one exception:
+
+## DeferredItemRegistry
+DeferredItemRegistry also takes a RegistryKey\<ItemGroup\> that is used to register to. It is nullable, should you not want to use the automatic
+item group registration. Along with this, after registering all of your items to it, if you wish to automatically add your items to the passed
+item group, you must call '.finalizeRegistration()' on it. As an example:
+```java
+private static final DeferredItemRegistry REGISTRY = new DeferredItemRegistry(Composer.MOD_ID, ModItemGroups.COMPOSER);
+
+public static final BlockItem PLUSHIE = REGISTRY.register(
+        ModBlocks.PLUSH,
+        "plush",
+        new ComposerItemSettings().soulbound(true)
+);
+
+public static void initialize() {
+    REGISTRY.finalizeRegistration();
+}
+```
+
+Another exception from most of the deferred registries is the deferred particle registry. This is because recipe types are mostly registered
+in pairs of RecipeType and RecipeSerializer, so instead of returning either, DeferredRecipeRegistry returns a class that holds an instance of
+each created in one method.
+
+Other than that, most of the methods have fairly obvious parameters, so just look at the source if you want to find more info about how to use them.
+## Some more examples:
+**All from Composer**
+```java
+public class ModBlocks {
+    private static final DeferredBlockRegistry BLOCKS = new DeferredBlockRegistry(Composer.MOD_ID);
+
+    public static final PlushBlock PLUSH = BLOCKS.register(
+            "plush",
+            PlushBlock::new,
+            AbstractBlock.Settings.copy(Blocks.BLACK_WOOL).nonOpaque()
+    );
+
+    public static void initialize() {}
+}
+
+```
+----
+```java
+public class ModBlockEntities {
+    private static final DeferredBlockEntityRegistry REGISTRY = new DeferredBlockEntityRegistry(Composer.MOD_ID);
+
+    public static final BlockEntityType<AbstractPlushieBlockEntity> PLUSH = REGISTRY.register(
+            "plush",
+            LilBroPlushBlockEntity::new,
+            ModBlocks.PLUSH
+    );
+
+    public static void initialize() {}
+}
+```
+----
+```java
+public class ModItemGroups {
+    private static final DeferredItemGroupRegistry REGISTRY = new DeferredItemGroupRegistry(Composer.MOD_ID);
+
+    public static final RegistryKey<ItemGroup> COMPOSER = REGISTRY.registerItemGroup(
+            "composer",
+            () -> new ItemStack(ModItems.PLUSHIE)
+    );
+
+    public static void initialize() {}
+}
+```

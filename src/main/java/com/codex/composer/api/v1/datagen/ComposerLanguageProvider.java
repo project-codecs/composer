@@ -1,7 +1,6 @@
 package com.codex.composer.api.v1.datagen;
 
 import me.fzzyhmstrs.fzzy_config.util.EnumTranslatable;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -14,8 +13,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Identifier;
-import com.codex.composer.api.v1.feature.FeatureHandle;
-import com.codex.composer.api.v1.registry.lazy.feature.Feature;
 import com.codex.composer.api.v1.util.misc.Translatable;
 
 //? if minecraft: <=1.20.4 {
@@ -25,6 +22,11 @@ import net.minecraft.registry.RegistryWrapper;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.registry.entry.RegistryEntry;
 //?}
+
+//? legacy {
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+//? } else
+//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -37,10 +39,10 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
         super(dataOutput);
     }
     *///? } else {
-    public ComposerLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public ComposerLanguageProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         super(dataOutput, registryLookup);
     }
-    //?}
+    //? }
 
     //? if minecraft: <=1.20.4
     //@Override
@@ -65,14 +67,6 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
     }
 
     // Custom
-
-    public void feature(FeatureHandle feature, String translation) {
-        if (feature.id() != null) add(feature.getTranslationKey(), translation);
-    }
-
-    public void feature(Feature feature, String translation) {
-        feature(feature.getHandle(), translation);
-    }
 
     public void stat(Identifier identifier, String value) {
         add("stat.%s.%s".formatted(identifier.getNamespace(), identifier.getPath()), value);

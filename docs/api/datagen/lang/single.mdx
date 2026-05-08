@@ -1,0 +1,103 @@
+---
+title: Single-  language provider
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.datagen <br/>
+Canonical Name: com.codex.composer.api.v1.datagen.ComposerLanguageProvider
+
+Client assets generation provider offering a ton of utility methods for generating languages.
+
+Inheritors have to implement:
+```java
+void generate();
+
+/* Optional to override, used in prefix(key, value), suffix(key, value) and surround(key, value) */
+String prefix() default "";
+String suffix() default "";
+```
+The class provides many methods for registering translations:
+```java
+void feature(FeatureHandle feature, String translation);
+void feature(Feature feature, String translation);
+void stat(Identifier identifier, String value);
+void group(RegistryKey<ItemGroup> key, String value);
+/* EnumTranslatable is from Fzzy Config */
+<T extends Enum<T> & EnumTranslatable> void enumTranslatable(Class<T> enumClass, String... values);
+// Only in 1.20.4 and below, SoundEvent was made final afterward
+void sound(TranslatableSoundEvent sound, String value);
+void sound(SoundEvent sound, String value);
+void add(Translatable translatable, String value);
+void add(Translatable translatable, String prefix, String value);
+void add(Translatable translatable, String prefix, String suffix, String value);
+/* Adds the value of prefix() before the key */
+void prefix(String key, String value);
+/* Adds the value of suffix() after the key */
+void suffix(String key, String value);
+/* Runs prefix(key, value) and suffix(key, value) */
+void surround(String key, String value);
+void add(String key, String value)
+void item(ItemConvertible item, String value)
+void block(Block block, String value)
+void registryKey(RegistryKey<ItemGroup> registryKey, String value)
+void entity(EntityType<?> entityType, String value)
+void stat(StatType<?> statType, String value);
+void effect(StatusEffect statusEffect, String value);
+void add(Identifier identifier, String value);
+void append(Path existingLanguageFile); throws IOException
+
+/* 1.20.1 - 1.20.4 */
+void enchantment(Enchantment enchantment, String value)
+void attribute(EntityAttribute entityAttribute, String value)
+
+/* 1.20.4 - 1.20.6 */
+void enchantment(Enchantment enchantment, String value)
+void attribute(RegistryEntry<EntityAttribute> entityAttribute, String value)
+
+/*  1.21  -        */
+void enchantment(RegistryKey<Enchantment> enchantment, String value)
+void attribute(RegistryEntry<EntityAttribute> entityAttribute, String value)
+```
+
+## Example Implementation:
+**From Elixiry, for now unreleased mod made for Warfare SMP**
+```java
+public class ElixiryLanguageProvider extends ComposerLanguageProvider {
+    public ElixiryLanguageProvider(FabricDataOutput dataOutput) {...}
+
+    private static final List<...> potionTranslations = new ArrayList<>();
+    private static final List<...> fullPotionTranslations = new ArrayList<>();
+
+    @Override
+    public void generate() {
+        block(ModBlocks.WITCH_CAULDRON, "Witch's Cauldron");
+        block(ModBlocks.ARCANE_LECTERN, "Arcane Lectern");
+        group(ModItemGroups.ELIXIRY, "Elixiry");
+        group(ModItemGroups.SCROLLS, "Arcane Scrolls");
+        group(ModItemGroups.PAPERS, "Drenched Papers");
+        item(ModItems.LEXICON_ARCANUM, "Lexicon Arcanum");
+        add(ModItems.LEXICON_ARCANUM.getTranslationKey() + "_creative", "Lexicon Arcanum (Creative)");
+        add(ModItems.LEXICON_ARCANUM.getTranslationKey() + "_creative_tooltip", "Creative-only lexicon that contains all brewing recipes.");
+        item(ModItems.ARCANE_SCROLL, "Arcane Scroll of %s");
+        item(ModItems.DRENCHED_PAPER, "Paper Steeped in %s");
+        item(ModItems.CONCOCTION, "Concoction");
+        item(ModItems.LARGE_BOTTLE, "Large Bottle");
+
+        addPotionTranslations();
+        addVanillaPotionTranslations();
+        buildPotionTranslations();
+    }
+
+    private void addPotionTranslations() {
+        add("nausea", trans("Potion of Nausea", "Splash Potion of Nausea", "Lingering Potion of Nausea", "Arrow of Nausea"), "Nauseatic Paper", "Nauseatic Scroll");
+        [...]
+    }
+
+    private void addVanillaPotionTranslations() {
+        add("empty", "Blank Paper", "Blank Scroll");
+        [...]
+    }
+
+    private Quartet<...> trans(String potion, String splash, String lingering, String arrow) {...}
+    private void add(String id, String paperTranslation, String scrollTranslation) {...}
+    private void add(String id, Quartet<...> trans, String paperTranslation, String scrollTranslation) {...}
+    private void buildPotionTranslations() {...}
+}

@@ -1,0 +1,84 @@
+---
+title: Scroll Events
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.event <br/>
+Canonical Name: com.codex.composer.api.v1.event.ServerScrollEvents & ClientScrollEvents
+
+Composer provides two scroll event handlers to register to, [ClientScrollEvents](#clientscrollevents) and [ServerScrollEvents](#serverscrollevents). <br/>
+Furthermore, both events have 3 priority layers, HIGH, MEDIUM and LOW, in order of execution.
+
+## ClientScrollEvents:
+Called when the scroll wheel is moved in any direction on the client. Event method is:
+```java
+/* Returns: true, if the processing for other scroll events & vanilla functionality should be cancelled. */
+boolean onScroll(MinecraftClient client, @Nullable ClientWorld world, @Nullable ClientPlayerEntity player, double scrollAmount);
+```
+The interface also provides the following method:
+```java
+/* Sends a ScrollActionPayload to the server, triggering ServerScrollEvent on the passed channel. */
+default void sync(Identifier channel, double scrollAmount);
+```
+This class also provides an abstract definition for the client scroll event, which lets you filter for a specific item in a specific hand:
+```java
+public static abstract class ItemFilterClientScrollEvent implements ClientScrollAction {
+    private final hand, item {...}
+
+    protected ItemFilterClientScrollEvent(Hand hand, Item item) {...}
+    protected ItemFilterClientScrollEvent(Item item) {...}
+
+    @Override // Original method
+    public boolean onScroll(MinecraftClient client, @Nullable ClientWorld world, @Nullable ClientPlayerEntity player, double scrollAmount) {...}
+
+    public abstract boolean onScroll(MinecraftClient client, ItemStack stack, @Nullable ClientWorld world, @Nullable ClientPlayerEntity player, double scrollAmount);
+}
+```
+## ServerScrollEvents:
+Called when a ClientScrollEvent sends a sync packet to the server.
+```java
+/* Same as ClientScrollEvent, but on the server side. The Identifier passed is the one the packet contained. */
+boolean onScroll(Identifier channel, ServerPlayerEntity player, PacketSender sender, double scrollAmount);
+```
+The interface also provides the following method:
+```java
+/* Simple equals check, designed for "prettier" code. */
+default boolean onChannel(Identifier channel, Identifier correctChannel);
+```
+## Example implementation:
+**From Elixiry, for now unreleased mod made for Warfare SMP**
+```java
+@Environment(EnvType.CLIENT)
+public class PotionGuideClientScrollEvent implements ClientScrollEvents.ItemFilterClientScrollEvent {
+    public static final Identifier CHANNEL = Elixiry.identify("potion_guide_event"); // elixiry:potion_guide_event
+    public static final PotionGuideScrollEvent INSTANCE = new PotionGuideScrollEvent();
+
+    private PotionGuideScrollEvent() {...}
+
+    @Override
+    public boolean onScroll(MinecraftClient minecraftClient, ItemStack itemStack, @Nullable ClientWorld clientWorld, @Nullable ClientPlayerEntity clientPlayerEntity, double v) {
+        if (clientPlayerEntity != null && clientPlayerEntity.shouldCancelInteraction()) { // shouldCancelInteraction = is shifting
+            sync(CHANNEL, v);
+            return true;
+        }
+        return false;
+    }
+}
+
+public class PotionGuideServerScrollEvent interface ServerScrollEvents.ServerScrollAction {
+    {...} // Channel, INSTANCE and constructor
+
+    @Override
+    public boolean onScroll(Identifier identifier, ServerPlayerEntity serverPlayerEntity, PacketSender packetSender, double v) {
+        if (serverPlayerEntity.shouldCancelInteraction()) {
+            ItemStack stack = serverPlayerEntity.getStackInHand(Hand.MAIN_HAND);
+            PotionGuideItemData data = PotionGuideItemData.get(stack);
+            boolean sign = Math.signum(v) == 1; // Is positive
+
+            if (sign) data.flipNext();
+            else data.flipPrevious();
+
+            data.write(stack);
+            return true;
+        }
+        return false;
+    }
+}

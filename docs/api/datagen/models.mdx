@@ -1,0 +1,53 @@
+---
+title: Composer model provider
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.datagen <br/>
+Canonical Name: com.codex.composer.api.v1.datagen.ComposerModelProvider
+
+Client assets generation provider offering the ability to dynamically generate blockstate definitions, block and item models,
+and in later versions assets/items/ entries. Vanilla already does this, and maybe so does FabricAPI, but here you can have them all
+in one place. It also attempts to let you use generated item models with multiple layers, though this functionality is spotty and mostly
+only works on older versions.
+
+Inheritors have to implement:
+```java
+void generateBlocks(BlockStateModelGenerator generator);
+void generateItems(ItemModelGenerator generator);
+```
+Apart from the functionality offered by the two generators, ComposerModelProvider also provides this method:
+```java
+/* Generates a block item model for block items that do not need a custom model and can just copy the block's model.
+   On newer versions, it does also auto-create the assets/items/ entry for the item model. */
+void blockItemModelFor(Item item, Block from);
+```
+
+## Example Implementation:
+#### From Composer
+```java
+public class ModModelProvider extends ComposerModelProvider {
+    public ModModelProvider(...) {...}
+
+    @Override
+    public void generateBlocks(BlockStateModelGenerator generator) {} // Unused, plushie model is hand-made
+
+    @Override
+    public void generateItems(ItemModelGenerator generator) {
+        blockItemModelFor(ModItems.PLUSHIE, ModBlocks.PLUSH); // Item model properties are defined in the block model.
+    }
+}
+```
+#### From Elixiry, for now unreleased mod made for Warfare SMP
+``` java
+public class ElixiryModelProvider extends ComposerModelProvider {
+    public ElixiryModelProvider(FabricDataOutput output) {... }
+
+    public void generateItems(ItemModelGenerator generator) {
+        generator.register(ModItems.LEXICON_ARCANUM_GUI, Models.GENERATED);
+        generator.register(ModItems.DRENCHED_PAPER, Models.GENERATED);
+    }
+
+    public void generateBlocks(BlockStateModelGenerator generator) {
+        generator.registerNorthDefaultHorizontalRotation(ModBlocks.ARCANE_LECTERN);
+    }
+}
+

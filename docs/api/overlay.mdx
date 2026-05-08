@@ -1,0 +1,89 @@
+---
+title: Overlays
+---
+Package: com.codex.composer.api.v1.overlay
+
+Composer offers a packet-based overlay system. Overlays can be triggered both on the client and server side, and can
+be fully customized. Composer implements two fully-specified overlays, one which displays colored text and one which
+displays a texture. You can send these overlays to the player using the class "Overlays", which is also where they are defined.
+On the client, the "OverlayManager" singleton can be used to manually queue and clear overlays, visible and active separately;
+Both are displayable using the a command (/overlay), though this command is hardcoded and not modifiable by third party mods.
+
+The main overlay interface is the following:
+
+Canonical Name: com.codex.composer.api.v1.overlay.impl.Overlay;
+
+Inheritors must implement:
+```java
+void render(DrawContext context, /*? float in 1.20.6 and below, else */RenderTickCounter tickDelta);
+void tick();
+boolean shouldRemove();
+Identifier getId();
+
+/* Whether this overlay is "blocked by" another active one. Ran when overlays are in the queue
+   To see if they are able to be displayed. */
+boolean blockedBy(Overlay other) default false;
+```
+
+There are two base implementations of this, AlignedOverlay and AnimatedOverlay, but since AnimatedOverlay extends
+AlignedOverlay only that will be documented.
+
+Inheritors of that must implement (as defined in AnimatedOverlay):
+```java
+void render(DrawContext context, /*? float in 1.20.6 and below, else */RenderTickCounter tickDelta, int x, int y);
+Vec2 getPadding();
+Vec2 getSize();
+```
+Among this, if you want to take advantage of the builtin overlay packet system, you must register an overlay serializer.
+You can do this using the vanilla registry system, registering to ComposerRegistries.OVERLAY_SERIALIZERS.
+## Example Implementation
+**From Composer**
+```java
+public static class TextOverlay extends AnimatedOverlay {
+    private static final Identifier ID = Composer.identify("text");
+    private final [text, color, scale, shadow];
+
+    private TextOverlay(Anchor anchor, Animation animation, String text, int color, double scale, boolean shadow, int duration) {...}
+    private TextOverlay(Anchor anchor, Animation animation, String text, int color, double scale, boolean shadow, int enter, int hold, int exit) {...}
+
+    @Override
+    protected void render(DrawContext context, /*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f, int x, int y) {
+        TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+        float opacity = getOpacity(f);
+        Opacitator.drawWithOpacity(opacity, false, (ignored, alpha) -> context.drawText(textRenderer, text, x, y, (alpha << 24) | color, shadow));
+    }
+
+    @Override
+    protected Vec2 getSize() {
+        TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+        return new Vec2(textRenderer.getWidth(text), textRenderer.getWrappedLinesHeight(Text.literal(text), Integer.MAX_VALUE));
+    }
+
+    @Override protected Vec2 getPadding() { return new Vec2(10, 10); }
+    @Override public Identifier getId() { return ID; }
+
+    public static class Serializer implements PacketSerializer<TextOverlay> {
+        @Override
+        public void write(TextOverlay object, PacketByteBuf buf) {
+            buf.writeEnumConstant(object.anchor);
+            buf.writeString(object.text);
+            buf.writeInt(object.color);
+            buf.writeDouble(object.scale);
+            buf.writeBoolean(object.shadow);
+            object.writeAnimation(buf); // Defined by AnimatedOverlay
+        }
+
+        @Override
+        public TextOverlay read(PacketByteBuf buf) {
+            return new TextOverlay(
+                    buf.readEnumConstant(Anchor.class),
+                    null,
+                    buf.readString(),
+                    buf.readInt(),
+                    buf.readDouble(),
+                    buf.readBoolean(),
+                    3
+            ).readAnimation(buf);
+        }
+    }
+}

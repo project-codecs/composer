@@ -44,15 +44,13 @@ public abstract class AbstractProgressItem extends Item {
      * Called when the item's progress increases.
      * Default implementation does nothing.
      */
-    protected void onProgressIncreased(ItemStack stack, PlayerEntity player, int newStep) {
-    }
+    protected void onProgressIncreased(ItemStack stack, PlayerEntity player, int newStep) { }
 
     /**
      * Called when the item finishes its process (reaches max steps).
      * Default implementation does nothing.
      */
-    protected void onFinishProcess(ItemStack stack, World world, PlayerEntity player) {
-    }
+    protected void onFinishProcess(ItemStack stack, World world, PlayerEntity player) { }
 
     /** Returns the current step stored in the item's NBT. */
     //? if minecraft: >=1.20.6

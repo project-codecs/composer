@@ -1,0 +1,91 @@
+---
+title: Multiblock controller Block
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.block <br/ >
+Canonical Name: com.codex.composer.api.v1.block.MultiblockControllerBlock
+
+Common interface for multiblock controllers (blocks that are the main acting block entity in a multiblock).
+
+Inheritors need to implement the following:
+```java
+@NotNull Identifier multiblock(); // Provides the multiblock to check for. Not nullable.
+```
+
+Also provides the following utility / overrideable methods:
+```java
+/* Checks the horizontal facing of the given blockstate, and inverts it if NORTH or SOUTH.*/
+default Direction getOrientation(BlockState state) {...}
+
+/* Checks whether the given multiblock is complete at the given location.
+   It's pretty expensive, so don't run it every thick, just hook into
+   onMultiblockFormed and onMultiblockBroken and store their value. */
+default boolean isComplete(BlockView world, BlockPos pos)
+
+/* Internal methods! Called when the controller block is broken or placed. It creates and destroys the multiblock
+   instance in the world data component, so don't override them if you don't know what you are doing.*/
+default void onPlaced(World world, BlockPos pos) {...}
+default void onBroken(World world, BlockPos pos) {...}
+
+/* If you want event hooks for that, use: */
+default void onMultiblockFormed() { }
+default void onMultiblockBroken() { }
+```
+
+### Example implementation:
+**From [Starstruck](https://github.com/LilBroCodes/starstruck) (Code currently private, sorry)**
+``` java
+public class KilnBlockEntity extends AbstractFuranceBlockEntity implements MultiblockControllerBlock {
+    private boolean multiblockFormed = false;
+
+    public KilnBlockEntity(BlockPos pos, BlockState state) {...}
+
+    @Override
+    public Identifier multiblock() {
+        return ModMultiblocks.KILN; // Identifier constant
+    }
+
+    @Override
+    public void onMultiblockFormed() {
+        multiblockFormed = true;
+    }
+
+    @Override
+    public void onMultiblockBroken() {
+        multiblockFormed = false;
+    }
+
+    public boolean isMultiblockFormed() {
+        return multiblockFormed;
+    }
+
+    public static void tickServer(ServerWorld world, BlockPos pos, BlockState state, KilnBlockEntity be) {
+        if (!be.isMultiblockFormed()) {
+            [...]
+
+            world.setBlockState(pos, state.with(Properties.LIT, false));
+            return;
+        } else {
+            [...]
+
+            world.setBlockState(pos, state.with(Properties.LIT, be.litTimeRemaining > 0));
+        }
+
+        [super].tick([...]);
+    }
+
+    public static void tickClient(KilnBlockEntity be) {...}
+
+    @Override
+    protected void writeData(WriteView view) {
+        super.writeData(view);
+        view.putBoolean("multiblockFormed", multiblockFormed);
+    }
+
+    @Override
+    protected void readData(ReadView view) {
+        super.readData(view);
+        multiblockFormed = view.getBoolean("multiblockFormed", false);
+    }
+
+    {...extra overrides...}
+}

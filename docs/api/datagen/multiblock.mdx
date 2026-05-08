@@ -1,0 +1,56 @@
+---
+title: Composer multiblock provider
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.datagen <br/>
+Canonical Name: com.codex.composer.api.v1.datagen.ComposerMultiblockProvider
+
+Simple server data generation provider for composer's multiblock system.
+
+Inheritors have to implement:
+```java
+void generate(DataWriter writer);
+```
+Creation of multiblock builders can me done with:
+```java
+/* Creates a new MultiblockJsonBuilder. Once finished with setting parameters. use .write(DataWriter) to write it to disk. */
+MultiblockJsonBuilder create(Identifier id);
+```
+
+## Example Implementation:
+**From [Starstruck](https://github.com/LilBroCodes/starstruck) (Code currently private, sorry)**
+```java
+public class ModMultiblockProvider extends ComposerMultiblockProvider {
+    public ModMultiblockProvider(FabricDataOutput output) {...}
+
+    @Override
+    public void generate(DataWriter writer) {
+        create(ModMultiblocks.KILN)
+                .layer() // Creates a new layer builder
+                    .rows("BBB", 3) // Second parameter repeats that line n times
+                    .end() // -> MultiblockJsonBuilder
+                .layer()
+                    .row("BBB")
+                    .row("B B")
+                    .row("BFB") // Here, the F is the controller at the second column of the second layer, first row, thus (1, 1, 0)
+                    .end()
+                .layer()
+                    .row("BBB")
+                    .row("B B")
+                    .row("BBB")
+                    .end()
+                .layer()
+                    .row("*B*")
+                    .row("B B")
+                    .row("*B*")
+                    .repeat(2) // Repeats the layer n times, then -> MultiblockJsonBuilder
+                .layer()
+                    .row("***") // Stars count as any block,
+                    .row("* *") // Spaces count as air.
+                    .row("***")
+                    .end()
+                .controller(new Vec3i(1, 1, 0)) // Position of the controller related to bottom-left, 0-indexed. X is left->right, y is bottom->top and z is front->back
+                .pattern('B').block(FIRE_BRICKS)
+                .pattern('F').block(KILN) // can also be .tag(TagKey<Block>) -> MultiblockJsonBuilder
+                .write(writer);
+    }
+}

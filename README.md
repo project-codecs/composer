@@ -5,38 +5,13 @@ It provides shared systems, utilities, and architectural building blocks used ac
     
 Composer does **not** add gameplay content on its own (except for a plushie). It exists to support other mods at runtime and during development.
 
----
-# *History Lesson!*
-Feel free to skip this part, it's just here for the people who are curious. <br>
-
-Composer began its life as a small utility mod providing some tools for targeting that I (LilBroCodes) made a while ago for myself.
-After using that version of the mod though, it became apparent that it's code quality and API schema was - let's just say - horrible.
-I had no idea how to actually do proper APIs, per-usage configs or anything, so the whole thing was barely usable. That's where **Composer Reloades** came in.
-
-I set out to rewrite composer from the ground up (which granted, didn't take much time) when I started working on some of my larger scale mods,
-and ended up not just rewriting the targeting but adding along a lot more useful things. Over time, **Composer Reloaded** grew to be an invaluable
-utility almost - if not - all of my mods used, and was growing in scope constantly.
-
-That is when I decided that **Composer Reloaded** was way too long of a name, and I was way too unprofessional to be the sole owner, so since then Composer
-has been under the **Project Codex** organization. I've since learned better API schemas, maintaining versions and all that, so **Composer** should be a library
-on a professional enough level for anyone to be able to use.
+For more details, take a look at the [wiki](https://moddedmc.wiki/composer-reloaded/latest)! <br>
+Information like style and contributing guidelines are also there!
 
 ---
 
-# Installation
-
-You can download Composer from [Modrinth](https://modrinth.com/mod/composer-reloaded).  
-If none of your mods require it, you don’t need to install it - it doesn’t add any gameplay content on its own, only
-functionality for other mods.
-
-Although, if you really want the LilBro plushie then feel free to install Composer just for that :P
-
-> [!WARNING]
-> If you do use Composer in your own mod, or want to include it anyway, you must also install a compatible version of **Cardinal
-Components** and **Fzzy Config**. For more info, look at the dependencies of the specific version on modrinth.
-
----
-
+<details>
+<summary>Old development usage docs</summary>
 # Development Usage
 
 If you want to use Composer as a library in your mod, add the Composer Maven repository and Cardinal Components
@@ -214,4 +189,5 @@ Add the following property to your `<properties>` section:
 </properties>
 ```
 
+</details>
 </details>

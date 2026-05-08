@@ -4,15 +4,13 @@
     "package": "com.codex.composer.mixin.impl",
     "compatibilityLevel": "${java}",
     "mixins": [
-        "access.MinecraftServerMixin",
-        "datafix.ItemStackMixin",
         "dynamic_tooltips.ItemStackMixin",
         "local.CampfireBlockEntityMixin",
+        "misc.ServerRecipeManagerMixin",
         "multiblocks.WorldChunkMixin",
         "soul_binding.ItemMixin",
         "soul_binding.PlayerEntityMixin",
-        "soul_binding.ServerPlayerEntityMixin",
-        "targeting.WorldMixin"
+        "soul_binding.ServerPlayerEntityMixin"
     ],
     "client": [
         "credits.ClientPlayNetworkHandlerMixin",
@@ -25,8 +23,7 @@
         "local.BlockRenderManagerAccessor",
         "scroll.MouseMixin",
         "scroll.PlayerInventoryMixin",
-        "soul_binding.ClientPlayerEntityMixin",
-        "targeting.MinecraftClientMixin"
+        "soul_binding.ClientPlayerEntityMixin"
     ],
     "injectors": {
         "defaultRequire": 1

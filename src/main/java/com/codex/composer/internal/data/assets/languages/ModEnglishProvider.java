@@ -10,8 +10,6 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.codex.composer.internal.registry.ModFeatures.*;
-
 public class ModEnglishProvider extends ComposerSemiLanguageProvider {
     @Override
     public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
@@ -27,9 +25,6 @@ public class ModEnglishProvider extends ComposerSemiLanguageProvider {
         );
 
         sound(ModSounds.LILBRO_SQUISH, "Plush Booped");
-
-        feature(TargetSynchronization.ENTITY, "Synchronizes players' target entities to the client. Frequency controls how often (in ticks) updates are sent. Changing this or disabling it may break other mods.");
-        feature(TargetSynchronization.BLOCK, "Synchronizes players' target blocks to the client. Frequency controls how often (in ticks) updates are sent. Changing this or disabling it may break other mods.");
 
         prefix("command.exception.player_not_found", "Player not found.");
         prefix("command.exception.no_players_found", "No players found.");
@@ -65,6 +60,7 @@ public class ModEnglishProvider extends ComposerSemiLanguageProvider {
 
         prefix("registry.prefix", "Composer Utilities");
         prefix("dynamic_tooltips.hidden", "Press %s to show %s");
+        prefix("dynamic_tooltips.details", "details");
 
         prefix("tooltips.soulbound", "This item is soulbound");
         prefix("tooltips.soulbound.not", "This item is not soulbound");

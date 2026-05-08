@@ -1,0 +1,25 @@
+---
+title: Composer's Registries
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.registry <br/>
+Canonical Name: com.codex.composer.api.v1.registry.ComposerRegistries & ComposerRegistryKeys
+
+Though in previous versions composer also had a registry for toast serializers, in 4.0 that system (the entirety of toasts) was removed,
+and that registry went with it, thus the only current registry defined by Composer is a registry of PacketSerializers for overlays.
+
+There's not much to it, it's a registry; it can be accessed via ComposerRegistries and ComposerRegistryKeys:
+
+```java
+public class ComposerRegistries {
+    public static Registry<PacketSerializer<? extends Overlay>> OVERLAY_SERIALIZERS;
+}
+```
+----
+```java
+public class ComposerRegistryKeys {
+    public static final RegistryKey<Registry<PacketSerializer<? extends Overlay>>> OVERLAY_SERIALIZERS_KEY = of("overlay_serializer");
+
+    private static <T> RegistryKey<Registry<T>> of(String name) {...} // Internal
+}
+
+```

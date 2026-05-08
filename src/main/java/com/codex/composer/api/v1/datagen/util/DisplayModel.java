@@ -18,6 +18,9 @@ import net.minecraft.client.data.ModelSupplier;
 import net.minecraft.client.data.TextureMap;
 //? }
 
+//? !legacy
+//import net.minecraft.client.render.model.ModelTexture;
+
 public class DisplayModel extends Model {
     private final DisplayBuilder<?> display;
 
@@ -40,13 +43,13 @@ public class DisplayModel extends Model {
     *///? } else {
     @Override
     public Identifier upload(Identifier id, TextureMap textures, BiConsumer<Identifier, ModelSupplier> modelCollector) {
-        Map<TextureKey, Identifier> map = this.createTextureMap(textures);
+        Map<TextureKey, /*? if legacy {*/Identifier/*? } else {*//*ModelTexture*//*? }*/> map = this.createTextureMap(textures);
         modelCollector.accept(id, () -> {
             JsonObject jsonObject = new JsonObject();
             this.parent.ifPresent((identifier) -> jsonObject.addProperty("parent", identifier.toString()));
             if (!map.isEmpty()) {
                 JsonObject jsonObject2 = new JsonObject();
-                map.forEach((textureKey, identifier) -> jsonObject2.addProperty(textureKey.getName(), identifier.toString()));
+                map.forEach((textureKey, identifier) -> jsonObject2.addProperty(textureKey.getName(), identifier/*? if !legacy {*//*.sprite()*//*? }*/.toString()));
                 jsonObject.add("textures", jsonObject2);
             }
 

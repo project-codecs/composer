@@ -3,11 +3,19 @@ package com.codex.composer.api.v1.tooltips.layout;
 import com.codex.composer.api.v1.tooltips.DynamicTooltipRegistry;
 import com.codex.composer.api.v1.tooltips.TooltipContext;
 import com.codex.composer.internal.client.config.ComposerClientConfig;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
 import java.util.List;
+
+//? if minecraft: >=1.21.5
+//import java.util.function.Consumer;
+
+//? if minecraft: <=1.21.6
+import net.minecraft.client.gui.screen.Screen;
+
+//? if minecraft: >=1.21.9
+//import net.minecraft.client.MinecraftClient;
 
 /**
  * Represents a tooltip section, which can have nested content sections.
@@ -16,11 +24,17 @@ public interface DynamicTooltip {
     /**
      * The main method that appends tooltip lines to a list of strings.
      */
+    //? if minecraft: <=1.21.4
     void appendTooltip(TooltipContext context, List<Text> out);
+    //? if minecraft: >=1.21.5
+    //void appendTooltip(TooltipContext context, Consumer<Text> out);
     boolean isRelevant(TooltipContext context);
     Location where();
 
-    static void appendRegistered(ItemStack stack, List<Text> list, DynamicTooltip.Location location) {
+    //? if minecraft: <=1.21.4
+    static void appendRegistered(ItemStack stack, List<Text> text, DynamicTooltip.Location location) {
+    //? if minecraft: >=1.21.5
+    //static void appendRegistered(ItemStack stack, Consumer<Text> text, DynamicTooltip.Location location) {
         List<DynamicTooltip> tooltips = DynamicTooltipRegistry.getInstance()
                 .getAll()
                 .values()
@@ -32,15 +46,15 @@ public interface DynamicTooltip {
 
         TooltipContext ctx = new TooltipContext(
                 stack,
-                Screen.hasShiftDown(),
-                Screen.hasControlDown(),
-                Screen.hasAltDown()
+                /*? if minecraft: <=1.21.6 { */Screen.hasShiftDown()/*?} else {*//*MinecraftClient.getInstance().isShiftPressed()*//*?}*/,
+                /*? if minecraft: <=1.21.6 { */Screen.hasControlDown()/*?} else {*//*MinecraftClient.getInstance().isCtrlPressed()*//*?}*/,
+                /*? if minecraft: <=1.21.6 { */Screen.hasAltDown()/*?} else {*//*MinecraftClient.getInstance().isAltPressed()*//*?}*/
         );
 
         tooltips
                 .stream()
                 .filter(t -> t.isRelevant(ctx) || ComposerClientConfig.INSTANCE.alwaysShowTooltips.get())
-                .forEach(t -> t.appendTooltip(ctx, list));
+                .forEach(t -> t.appendTooltip(ctx, text));
     }
 
     enum Location {

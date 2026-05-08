@@ -1,6 +1,6 @@
 package com.codex.composer.internal.command;
 
-import com.codex.composer.api.v1.util.commands.ComposerCommand;
+import com.codex.composer.api.v1.util.command.ComposerCommand;
 import com.codex.composer.internal.networking.ShowCreditsPayload;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;

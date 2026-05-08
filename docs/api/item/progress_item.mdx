@@ -1,0 +1,66 @@
+---
+title: Abstract progress item
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.item <br/>
+Canonical Name: com.codex.composer.api.v1.item.AbstractProgressItem
+
+Base class for items that have a multistep progress mechanic.
+
+Each item tracks its current step in NBT and can produce a resulting item once fully completed.
+Subclasses define the final item and any behavior when progress changes or completes.
+
+Inheritors have to implement:
+```java
+/* Called when the item reaches its final step. Should return the item
+   that represents the completed state. */
+protected abstract ItemStack getCompletedItem(ItemStack oldStack);
+
+/* Optional, empty by default */
+void onProgressIncreased(ItemStack stack, PlayerEntity player, int newStep) {}
+void onFinishProcess(ItemStack stack, World world, PlayerEntity player) {}
+```
+## Example Implementation
+**From Mathematica, an unreleased CC:T addon for fabric.**
+```java
+public abstract class AbstractPolishableItem extends AbstractProgressItem {
+    private final float failChance;
+
+    public AbstractPolishableItem(Settings settings, int steps, float failChance) {... }
+
+    public abstract ItemStack getShatteredItem(ItemStack stack);
+
+    public ItemStack tryPolish(ItemStack stack, World world, PlayerEntity player) {
+        if (Math.random() <= getFailChance()) {
+            return getShatteredItem(stack);
+        }
+
+        return tryIncrementProgress(stack, world, player, 1);
+    }
+
+    public static ItemStack create(Item type, int step) {...}
+    public float getFailChance() {...}
+
+    @Override public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {...}
+}
+```
+----
+```java
+public class RoughPrismarineCrystal extends AbstractPolishableItem {
+    public RoughPrismarineCrystal() {
+        super(new Settings().maxCount(1), 5, 0.15f);
+    }
+
+    @Override
+    protected ItemStack getCompletedItem(ItemStack itemStack) {
+        return new ItemStack(ModItems.POLISHED_PRISMARINE_CRYSTAL);
+    }
+
+    @Override
+    public ItemStack getShatteredItem(ItemStack stack) {
+        return new ItemStack(ModItems.SHATTERED_PRISMARINE_CRYSTAL);
+    }
+
+    @Override
+    public int getItemBarColor(ItemStack stack) { return 0x55FCD2; }
+}
+

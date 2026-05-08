@@ -1,0 +1,17 @@
+{
+    "id": "composer-reloaded",
+    "platforms": {
+        "modrinth": "WJ1ahCDP"
+    },
+    "modid": "composer",
+    "owners": [
+        "lilbrocodes"
+    ],
+    "licenses": {
+        "project": {
+            "name": "CreativeCommons Attribution-NonCommercial-ShareAlike 4.0 International",
+            "id": "CC-BY-NC-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+        }
+    }
+}

@@ -1,0 +1,134 @@
+---
+title: Multi-language provider
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.datagen.lang <br/>
+Canonical Name: com.codex.composer.api.v1.datagen.lang.ComposerMultiLanguageProvider & ComposerSemiLanguageProvider
+
+Composer offers the ability for mods to use data generation to generate files for multiple languages, or just separate language
+file generation into multiple classes to take advantage of the prefix() functionality.
+
+There are two classes for this, [ComposerSemiLanguageProvider](#composersemilanguageprovider) and [ComposerMultiLanguageProvider](#composermultilanguageprovider).
+## ComposerSemiLanguageProvider
+This is a semi-duplicate of the normal [ComposerLanguageProvider](single). It contains basically all of the same utilities, except it doesn't
+implement DataProvider and generate anything on it's own and is rather only used my [ComposerMultiLanguageProvider](#composermultilanguageprovider).
+## ComposerMultiLanguageProvider
+Wrapper class for multiple instances of [ComposerSemiLanguageProvider](#composersemilanguageprovider)s. You register different languages
+much like you would different data providers to a FabricDataGenerator.Pack:
+```java
+/* Initialize the LanguagePack. If no base language is set an IllegalStateException will be thrown.
+   Multiple providers can be registered for the same language code.
+
+   If there are multiple language codes, the provider will check if the base language's keys match the keys of
+   all other languages. Warnings will be sent both if other languages have keys missing that the base language
+   does have, and if other languages have extra keys that the base language does not have.*/
+void init(LanguagePack pack);
+
+class LanguagePack {
+    private [final map of languages, baseLanguage];
+
+    /* Adds a new provider with setDefault=false */
+    public <T extends ComposerSemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider);
+    public <T extends ComposerSemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider, boolean setDefault);
+
+    /* Sets the base language. */
+    public void setBaseLanguage(@Nullable String languageCode);
+}
+```
+## Example Implementations:
+#### From Composer:
+```java
+public class ModLanguageProvider extends ComposerMultiLanguageProvider {
+    public ModLanguageProvider(...) {...}
+
+    @Override
+    protected void init(LanguagePack pack) {
+        pack.addProvider("en_us", ModEnglishProvider::new, true); // Set english as base
+        pack.addProvider("lol_us", ModLolcatProvider::new);
+        pack.addProvider("enws", ModShakespeareanProvider::new);
+        pack.addProvider("hu_hu", ModHungarianProvider::new);
+    }
+}
+```
+----
+```java
+public class ModEnglishProvider extends ComposerSemiLanguageProvider {
+    @Override
+    public void generate(...) {
+        block(ModBlocks.PLUSH, "LilBro Plush");
+        stat(ModStatistics.PLUSH_BOOP, "LilBro Plushies Booped");
+        group(ModItemGroups.COMPOSER, "Composer's Silly Little Additions");
+
+        [...] // Many translations
+    }
+
+    @Override
+    public String prefix() { return "composer"; }
+}
+
+public class ModShakespeareanProvider extends ComposerSemiLanguageProvider {
+    @Override
+    public void generate(...) {
+        block(ModBlocks.PLUSH, "LilBro's Plush Effigy");
+        stat(ModStatistics.PLUSH_BOOP, "LilBro Effigies Prodded");
+        group(ModItemGroups.COMPOSER, "The Composer's Merry Trifling Additions");
+
+        [...] // Many translations
+    }
+
+    @Override
+    public String prefix() { return "composer"; }
+}
+```
+#### Starstruck uses it for separating translations into (General, Compendium), Advancements and Config:
+```java
+public class ModLanguageProvider extends ComposerMultiLanguageProvider {
+    public ModLanguageProvider(...) {...}
+
+    @Override
+    protected void init(ComposerMultiLanguageProvider.LanguagePack pack) {
+        pack.addProvider("en_us", ModEnglishLanguage::new, true);
+        pack.addProvider("en_us", ModEnglishCompendium::new);
+        pack.addProvider("en_us", ModEnglishConfigTexts.Client::new);
+        pack.addProvider("en_us", ModEnglishAdvancements::new);
+    }
+}
+```
+----
+```java
+public class ModEnglishAdvancements extends ComposerSemiLanguageProvider {
+    @Override
+    public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+        add("root", "Starstruck", "Deep into an unknown world");                                   // advancements.starstruck.root
+        add("arrival", "Where am I?", "Crash land on planet §k?????");                             // advancements.starstruck.arrival
+
+        [...]
+
+        add("adventure.compendium_filled", "Full-blown zoologist", "Scan every living creature");  // advancements.starstruck.adventure.compendium_filled
+
+        [...]
+    }
+
+    @Override
+    public String prefix() { return "advancements.starstruck"; }
+
+    private void add(String id, String name, String description) {
+        prefix(id, name);
+        prefix(id + ".description", description);
+    }
+}
+
+public class ModEnglishConfigTexts {
+    public static class Client extends ComposerSemiLanguageProvider {
+        @Override
+        public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+            prefix("title", "Starstruck Client Config"); // text.config.starstruck-client.title
+            prefix("category.cam", "C.A.M.");            // text.config.starstruck-client.category.cam
+            prefix("category.title", "Title Screen");    // text.config.starstruck-client.category.title
+
+            [...]
+        }
+
+        @Override
+        public String prefix() { return "text.config.starstruck-client"; }
+    }
+}

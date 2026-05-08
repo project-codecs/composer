@@ -1,8 +1,9 @@
 package com.codex.composer.api.v1.datagen;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import com.google.gson.JsonPrimitive;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataWriter;
@@ -17,11 +18,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+//? legacy {
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+//? } else
+//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+
 public abstract class ComposerMultiblockProvider implements DataProvider {
     private final List<CompletableFuture<?>> futures = new ArrayList<>();
-    private final FabricDataOutput output;
+    private final /*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ output;
 
-    public ComposerMultiblockProvider(FabricDataOutput output) {
+    public ComposerMultiblockProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ output) {
         this.output = output;
     }
 
@@ -46,7 +52,7 @@ public abstract class ComposerMultiblockProvider implements DataProvider {
         private final ComposerMultiblockProvider provider;
         private final Identifier id;
         private final List<List<String>> layers = new ArrayList<>();
-        private final Map<Character, JsonObject> pattern = new HashMap<>();
+        private final Map<Character, JsonElement> pattern = new HashMap<>();
         private Vec3i controllerPos = null;
         private int rowWidth = -1;
         private int layerWidth = -1;
@@ -77,7 +83,7 @@ public abstract class ComposerMultiblockProvider implements DataProvider {
             return this;
         }
 
-        private MultiblockJsonBuilder push(char character, JsonObject obj) {
+        private MultiblockJsonBuilder push(char character, JsonElement obj) {
             pattern.put(character, obj);
             return this;
         }
@@ -129,15 +135,11 @@ public abstract class ComposerMultiblockProvider implements DataProvider {
             }
 
             public MultiblockJsonBuilder block(Block block) {
-                JsonObject object = new JsonObject();
-                object.addProperty("block", Registries.BLOCK.getId(block).toString());
-                return parent.push(character, object);
+                return parent.push(character, new JsonPrimitive(Registries.BLOCK.getId(block).toString()));
             }
 
             public MultiblockJsonBuilder tag(TagKey<Block> tag) {
-                JsonObject object = new JsonObject();
-                object.addProperty("tag", tag.id().toString());
-                return parent.push(character, object);
+                return parent.push(character, new JsonPrimitive("#" + tag.id()));
             }
         }
 

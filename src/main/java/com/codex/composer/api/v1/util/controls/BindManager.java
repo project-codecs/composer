@@ -39,11 +39,11 @@ public class BindManager {
                     handle(client, client.world, bind, checkPlayer, checkWorld, held, method)
             );
 
-            case START_WORLD -> ClientTickEvents.START_WORLD_TICK.register(world ->
+            case START_WORLD -> ClientTickEvents./*? if legacy {*/START_WORLD_TICK/*? } else {*//*START_LEVEL_TICK*//*? }*/.register(world ->
                     handle(MinecraftClient.getInstance(), world, bind, checkPlayer, checkWorld, held, method)
             );
 
-            case END_WORLD -> ClientTickEvents.END_WORLD_TICK.register(world ->
+            case END_WORLD -> ClientTickEvents./*? if legacy {*/START_WORLD_TICK/*? } else {*//*END_LEVEL_TICK*//*? }*/.register(world ->
                     handle(MinecraftClient.getInstance(), world, bind, checkPlayer, checkWorld, held, method)
             );
         }

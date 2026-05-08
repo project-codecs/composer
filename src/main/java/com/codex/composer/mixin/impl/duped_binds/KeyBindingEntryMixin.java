@@ -1,6 +1,10 @@
 package com.codex.composer.mixin.impl.duped_binds;
 
 import net.minecraft.client.gui.screen.option.ControlsListWidget;
+import org.spongepowered.asm.mixin.Mixin;
+
+
+//? if minecraft: <=1.21.6 {
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -10,13 +14,14 @@ import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.client.duped_binds.BindTracker;
 import com.codex.composer.internal.client.duped_binds.RainbowColor;
 import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+//? }
 
 @Mixin(ControlsListWidget.KeyBindingEntry.class)
 public abstract class KeyBindingEntryMixin {
+    //? if minecraft: <=1.21.6 {
     @Shadow
     @Final
     private KeyBinding binding;
@@ -28,7 +33,7 @@ public abstract class KeyBindingEntryMixin {
     private int flowed_combat$recolorBinding(int value) {
         if (Composer.disableDupedBinds()) return value;
         if (BindTracker.bindAllowed(binding)) {
-            RainbowColor.stepColor();
+            RainbowColor.stepColor(ComposerClientConfig.INSTANCE.rainbowEffectSpeed.get());
             this.update();
             return ComposerClientConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds ?
                     RainbowColor.currentColor :
@@ -49,4 +54,5 @@ public abstract class KeyBindingEntryMixin {
             return value;
         }
     }
+    //? }
 }

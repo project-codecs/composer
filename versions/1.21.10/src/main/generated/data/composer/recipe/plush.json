@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "minecraft:black_wool",
+    "N": "minecraft:brown_wool",
+    "P": "minecraft:purple_wool",
+    "W": "minecraft:white_wool"
+  },
+  "pattern": [
+    "WBW",
+    "NBP",
+    "P N"
+  ],
+  "result": {
+    "count": 1,
+    "id": "composer:plush"
+  }
+}
