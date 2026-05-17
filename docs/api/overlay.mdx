@@ -36,6 +36,12 @@ Vec2 getSize();
 ```
 Among this, if you want to take advantage of the builtin overlay packet system, you must register an overlay serializer.
 You can do this using the vanilla registry system, registering to ComposerRegistries.OVERLAY_SERIALIZERS.
+## Important!
+When registering an overlay serializer, you must register it from a ComposerPostInitialization callback! If you do it from
+your init method, there is a random chance based on what order mods are loaded that the registry will not exist yet, and
+the game will crash! You can do this by adding a 'composer-post-init' entrypoint to your fabric.mod.json pointing to a class
+that implements ComposerPostInitialization.
+
 ## Example Implementation
 **From Composer**
 ```java

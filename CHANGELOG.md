@@ -5,37 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.1] - 2026-05-17
+
+### Added
+
+- Composer post-initialization entrypoint for registering to composer's registries by @lilbrocodes
+
 ## [4.0] - 2026-05-8
 
 ### Added
 
-- Wiki! View it on https://moddedmc.wiki/ (slug undecided)
-- Support for 1.21.5 - 1.21.11, except for 1.21.9 because of broken CCA b
-- Alternatives for ComposerCompound in 1.21.5 and above
-- Typed tag builders for 1.20.4+
-- ServerRecipeManager Events
-- Deferred recipe registry
-- ListBuilder from Constructive to not depend
-- KeyBiding press/hold "events" to BindManager
+- Wiki! View it on https://moddedmc.wiki/ (slug undecided) by @lilbrocodes
+- Support for 1.21.5 - 1.21.11, except for 1.21.9 because of broken CCA b by @lilbrocodes
+- Alternatives for ComposerCompound in 1.21.5 and above by @lilbrocodes
+- Typed tag builders for 1.20.4+ by @lilbrocodes
+- ServerRecipeManager Events by @lilbrocodes
+- Deferred recipe registry by @lilbrocodes
+- ListBuilder from Constructive to not depend by @lilbrocodes
+- KeyBiding press/hold "events" to BindManager by @lilbrocodes
 
 ### Changed
 
-- PlushieBlockEntity -> AbstractPlushieBlockEntity
-- v1.nbt -> v1.data
-- events.impl.ItemFilterScrollEvent -> events.ClientScrollEvents.ClientItemFilterScrollEvent
-- Dynamic tooltips to use Texts instead of raw Strings
-- RainbowColor to be more accessible to third-party mods
+- PlushieBlockEntity -> AbstractPlushieBlockEntity by @lilbrocodes
+- v1.nbt -> v1.data by @lilbrocodes
+- events.impl.ItemFilterScrollEvent -> events.ClientScrollEvents.ClientItemFilterScrollEvent by @lilbrocodes
+- Dynamic tooltips to use Texts instead of raw Strings by @lilbrocodes
+- RainbowColor to be more accessible to third-party mods by @lilbrocodes
 
 ### Removed
 
-- Composer data fixers
-- Composer features
-- Targeting utilities
-- Easytags / Automata
-- SerializableBoolean
-- Constructive from dependencies
-- SerializableIdentifier
-- Composite Events
+- Composer data fixers by @lilbrocodes
+- Composer features by @lilbrocodes
+- Targeting utilities by @lilbrocodes
+- Easytags / Automata by @lilbrocodes
+- SerializableBoolean by @lilbrocodes
+- Constructive from dependencies by @lilbrocodes
+- SerializableIdentifier by @lilbrocodes
+- Composite Events by @lilbrocodes
 
 ## [3.4] - 2026-04-26
 

@@ -1,5 +1,6 @@
 package com.codex.composer.internal;
 
+import com.codex.composer.api.v1.registry.ComposerPostInitialization;
 import com.codex.composer.api.v1.util.misc.CachedLogger;
 import com.codex.composer.internal.cca.ModCardinalComponents;
 import com.codex.composer.internal.cca.chunk.MultiblocksComponent;
@@ -96,6 +97,10 @@ public class Composer implements ModInitializer {
         );
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MultiblockLoader());
+
+        FabricLoader.getInstance()
+                .getEntrypointContainers("composer-post-init", ComposerPostInitialization.class)
+                .forEach(e -> e.getEntrypoint().initialize());
     }
 
     public static boolean disableDupedBinds() {

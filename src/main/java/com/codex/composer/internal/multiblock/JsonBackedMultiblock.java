@@ -87,6 +87,7 @@ public class JsonBackedMultiblock implements Multiblock {
         return this.validWhen(pos).test(state);
     }
 
+    @SuppressWarnings("SequencedCollectionMethodCanBeUsed")
     public Predicate<BlockState> validWhen(BlockPos pos) {
         int layerCount = this.blocks.size();
         int rowCount = this.blocks.get(0).size();
@@ -105,6 +106,7 @@ public class JsonBackedMultiblock implements Multiblock {
         return this.blocks.get(y).get(rowIndex).get(x);
     }
 
+    @SuppressWarnings("SequencedCollectionMethodCanBeUsed")
     public Vec3i shape() {
         int height = this.blocks.size();                  // Y: number of layers
         int depth = this.blocks.get(0).size();           // Z: number of rows per layer
