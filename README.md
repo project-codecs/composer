@@ -1,3 +1,4 @@
+[![wakatime](https://wakatime.com/badge/github/project-codecs/composer.svg)](https://wakatime.com/badge/github/project-codecs/composer)
 # What is Composer?
 
 **Composer** is a general-purpose Fabric library mod developed under **Project Codex**.
