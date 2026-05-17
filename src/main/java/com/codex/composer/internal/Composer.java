@@ -22,9 +22,9 @@ import com.codex.composer.api.v1.util.misc.AbstractPseudoRegistry;
 import com.codex.composer.api.v1.util.misc.EventStacker;
 import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.networking.ScrollActionPayload;
+import net.fabricmc.loader.api.FabricLoader;
 
 //? if minecraft: <=1.21.6 {
-import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
 import net.fabricmc.loader.api.metadata.ModMetadata;
