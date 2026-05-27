@@ -1,6 +1,6 @@
 package com.codex.composer.api.v1.util.math;
 
-import java.lang.Math;
+import net.minecraft.util.math.MathHelper;
 
 public class CubicInterpolation {
     private CubicInterpolation() {}
@@ -61,6 +61,6 @@ public class CubicInterpolation {
     }
 
     public static float fClamp01(float v) {
-        return Math.clamp(v, 0f, 1f);
+        return MathHelper.clamp(v, 0f, 1f);
     }
 }
