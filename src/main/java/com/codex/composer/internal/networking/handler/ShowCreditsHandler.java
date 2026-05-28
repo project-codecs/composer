@@ -1,6 +1,5 @@
 package com.codex.composer.internal.networking.handler;
 
-import com.codex.composer.api.v1.util.misc.PredicateVoid;
 import com.codex.composer.internal.client.screen.ModifiedCreditsScreen;
 import com.codex.composer.internal.networking.ShowCreditsPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

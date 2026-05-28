@@ -1,6 +1,6 @@
 package com.codex.composer.api.v1.util.wildcard;
 
-import com.codex.composer.api.v1.util.math.CharCount;
+import com.codex.ambarella.api.v1.util.math.CharCount;
 
 public class IdentifierWildcards {
     public static boolean matches(String id, String namespacePattern, String pathPattern) {

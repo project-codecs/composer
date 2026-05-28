@@ -1,11 +1,11 @@
 package com.codex.composer.mixin.impl.soul_binding;
 
+import com.codex.ambarella.api.v1.util.collections.ComposedStream;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import com.codex.composer.api.v1.item.settings.component.SoulboundComponent;
 import com.codex.composer.api.v1.util.misc.CollectionCollector;
-import com.codex.composer.api.v1.util.misc.ComposedStream;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

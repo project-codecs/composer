@@ -1,10 +1,10 @@
 package com.codex.composer.api.v1.overlay.impl;
 
+import com.codex.ambarella.api.v1.util.math.Vec2d;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
-import com.codex.composer.api.v1.util.math.Vec2;
 
 import java.util.Locale;
 
@@ -67,19 +67,19 @@ public abstract class Overlay {
             return Math.round(MinecraftClient.getInstance().getWindow().getScaledHeight() * yFactor);
         }
 
-        public int xOffset(Vec2 size) {
+        public int xOffset(Vec2d size) {
             return Math.toIntExact(Math.round(size.x * widthOffset));
         }
 
-        public int yOffset(Vec2 size) {
+        public int yOffset(Vec2d size) {
             return Math.toIntExact(Math.round(size.y * heightOffset));
         }
 
-        public int padX(Vec2 padding) {
+        public int padX(Vec2d padding) {
             return Math.toIntExact(Math.round(padding.x * xPaddingFactor));
         }
 
-        public int padY(Vec2 padding) {
+        public int padY(Vec2d padding) {
             return Math.toIntExact(Math.round(padding.y * yPaddingFactor));
         }
 

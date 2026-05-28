@@ -1,5 +1,6 @@
-package com.codex.composer.api.v1.util.math;
+package com.codex.composer.api.v1.util.misc;
 
+import com.codex.ambarella.api.v1.util.math.Vec2d;
 import net.minecraft.client.MinecraftClient;
 
 public class Scaling {
@@ -30,14 +31,14 @@ public class Scaling {
         return (int) (scaled * getScale());
     }
 
-    public static Vec2 toScaled(Vec2 pixels) {
+    public static Vec2d toScaled(Vec2d pixels) {
         double scale = getScale();
-        return new Vec2(pixels.x / scale, pixels.y / scale);
+        return new Vec2d(pixels.x / scale, pixels.y / scale);
     }
 
-    public static Vec2 toPixels(Vec2 scaled) {
+    public static Vec2d toPixels(Vec2d scaled) {
         double scale = getScale();
-        return new Vec2(scaled.x * scale, scaled.y * scale);
+        return new Vec2d(scaled.x * scale, scaled.y * scale);
     }
 }
 

@@ -1,7 +1,7 @@
 package com.codex.composer.internal.multiblock;
 
+import com.codex.ambarella.api.v1.util.misc.PredicateVoid;
 import com.codex.composer.api.v1.multiblock.Multiblock;
-import com.codex.composer.api.v1.util.misc.PredicateVoid;
 import com.codex.composer.internal.data.loader.json.MultiblockJsonLoader;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.block.Block;

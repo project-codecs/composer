@@ -1,10 +1,10 @@
 package com.codex.composer.api.v1.overlay.impl;
 
+import com.codex.ambarella.api.v1.util.math.Vec2d;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.DrawContext;
 import org.joml.Vector2i;
-import com.codex.composer.api.v1.util.math.Vec2;
 
 //? if minecraft: >=1.21
 import net.minecraft.client.render.RenderTickCounter;
@@ -27,8 +27,8 @@ public abstract class AlignedOverlay extends Overlay {
     }
 
     protected abstract void render(DrawContext context, /*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f, int x, int y);
-    protected abstract Vec2 getPadding();
-    protected abstract Vec2 getSize();
+    protected abstract Vec2d getPadding();
+    protected abstract Vec2d getSize();
 
     protected void init() {
 

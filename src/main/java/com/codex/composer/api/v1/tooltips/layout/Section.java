@@ -1,7 +1,7 @@
 package com.codex.composer.api.v1.tooltips.layout;
 
+import com.codex.ambarella.api.v1.util.collections.ListBuilder;
 import com.codex.composer.api.v1.tooltips.TooltipContext;
-import com.codex.composer.api.v1.util.misc.ListBuilder;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 

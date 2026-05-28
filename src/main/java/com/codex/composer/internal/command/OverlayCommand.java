@@ -1,5 +1,6 @@
 package com.codex.composer.internal.command;
 
+import com.codex.ambarella.api.v1.util.misc.PredicateVoid;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
@@ -20,7 +21,6 @@ import net.minecraft.util.Identifier;
 import com.codex.composer.api.v1.util.command.ComposerCommand;
 import com.codex.composer.api.v1.overlay.impl.AnimatedOverlay;
 import com.codex.composer.api.v1.overlay.impl.Overlay;
-import com.codex.composer.api.v1.util.misc.PredicateVoid;
 import com.codex.composer.api.v1.util.command.AnimatedOverlayAnimationArgumentType;
 import com.codex.composer.api.v1.util.command.ColorArgumentType;
 import com.codex.composer.api.v1.util.command.OverlayAnchorArgumentType;

@@ -10,7 +10,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import com.codex.composer.api.v1.overlay.impl.AnimatedOverlay;
 import com.codex.composer.api.v1.overlay.impl.Overlay;
-import com.codex.composer.api.v1.util.math.Vec2;
+import com.codex.ambarella.api.v1.util.math.Vec2d;
 import com.codex.composer.api.v1.util.misc.PacketSerializer;
 import com.codex.composer.api.v1.util.render.Opacitator;
 import com.codex.composer.internal.Composer;
@@ -71,7 +71,7 @@ public class Overlays {
         private static final Identifier ID = Composer.identify("textured");
         private final Identifier texture;
         private final Double scale;
-        private Vec2 size;
+        private Vec2d size;
         private boolean removed = false;
         private final boolean shouldLoadTextures;
 
@@ -115,7 +115,7 @@ public class Overlays {
                 return;
             }
 
-            Vec2 shape;
+            Vec2d shape;
             try {
                 shape = loadSize(tex);
             } catch (Exception e) {
@@ -127,7 +127,7 @@ public class Overlays {
             size = shape.mul(scale);
             if (size == null) remove();
             //? } else {
-            /*size = new Vec2(0, 0);
+            /*size = new Vec2d(0, 0);
             *///? }
         }
 
@@ -150,7 +150,7 @@ public class Overlays {
                     return;
                 }
 
-                Vec2 shape;
+                Vec2d shape;
                 try {
                     shape = loadSize(tex);
                 } catch (Exception e) {
@@ -199,23 +199,23 @@ public class Overlays {
         }
 
         @Override
-        protected Vec2 getPadding() {
-            return new Vec2(10, 10);
+        protected Vec2d getPadding() {
+            return new Vec2d(10, 10);
         }
 
         @Override
-        protected Vec2 getSize() {
+        protected Vec2d getSize() {
             return size;
         }
 
         @Contract("null -> fail")
-        private @NotNull Vec2 loadSize(AbstractTexture tex) throws Exception {
+        private @NotNull Vec2d loadSize(AbstractTexture tex) throws Exception {
             if (tex instanceof NativeImageBackedTexture nat) {
                 NativeImage image = nat.getImage();
                 if (image == null) {
                     throw new Exception("NativeImageBackedTexture image is null");
                 }
-                return new Vec2(image.getWidth(), image.getHeight());
+                return new Vec2d(image.getWidth(), image.getHeight());
             }
 
             if (tex instanceof ResourceTexture res) {
@@ -226,7 +226,7 @@ public class Overlays {
                     throw new Exception("ResourceTexture failed to load TextureData");
                 }
 
-                return new Vec2(data.image.getWidth(), data.image.getHeight());
+                return new Vec2d(data.image.getWidth(), data.image.getHeight());
                 *///? } else {
                 TextureContents contents = res.loadContents(MinecraftClient.getInstance().getResourceManager());
 
@@ -234,7 +234,7 @@ public class Overlays {
                     throw new Exception("ResourceTexture failed to load TextureContents");
                 }
 
-                return new Vec2(contents.image().getWidth(), contents.image().getHeight());
+                return new Vec2d(contents.image().getWidth(), contents.image().getHeight());
                 //? }
             }
 
@@ -305,14 +305,14 @@ public class Overlays {
         }
 
         @Override
-        protected Vec2 getPadding() {
-            return new Vec2(10, 10);
+        protected Vec2d getPadding() {
+            return new Vec2d(10, 10);
         }
 
         @Override
-        protected Vec2 getSize() {
+        protected Vec2d getSize() {
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-            return new Vec2(textRenderer.getWidth(text), textRenderer.getWrappedLinesHeight(Text.literal(text), Integer.MAX_VALUE));
+            return new Vec2d(textRenderer.getWidth(text), textRenderer.getWrappedLinesHeight(Text.literal(text), Integer.MAX_VALUE));
         }
 
         @Override

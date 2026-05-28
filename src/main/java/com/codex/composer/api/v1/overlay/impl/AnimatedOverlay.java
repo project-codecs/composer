@@ -3,14 +3,15 @@ package com.codex.composer.api.v1.overlay.impl;
 //? if minecraft: >=1.21
 import net.minecraft.client.render.RenderTickCounter;
 
+import com.codex.ambarella.api.v1.util.math.Vec2d;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.StringIdentifiable;
 import org.joml.Vector2i;
-import com.codex.composer.api.v1.util.math.Vec2;
-import static com.codex.composer.api.v1.util.math.CubicInterpolation.*;
 
 import java.util.Locale;
+
+import static com.codex.ambarella.api.v1.util.math.Interpolation.*;
 
 public abstract class AnimatedOverlay extends AlignedOverlay {
     protected int enter;
@@ -46,17 +47,17 @@ public abstract class AnimatedOverlay extends AlignedOverlay {
             return;
         }
         Vector2i real = calculatePosition();
-        Vec2 size = getSize();
-        Vec2 padding = getPadding();
+        Vec2d size = getSize();
+        Vec2d padding = getPadding();
         if (size == null || padding == null ) return;
-        Vec2 volume = size.add(padding);
+        Vec2d volume = size.add(padding);
 
-        Vec2 move = new Vec2(
+        Vec2d move = new Vec2d(
                 volume.x() * 1.5 * slide.xMod,
                 volume.y() * 1.5 * slide.yMod
         );
 
-        Vec2 offset;
+        Vec2d offset;
 
         float time = Math.max(0f, age - 1 + /*? if minecraft: <=1.20.6 {*//*f*//*? } else if minecraft: <=1.21.4 {*/f.getTickDelta(false)/*? } else {*//*f.getTickProgress(false)*//*? }*/);
 
@@ -65,15 +66,15 @@ public abstract class AnimatedOverlay extends AlignedOverlay {
         float slideOutEnd = holdEnd + exit;
 
         if (time < slideInEnd) {
-            if (enter == 0) offset = new Vec2(0, 0);
+            if (enter == 0) offset = new Vec2d(0, 0);
             else {
                 float t = fClamp01(time / enter);
                 offset = move.mul(1 - easeInOutCubic(t));
             }
         } else if (time < holdEnd) {
-            offset = new Vec2(0, 0);
+            offset = new Vec2d(0, 0);
         } else if (time < slideOutEnd) {
-            if (exit == 0) offset = new Vec2(0, 0);
+            if (exit == 0) offset = new Vec2d(0, 0);
             else {
                 float t = fClamp01((time - holdEnd) / exit);
                 offset = move.mul(easeInOutCubic(t));
@@ -82,7 +83,7 @@ public abstract class AnimatedOverlay extends AlignedOverlay {
             offset = move;
         }
 
-        if (offset == null) offset = new Vec2(0, 0);
+        if (offset == null) offset = new Vec2d(0, 0);
         Vector2i pos = real.add(offset.x(), offset.y());
         render(context, f, pos.x, pos.y);
     }

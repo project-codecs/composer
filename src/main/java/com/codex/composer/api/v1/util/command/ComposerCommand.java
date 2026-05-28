@@ -1,5 +1,6 @@
 package com.codex.composer.api.v1.util.command;
 
+import com.codex.ambarella.api.v1.util.math.Interpolation;
 import com.codex.composer.internal.config.ComposerServerConfig;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -9,7 +10,6 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import com.codex.composer.api.v1.util.math.Math;
 
 /**
  * Base class for implementing Minecraft commands with convenient utilities.
@@ -181,7 +181,7 @@ public abstract class ComposerCommand implements CommandRegistrationCallback {
         for (int i = 0; i < len; i++) {
             double t = len == 1 ? 0.0 : (double) i / (len - 1);
 
-            int color = Math.lerpColor(startColor, endColor, t);
+            int color = Interpolation.lerpColor(startColor, endColor, t);
             char c = text.getString().charAt(i);
 
             out.append(

@@ -36,12 +36,11 @@ fun present(key: String): Boolean {
 }
 
 repositories {
-    mavenCentral()
-    mavenLocal()
     fun strictMaven(url: String, alias: String, vararg groups: String) = exclusiveContent {
         forRepository { maven(url) { name = alias } }
         filter { groups.forEach(::includeGroup) }
     }
+
     strictMaven("https://www.cursemaven.com", "CurseForge", "curse.maven")
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
     strictMaven("https://maven.ladysnake.org/releases", "Ladysnake")
@@ -50,6 +49,9 @@ repositories {
     strictMaven("https://maven.nucleoid.xyz/", "Nucleoid")
     strictMaven("https://repo.codemc.io/repository/relativitymc/", "RelativityMc")
     strictMaven("https://maven.sinytra.org", "Sinytra")
+    strictMaven("https://dl.cloudsmith.io/public/project-codex/ambarella/maven/", "Codex/Ambarella")
+
+    mavenCentral()
 }
 
 dependencies {
@@ -72,6 +74,9 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:${property("junit_version")}"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    compileOnly("com.codex:ambarella:${property("ambarella_version")}")
+    include("com.codex:ambarella:${property("ambarella_version")}")
 
     sc.constants["release"]?.let {
         if (!it) {
@@ -123,7 +128,7 @@ java {
 val canPublish = present("CLOUDSMITH_USERNAME") && present("CLOUDSMITH_API_KEY")
 tasks {
     processResources {
-        fun cca_ext(): String { return if (sc.current.parsed < "26") "" else "-base" }
+        fun ccaExt(): String { return if (sc.current.parsed < "26") "" else "-base" }
 
         val props = mapOf(
             "id" to project.property("mod.id"),
@@ -132,7 +137,7 @@ tasks {
             "minecraft" to project.property("mod.mc_dep"),
             "loader" to project.property("deps.fabric_loader"),
             "cca" to project.property("deps.cca"),
-            "cca_ext" to cca_ext(),
+            "cca_ext" to ccaExt(),
             "fapi" to project.property("deps.fabric_api"),
             "aw" to project.property("mod.mc_title")
         )
