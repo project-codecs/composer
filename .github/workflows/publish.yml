@@ -44,7 +44,7 @@ jobs:
           CLOUDSMITH_USERNAME: ${{ secrets.CLOUDSMITH_USERNAME }}
         run: |
           echo "Publishing to Cloudsmith..."
-          ./gradlew publish
+          ./gradlew publish -Prelease=true -Pdev=false
 
       - name: Publish to Modrinth
         if: github.event.inputs.target == 'modrinth' || github.event.inputs.target == 'both'
@@ -52,7 +52,7 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: |
           echo "Publishing to Modrinth..."
-          ./gradlew publishMods
+          ./gradlew publishMods -Prelease=true -Pdev=false
 
       - name: Update Modrinth description
         if: github.event.inputs.update_readme
@@ -60,4 +60,4 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: |
           echo "Updating Modrinth description..."
-          ./gradlew modrinthSyncBody
+          ./gradlew modrinthSyncBody -Prelease=true -Pdev=false

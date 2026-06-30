@@ -24,7 +24,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build
-        run: ./gradlew buildAndCollect collectArtifacts
+        run: ./gradlew buildAndCollect collectArtifacts -Prelease=true -Pdev=false
 
       - name: Get Build Artifacts
         uses: actions/upload-artifact@v4
