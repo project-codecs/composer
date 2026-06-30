@@ -1,5 +1,6 @@
 {
     "id": "composer",
+    "schema": "1",
     "platforms": {
         "modrinth": "WJ1ahCDP"
     },
