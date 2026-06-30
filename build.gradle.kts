@@ -54,7 +54,7 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
+dependencies  {
     fun cca(): String { return if (sc.current.parsed >= "1.20.6") "org.ladysnake" else "dev.onyxstudios" }
     fun ccaWorld(): String { return if (sc.current.parsed < "26") "world" else "leveldata" }
     fun yarn(): String { return if (sc.current.parsed <= "1.21.11") "net.fabricmc:yarn" else "org.relativitymc:modern-yarn" }
@@ -75,11 +75,11 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    compileOnly("com.codex:ambarella:${property("ambarella_version")}")
+    implementation("com.codex:ambarella:${property("ambarella_version")}")
     include("com.codex:ambarella:${property("ambarella_version")}")
 
-    sc.constants["release"]?.let {
-        if (!it) {
+    sc.constants["dev"]?.let {
+        if (it) {
             if (sc.current.parsed >= "1.21.11") modRuntimeOnly("org.sinytra:wiki-exporter-fabric:${property("r.deps.wiki_exporter")}")
             modLocalRuntime("com.terraformersmc:modmenu:${property("r.deps.mod_menu")}")
             modLocalRuntime("${cca()}.cardinal-components-api:cardinal-components-api:${property("deps.cca")}")

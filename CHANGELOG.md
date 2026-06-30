@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2] - 2026-06-30
+
+### Added
+
+- Inline prefixes to ComposerLanguageProvider by @lilbrocodes
+- SemiLanguageProvider with all the same utilities as ComposerLanguageProvider by @lilbrocodes
+- Better entity registration utilities for 1.21.3+ by @lilbrocodes
+
+### Changes
+
+- Multiblocks now use a custom data structure called a "cube matrix" to prevent the raw use of stacked lists by @lilbrocodes
+
+### Deprecated
+
+- ComposerSemiLanguageProvider in favour of SemiLanguageProvider by @lilbrocodes
+- DeferredEntityRegistry#register(FabricEntityTypeBuilder<T>) is now only deprecated on 1.21.3+ by @lilbrocodes
+
 ## [4.1] - 2026-05-28
 
 ### Removed
@@ -21,9 +38,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Wiki! View it on https://moddedmc.wiki/ (slug undecided) by @lilbrocodes
-- Support for 1.21.5 - 1.21.11, except for 1.21.9 because of broken CCA b by @lilbrocodes
-- Alternatives for ComposerCompound in 1.21.5 and above by @lilbrocodes
+- Wiki! View it on the [Sinytra Modded MC Wiki](https://moddedmc.wiki/en/project/composer) by @lilbrocodes
+- Support for 1.21.5 - 1.21.11, except for 1.21.9 because of broken CCA by @lilbrocodes
+- Alternatives for ComposerCompound in 1.21.6 and above by @lilbrocodes
 - Typed tag builders for 1.20.4+ by @lilbrocodes
 - ServerRecipeManager Events by @lilbrocodes
 - Deferred recipe registry by @lilbrocodes

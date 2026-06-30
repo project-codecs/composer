@@ -1,10 +1,12 @@
 package com.codex.composer.internal.data.loader.json;
 
+import com.codex.composer.api.v1.util.misc.CubeMatrix;
 import com.codex.composer.internal.Composer;
 import com.google.gson.*;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3i;
+import org.joml.Vector3i;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -40,67 +42,50 @@ public class MultiblockJsonLoader {
     }
 
     private static ParsedMultiblock process(RawMultiblock raw) {
-        List<Layer> processedLayers = new ArrayList<>();
+        CubeMatrix<Key> matrix = new CubeMatrix<>();
 
-        for (List<String> layer : raw.layers) {
-            List<List<Key>> shape = new ArrayList<>();
+        for (int y = 0; y < raw.layers.size(); y++) {
+            List<String> layer = raw.layers.get(y);
 
-            for (String row : layer) {
-                List<Key> keyRow = new ArrayList<>();
+            for (int z = 0; z < layer.size(); z++) {
+                String row = layer.get(z);
+                char[] entries = row.toCharArray();
 
-                for (char c : row.toCharArray()) {
+                for (int x = 0; x < entries.length; x++) {
+                    char c = entries[x];
                     JsonPrimitive value = raw.pattern.get(String.valueOf(c));
-
-                    keyRow.add(new Key(c, value));
+                    matrix.set(new Vector3i(x, y, layer.size() - 1 - z), new Key(c, value));
                 }
-
-                shape.add(keyRow);
             }
-
-            processedLayers.add(new Layer(shape));
         }
 
         List<Key> keys = raw.pattern.entrySet().stream()
                 .map(entry -> new Key(entry.getKey().charAt(0), entry.getValue().getAsJsonPrimitive()))
                 .toList();
 
-        return new ParsedMultiblock(raw.id, processedLayers, keys, raw.controller_pos);
+        return new ParsedMultiblock(raw.id, matrix, keys, raw.controller_pos);
     }
 
     public static class ParsedMultiblock {
         private final Identifier id;
-        private final List<Layer> layers;
+        private final CubeMatrix<Key> matrix;
         private final List<Key> keys;
         private final Vec3i controllerPos;
 
-        public ParsedMultiblock(Identifier id, List<Layer> layers, List<Key> keys, Vec3i controllerPos) {
+        public ParsedMultiblock(Identifier id, CubeMatrix<Key> matrix, List<Key> keys, Vec3i controllerPos) {
             this.id = id;
-            this.layers = layers;
+            this.matrix = matrix;
             this.keys = keys;
             this.controllerPos = controllerPos;
         }
 
-        public Identifier getId() {
-            return id;
-        }
-
-        public List<Layer> getLayers() {
-            return layers;
-        }
-
-        public List<Key> getKeys() {
-            return keys;
-        }
-
-        public Vec3i getControllerPos() {
-            return controllerPos;
-        }
+        public Identifier getId() { return id; }
+        public CubeMatrix<Key> getMatrix() { return matrix; }
+        public List<Key> getKeys() { return keys; }
+        public Vec3i getControllerPos() { return controllerPos; }
     }
 
-    public record Layer(List<List<Key>> shape) {}
-
     public record Key(char symbol, JsonPrimitive value) {}
-
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private static class RawMultiblock {

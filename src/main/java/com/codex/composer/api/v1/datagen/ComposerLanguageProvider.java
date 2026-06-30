@@ -15,10 +15,14 @@ import net.minecraft.stat.StatType;
 import net.minecraft.util.Identifier;
 import com.codex.composer.api.v1.util.misc.Translatable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 //? if minecraft: <=1.20.4 {
 /*import com.codex.composer.api.v1.util.misc.TranslatableSoundEvent;
 *///? } else {
 import net.minecraft.registry.RegistryWrapper;
+
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.registry.entry.RegistryEntry;
 //?}
@@ -32,7 +36,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
-    protected TranslationBuilder builder;
+    protected final Set<String> set = new HashSet<>();
+    protected FabricLanguageProvider.TranslationBuilder builder;
+    protected String prefix = "";
+    private boolean prefixInlined = false;
+    protected String suffix = "";
+    private boolean suffixInlined = false;
 
     //? if minecraft: <=1.20.4 {
     /*public ComposerLanguageProvider(FabricDataOutput dataOutput) {
@@ -59,12 +68,12 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
     //?}
 
     public abstract void generate();
-    public String prefix() {
-        return "";
-    }
-    public String suffix() {
-        return "";
-    }
+
+    public String prefix() { return prefix; }
+    public String suffix() { return suffix; }
+
+    public void prefix(String prefix) { this.prefix = prefix; prefixInlined = prefix != null && !prefix.isBlank(); }
+    public void suffix(String suffix) { this.suffix = suffix; suffixInlined = suffix != null && !suffix.isBlank(); }
 
     // Custom
 
@@ -110,23 +119,48 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
         add(translatable.getTranslationKey(prefix, suffix), value);
     }
 
+    @Deprecated(since = "4.2", forRemoval = true)
     public void prefix(String key, String value) {
         add(prefix() + (prefix().isBlank() ? "" : ".") + key, value);
     }
 
+    @Deprecated(since = "4.2", forRemoval = true)
     public void suffix(String key, String value) {
         add(key + (suffix().isBlank() ? "" : ".") + suffix(), value);
     }
 
+    @Deprecated(since = "4.2", forRemoval = true)
     public void surround(String key, String value) {
         add("%s%s%s%s%s".formatted(prefix(), prefix().isBlank() ? "" : ".", key, suffix().isBlank() ? "" : ".", suffix()), value);
     }
 
-    // Vanilla redirect
+    public void pre(String key, String value) {
+        add(prefix() + (prefix().isBlank() ? "" : ".") + key, value, false);
+    }
+
+    public void suf(String key, String value) {
+        add(key + (suffix().isBlank() ? "" : ".") + suffix(), value, false);
+    }
+
+    public void sur(String key, String value) {
+        add("%s%s%s%s%s".formatted(prefix(), prefix().isBlank() ? "" : ".", key, suffix().isBlank() ? "" : ".", suffix()), value, false);
+    }
 
     public void add(String key, String value) {
-        builder.add(key, value);
+        add(key, value, true);
     }
+
+    public void add(String key, String value, boolean append) {
+        if (set.contains(key) && (!append && (prefixInlined || suffixInlined))) return;
+        set.add(key);
+
+        if (append && prefixInlined && suffixInlined) sur(key, value);
+        else if (append && prefixInlined) pre(key, value);
+        else if (append && suffixInlined) suf(key, value);
+        else builder.add(key, value);
+    }
+
+    // Vanilla redirect
 
     public void item(ItemConvertible item, String value) {
         builder.add(item.asItem(), value);
@@ -134,6 +168,8 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
 
     public void block(Block block, String value) {
         builder.add(block, value);
+        //? if minecraft: >=1.21.3
+        item(block, value);
     }
 
     public void registryKey(RegistryKey<ItemGroup> registryKey, String value) {

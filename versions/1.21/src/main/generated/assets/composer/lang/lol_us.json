@@ -40,8 +40,6 @@
   "composer.tooltips.soulbound.droppable": "U can drop dis item even tho it iz soulbound",
   "composer.tooltips.soulbound.droppable.not": "U CANNOT drop dis item when it iz soulbound",
   "composer.tooltips.soulbound.not": "Dis item iz NOT soulbound",
-  "feature.description.composer.target_synchronization.block": "Makez playerz's target blockz go to teh client. Frequency iz how often (in tickz) updatez iz sended. Changing dis or turning it off mite brek other modz (rip).",
-  "feature.description.composer.target_synchronization.entity": "Makez playerz's target entitiez go to teh client. Frequency iz how often (in tickz) updatez iz sended. Changing dis or turning it off mite brek other modz (oh noes).",
   "itemGroup.composer": "Composer's Silly Lil Addishuns (iz funni)",
   "stat.composer.boop_plush": "LilBro Plushiez Booped (hehehe)"
 }

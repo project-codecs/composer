@@ -40,8 +40,6 @@
   "composer.tooltips.soulbound.droppable": "This item is droppable when soulbound",
   "composer.tooltips.soulbound.droppable.not": "This item is not droppable when soulbound",
   "composer.tooltips.soulbound.not": "This item is not soulbound",
-  "feature.description.composer.target_synchronization.block": "Synchronizes players' target blocks to the client. Frequency controls how often (in ticks) updates are sent. Changing this or disabling it may break other mods.",
-  "feature.description.composer.target_synchronization.entity": "Synchronizes players' target entities to the client. Frequency controls how often (in ticks) updates are sent. Changing this or disabling it may break other mods.",
   "itemGroup.composer": "Composer's Silly Little Additions",
   "stat.composer.boop_plush": "LilBro Plushies Booped"
 }

@@ -3,6 +3,7 @@ package com.codex.composer.api.v1.datagen.lang;
 import me.fzzyhmstrs.fzzy_config.util.EnumTranslatable;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -10,7 +11,6 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Identifier;
@@ -18,7 +18,8 @@ import com.codex.composer.api.v1.util.misc.Translatable;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.concurrent.CompletableFuture;
+import java.util.HashSet;
+import java.util.Set;
 
 //? if minecraft: <=1.20.4
 //import com.codex.composer.api.v1.util.misc.TranslatableSoundEvent;
@@ -26,18 +27,24 @@ import java.util.concurrent.CompletableFuture;
 //? if minecraft: >=1.20.6
 import net.minecraft.registry.entry.RegistryEntry;
 
-@Deprecated(since = "4.2", forRemoval = true)
-public abstract class ComposerSemiLanguageProvider implements ComposerMultiLanguageProvider.SemiLangProvider {
+public abstract class SemiLanguageProvider implements ComposerMultiLanguageProvider.SemiLangProvider {
+    protected final Set<String> set = new HashSet<>();
     protected FabricLanguageProvider.TranslationBuilder builder;
+    protected String prefix = "";
+    private boolean prefixInlined = false;
+    protected String suffix = "";
+    private boolean suffixInlined = false;
 
-    public abstract void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup);
-
+    @Override
     public void setBuilder(FabricLanguageProvider.TranslationBuilder builder) {
         this.builder = builder;
     }
 
-    public String prefix() { return ""; }
-    public String suffix() { return ""; }
+    public String prefix() { return prefix; }
+    public String suffix() { return suffix; }
+
+    public void prefix(String prefix) { this.prefix = prefix; prefixInlined = prefix != null && !prefix.isBlank(); }
+    public void suffix(String suffix) { this.suffix = suffix; suffixInlined = suffix != null && !suffix.isBlank(); }
 
     public void stat(Identifier identifier, String value) {
         add("stat.%s.%s".formatted(identifier.getNamespace(), identifier.getPath()), value);
@@ -81,23 +88,56 @@ public abstract class ComposerSemiLanguageProvider implements ComposerMultiLangu
         add(translatable.getTranslationKey(prefix, suffix), value);
     }
 
-    public void prefix(String key, String value) {
-        add(prefix() + (prefix().isBlank() ? "" : ".") + key, value);
+    public void bind(KeyBinding bind, String value) {
+        //? if minecraft: >=1.21.9 {
+        //add(bind.getId(), value);
+        //? } else {
+        add(bind.getTranslationKey(), value);
+        //? }
     }
 
-    public void suffix(String key, String value) {
-        add(key + (suffix().isBlank() ? "" : ".") + suffix(), value);
+    //? if minecraft: >=1.21.9 {
+    /*public void bind_category(KeyBinding.Category category, String value) {
+        add(String.format("key.category.%s.%s", category.id().getNamespace(), category.id().getPath()), value);
+    }
+    *///? } else {
+    public void bind(KeyBinding bind, String keyTranslation, String categoryTranslation) {
+        bind(bind, keyTranslation);
+        bind_category(bind, categoryTranslation);
     }
 
-    public void surround(String key, String value) {
-        add("%s%s%s%s%s".formatted(prefix(), prefix().isBlank() ? "" : ".", key, suffix().isBlank() ? "" : ".", suffix()), value);
+    public void bind_category(KeyBinding bind, String value) {
+        add(bind.getCategory(), value);
+    }
+    //? }
+
+    public void pre(String key, String value) {
+        add(prefix() + (prefix().isBlank() ? "" : ".") + key, value, false);
+    }
+
+    public void suf(String key, String value) {
+        add(key + (suffix().isBlank() ? "" : ".") + suffix(), value, false);
+    }
+
+    public void sur(String key, String value) {
+        add("%s%s%s%s%s".formatted(prefix(), prefix().isBlank() ? "" : ".", key, suffix().isBlank() ? "" : ".", suffix()), value, false);
+    }
+
+    public void add(String key, String value) {
+        add(key, value, true);
+    }
+
+    public void add(String key, String value, boolean append) {
+        if (set.contains(key) && (!append && (prefixInlined || suffixInlined))) return;
+        set.add(key);
+
+        if (append && prefixInlined && suffixInlined) sur(key, value);
+        else if (append && prefixInlined) pre(key, value);
+        else if (append && suffixInlined) suf(key, value);
+        else builder.add(key, value);
     }
 
     // Vanilla redirect
-
-    public void add(String key, String value) {
-        builder.add(key, value);
-    }
 
     public void item(ItemConvertible item, String value) {
         builder.add(item.asItem(), value);

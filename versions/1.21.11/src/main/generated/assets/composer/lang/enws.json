@@ -40,8 +40,6 @@
   "composer.tooltips.soulbound.droppable": "This item may be dropped even whilst bound to thy soul",
   "composer.tooltips.soulbound.droppable.not": "This item may not be dropped whilst bound to thy soul",
   "composer.tooltips.soulbound.not": "This item is not bound to thy soul",
-  "feature.description.composer.target_synchronization.block": "Doth synchronise the target blocks of players unto the client. The frequency governeth how oft (in ticks) updates are dispatched. To alter this or to disable it may bring ruin upon other mods.",
-  "feature.description.composer.target_synchronization.entity": "Doth synchronise the target entities of players unto the client. The frequency governeth how oft (in ticks) updates are dispatched. To alter this or to disable it may bring ruin upon other mods.",
   "item.composer.plush": "LilBro's Plush Effigy",
   "itemGroup.composer": "The Composer's Merry Trifling Additions",
   "stat.composer.boop_plush": "LilBro Effigies Prodded"

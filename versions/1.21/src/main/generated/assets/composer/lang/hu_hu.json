@@ -11,7 +11,7 @@
   "composer.credits.success_credits": "Stáblista megjelenítése %s játékosnak.",
   "composer.credits.success_poem": "End-vers megjelenítése %s játékosnak.",
   "composer.dynamic_tooltips.details": "a részleteket",
-  "composer.dynamic_tooltips.hidden": "Nyomd meg a(z) %s-t hogy látsd %s",
+  "composer.dynamic_tooltips.hidden": "Nyomd meg a(z) %s-t hogy lásd %s",
   "composer.feature.description.missing": "Nem érkezett leírás.",
   "composer.feature.disable": "%s funkció letiltva",
   "composer.feature.enable": "%s funkció engedélyezve",
@@ -40,8 +40,6 @@
   "composer.tooltips.soulbound.droppable": "Ez a tárgy lélekhez kötötten is dobható el",
   "composer.tooltips.soulbound.droppable.not": "Ez a tárgy lélekhez kötötten nem dobható el",
   "composer.tooltips.soulbound.not": "Ez a tárgy nincs lélekhez kötve",
-  "feature.description.composer.target_synchronization.block": "Szinkronizálja a játékosok célblokkjait a klienssel. A frekvencia azt szabályozza, milyen sűrűn (tick-enként) kerülnek elküldésre a frissítések. Ennek megváltoztatása vagy letiltása más modokat elronthat.",
-  "feature.description.composer.target_synchronization.entity": "Szinkronizálja a játékosok célentitásait a klienssel. A frekvencia azt szabályozza, milyen sűrűn (tick-enként) kerülnek elküldésre a frissítések. Ennek megváltoztatása vagy letiltása más modokat elronthat.",
   "itemGroup.composer": "A Composer vicces kis cuccai",
   "stat.composer.boop_plush": "Megbökött LilBroCodes plüssök"
 }
