@@ -8,11 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [4.3] - 2026-09-06
 
 ### Added
-- A registerReference to the deferred sound registry
+- A registerReference to the deferred sound registry by @lilbrocodes
 
 ### Removed
-- The SemiLangProvider abstraction as well as the old ComposerSemiLanguageProvider in favor of SemiLanguageProvider
-- 
+- The SemiLangProvider abstraction as well as the old ComposerSemiLanguageProvider in favor of SemiLanguageProvider by @lilbrocodes
 
 ## [4.2] - 2026-06-30
 
