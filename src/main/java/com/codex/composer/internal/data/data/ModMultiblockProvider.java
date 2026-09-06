@@ -1,7 +1,7 @@
 package com.codex.composer.internal.data.data;
 
 //? if !release {
-import com.codex.composer.api.v1.datagen.ComposerMultiblockProvider;
+/*import com.codex.composer.api.v1.datagen.ComposerMultiblockProvider;
 import com.codex.composer.internal.Composer;
 import com.codex.composer.internal.registry.ModBlocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -27,4 +27,4 @@ public class ModMultiblockProvider extends ComposerMultiblockProvider {
                 .write(writer);
     }
 }
-//? }
+*///? }

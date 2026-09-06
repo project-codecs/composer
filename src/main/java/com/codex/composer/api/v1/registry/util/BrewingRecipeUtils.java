@@ -73,7 +73,7 @@ public class BrewingRecipeUtils {
     //?}
 
     public static void redstone(Potion base, Potion extended) {
-        register(base, Items.REDSTONE, extended);
+        register(base, Items./*? if minecraft: >=26.2 { *//*REDSTONE_WIRE*//*? } else { */REDSTONE/*? }*/, extended);
     }
 
     public static void glowstone(Potion base, Potion stronger) {

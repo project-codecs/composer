@@ -14,8 +14,8 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
+import net.minecraft.util/*? if minecraft: >=26.2 { *//*.math*//*? } */.BlockMirror;
+import net.minecraft.util/*? if minecraft: >=26.2 { *//*.math*//*? } */.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -25,7 +25,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 //? if minecraft: >=1.21
 import net.minecraft.state.property.EnumProperty;
 

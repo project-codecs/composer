@@ -21,10 +21,10 @@ public class ShowCreditsHandler implements ClientPlayNetworking.PlayPayloadHandl
     *///? } else {
     public void receive(ShowCreditsPayload payload, ClientPlayNetworking.Context context) {
     //? }
-        MinecraftClient.getInstance().setScreen(new ModifiedCreditsScreen(
+        MinecraftClient.getInstance().setScreenAndRender(new ModifiedCreditsScreen(
                 payload.credits(),
                 payload.poem(),
-                () -> MinecraftClient.getInstance().setScreen(null)
+                () -> MinecraftClient.getInstance().setScreenAndRender(null)
         ));
     }
 }

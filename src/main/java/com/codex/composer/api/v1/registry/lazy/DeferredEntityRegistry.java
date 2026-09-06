@@ -1,6 +1,5 @@
 package com.codex.composer.api.v1.registry.lazy;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
@@ -14,6 +13,9 @@ import net.minecraft.entity.SpawnGroup;
 import java.util.function.UnaryOperator;
 //? }
 
+//? if minecraft: <26.2
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+
 public class DeferredEntityRegistry extends EmptyDeferredRegistry {
     public DeferredEntityRegistry(String modId) {
         super(modId);
@@ -25,10 +27,13 @@ public class DeferredEntityRegistry extends EmptyDeferredRegistry {
     }
 
     //? if minecraft: >=1.21.3
+
+    //? if minecraft: <26.2 {
     @SuppressWarnings("deprecation")
     public <T extends Entity> EntityType<T> register(String name, FabricEntityTypeBuilder<T> builder) {
         return register(name, builder.build(/*? if minecraft: >=1.21.3 { */RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(modId, name))/*?}*/));
     }
+    //? }
 
     //? if minecraft: >=1.21.3 {
     public <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {

@@ -22,12 +22,12 @@ import net.minecraft.storage.WriteView;
 import net.minecraft.registry.RegistryWrapper;
 
 //? if !release {
-import com.codex.composer.api.v1.block.MultiblockControllerBlock;
+/*import com.codex.composer.api.v1.block.MultiblockControllerBlock;
 import com.codex.composer.internal.Composer;
 import net.minecraft.util.Identifier;
-//? }
+*///? }
 
-public abstract class AbstractPlushieBlockEntity extends BlockEntity /*? if !release { */ implements MultiblockControllerBlock /*? }*/ {
+public abstract class AbstractPlushieBlockEntity extends BlockEntity /*? if !release { */ /*implements MultiblockControllerBlock *//*? }*/ {
     private static final float SQUASH = 3f;
     private static final float SQUASH_EPS = 0.01f;
     public double squash;
@@ -37,11 +37,11 @@ public abstract class AbstractPlushieBlockEntity extends BlockEntity /*? if !rel
     }
 
     //? if !release {
-    @Override
+    /*@Override
     public Identifier multiblock() {
         return Composer.identify("ritual");
     }
-    //? }
+    *///? }
 
     public static void tick(World world, BlockPos pos, BlockState state, @NotNull AbstractPlushieBlockEntity spark) {
         if (spark.squash > 0) {

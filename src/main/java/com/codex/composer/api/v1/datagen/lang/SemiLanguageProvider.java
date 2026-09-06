@@ -11,6 +11,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Identifier;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 //? if minecraft: <=1.20.4
 //import com.codex.composer.api.v1.util.misc.TranslatableSoundEvent;
@@ -27,7 +29,7 @@ import java.util.Set;
 //? if minecraft: >=1.20.6
 import net.minecraft.registry.entry.RegistryEntry;
 
-public abstract class SemiLanguageProvider implements ComposerMultiLanguageProvider.SemiLangProvider {
+public abstract class SemiLanguageProvider {
     protected final Set<String> set = new HashSet<>();
     protected FabricLanguageProvider.TranslationBuilder builder;
     protected String prefix = "";
@@ -35,10 +37,10 @@ public abstract class SemiLanguageProvider implements ComposerMultiLanguageProvi
     protected String suffix = "";
     private boolean suffixInlined = false;
 
-    @Override
     public void setBuilder(FabricLanguageProvider.TranslationBuilder builder) {
         this.builder = builder;
     }
+    public abstract void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup);
 
     public String prefix() { return prefix; }
     public String suffix() { return suffix; }
@@ -90,8 +92,8 @@ public abstract class SemiLanguageProvider implements ComposerMultiLanguageProvi
 
     public void bind(KeyBinding bind, String value) {
         //? if minecraft: >=1.21.9 {
-        //add(bind.getId(), value);
-        //? } else {
+        /*add(bind.getId(), value);
+        *///? } else {
         add(bind.getTranslationKey(), value);
         //? }
     }

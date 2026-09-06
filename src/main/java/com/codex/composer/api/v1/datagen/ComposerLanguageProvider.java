@@ -27,10 +27,7 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.registry.entry.RegistryEntry;
 //?}
 
-//? legacy {
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-//? } else
-//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -48,7 +45,7 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
         super(dataOutput);
     }
     *///? } else {
-    public ComposerLanguageProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public ComposerLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         super(dataOutput, registryLookup);
     }
     //? }

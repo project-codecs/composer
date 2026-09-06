@@ -17,17 +17,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-
-//? legacy {
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-//? } else
-//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 public abstract class ComposerMultiblockProvider implements DataProvider {
     private final List<CompletableFuture<?>> futures = new ArrayList<>();
-    private final /*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ output;
+    private final FabricDataOutput output;
 
-    public ComposerMultiblockProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ output) {
+    public ComposerMultiblockProvider(FabricDataOutput output) {
         this.output = output;
     }
 

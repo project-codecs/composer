@@ -9,13 +9,10 @@ import com.codex.composer.internal.registry.ModItems;
 *///? } else
 import net.minecraft.client.data.*;
 
-//? legacy {
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-//? } else
-//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 public class ModModelProvider extends ComposerModelProvider {
-    public ModModelProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ output) {
+    public ModModelProvider(FabricDataOutput output) {
         super(output);
     }
 

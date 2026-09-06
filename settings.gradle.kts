@@ -15,7 +15,7 @@ plugins {
 stonecutter {
     create(rootProject) {
         versions("1.20.1", "1.20.4", "1.20.6", "1.21", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.10", "1.21.11")
-//        version("26.1.2") // Disabled for now as it does not build in dev env and I don't trust it
+        versions("26.1.2", "26.2") // Risky versions, as they don't run in dev env and I don't trust them. Will be published as beta
         vcsVersion = "1.21.4"
     }
 }

@@ -8,7 +8,7 @@ import com.codex.composer.internal.data.data.ModBlockLootTableProvider;
 import com.codex.composer.internal.data.data.ModRecipeProvider;
 
 //? if !release
-import com.codex.composer.internal.data.data.ModMultiblockProvider;
+//import com.codex.composer.internal.data.data.ModMultiblockProvider;
 
 public class ComposerDataGenerator implements DataGeneratorEntrypoint {
     @Override
@@ -22,6 +22,6 @@ public class ComposerDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModRecipeProvider::new);
 
         //? if !release
-        pack.addProvider(ModMultiblockProvider::new);
+        //pack.addProvider(ModMultiblockProvider::new);
     }
 }

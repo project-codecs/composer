@@ -27,7 +27,7 @@ import net.minecraft.client.render.RenderLayer;
 
 //? if minecraft: >=1.21.6 {
 /*import com.mojang.blaze3d.pipeline.RenderPipeline;
-import net.minecraft.client.gl.RenderPipelines;
+import net.minecraft.client./^? if minecraft: >=26.2 { ^//^render^//^? } else { ^/gl/^? }^/.RenderPipelines;
 *///? }
 
 public class Overlays {

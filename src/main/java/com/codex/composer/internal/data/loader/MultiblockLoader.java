@@ -4,20 +4,27 @@ import com.codex.composer.api.v1.multiblock.MultiblockRegistry;
 import com.codex.composer.internal.Composer;
 import com.codex.composer.internal.data.loader.json.MultiblockJsonLoader;
 import com.codex.composer.internal.multiblock.JsonBackedMultiblock;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
-public class MultiblockLoader implements SimpleSynchronousResourceReloadListener {
+//? if minecraft: >=26.2 {
+/*import net.minecraft.resource.SynchronousResourceReloader;
+*///? } else {
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+//? }
+
+public class MultiblockLoader implements /*? if minecraft: >=26.2 { *//*SynchronousResourceReloader*//*? } else { */SimpleSynchronousResourceReloadListener/*? }*/ {
     public static final Identifier ID = Composer.identify("multiblock");
 
+    //? if minecraft: <26.2 {
     @Override
     public Identifier getFabricId() {
         return ID;
     }
+    //? }
 
     @Override
-    public void reload(ResourceManager manager) {
+    public void /*? if minecraft: >=26.2 { *//*scheduleReload*//*? } else { */reload/*? }*/(ResourceManager manager) {
         MultiblockRegistry registry = MultiblockRegistry.getInstance();
 
         registry.clear();

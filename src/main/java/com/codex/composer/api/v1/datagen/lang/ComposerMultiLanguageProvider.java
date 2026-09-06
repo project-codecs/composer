@@ -1,6 +1,5 @@
 package com.codex.composer.api.v1.datagen.lang;
 
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.data.DataOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataWriter;
@@ -12,17 +11,14 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-//? legacy {
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-//? } else
-//import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 public abstract class ComposerMultiLanguageProvider implements DataProvider {
-    private final /*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ dataOutput;
+    private final FabricDataOutput dataOutput;
     private final CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup;
     private final LanguagePack languagePack = new LanguagePack();
 
-    public ComposerMultiLanguageProvider(/*? if legacy {*/FabricDataOutput/*? } else {*//*FabricPackOutput*//*? }*/ dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public ComposerMultiLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         this.dataOutput = dataOutput;
         this.registryLookup = registryLookup;
         init(languagePack);
@@ -34,10 +30,10 @@ public abstract class ComposerMultiLanguageProvider implements DataProvider {
     public CompletableFuture<?> run(DataWriter writer) {
         Map<String, Map<String, String>> allLanguageKeys = new HashMap<>();
 
-        for (Map.Entry<String, List<SemiLangProvider>> entry : languagePack.languageMap.entrySet()) {
+        for (Map.Entry<String, List<SemiLanguageProvider>> entry : languagePack.languageMap.entrySet()) {
             String langCode = entry.getKey();
             Map<String, String> translations = new HashMap<>();
-            for (SemiLangProvider provider : entry.getValue()) {
+            for (SemiLanguageProvider provider : entry.getValue()) {
                 provider.setBuilder((key, value) -> {
                     Objects.requireNonNull(key);
                     Objects.requireNonNull(value);
@@ -112,27 +108,22 @@ public abstract class ComposerMultiLanguageProvider implements DataProvider {
     }
 
     public static class LanguagePack {
-        private final Map<String, List<SemiLangProvider>> languageMap = new HashMap<>();
+        private final Map<String, List<SemiLanguageProvider>> languageMap = new HashMap<>();
         @Nullable private String baseLanguage;
 
-        public <T extends SemiLangProvider> T addProvider(String languageCode, Supplier<T> provider, boolean setDefault) {
+        public <T extends SemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider, boolean setDefault) {
             if (setDefault) baseLanguage = languageCode;
             languageMap.computeIfAbsent(languageCode, k -> new ArrayList<>()).add(provider.get());
             return provider.get();
         }
 
         @SuppressWarnings("UnusedReturnValue")
-        public <T extends SemiLangProvider> T addProvider(String languageCode, Supplier<T> provider) {
+        public <T extends SemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider) {
             return addProvider(languageCode, provider, false);
         }
 
         public void setBaseLanguage(@Nullable String languageCode) {
             this.baseLanguage = languageCode;
         }
-    }
-
-    public interface SemiLangProvider {
-        void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup);
-        void setBuilder(FabricLanguageProvider.TranslationBuilder builder);
     }
 }

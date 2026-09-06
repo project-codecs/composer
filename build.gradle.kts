@@ -58,7 +58,7 @@ dependencies  {
     fun cca(): String { return if (sc.current.parsed >= "1.20.6") "org.ladysnake" else "dev.onyxstudios" }
     fun ccaWorld(): String { return if (sc.current.parsed < "26") "world" else "leveldata" }
     fun yarn(): String { return if (sc.current.parsed <= "1.21.11") "net.fabricmc:yarn" else "org.relativitymc:modern-yarn" }
-
+    
     minecraft("com.mojang:minecraft:${sc.current.version}")
     mappings("${yarn()}:${property("deps.yarn")}:v2")
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
@@ -80,7 +80,7 @@ dependencies  {
 
     sc.constants["dev"]?.let {
         if (it) {
-            if (sc.current.parsed >= "1.21.11") modRuntimeOnly("org.sinytra:wiki-exporter-fabric:${property("r.deps.wiki_exporter")}")
+            if (sc.current.version == "1.21.11") modRuntimeOnly("org.sinytra:wiki-exporter-fabric:${property("r.deps.wiki_exporter")}")
             modLocalRuntime("com.terraformersmc:modmenu:${property("r.deps.mod_menu")}")
             modLocalRuntime("${cca()}.cardinal-components-api:cardinal-components-api:${property("deps.cca")}")
         }
@@ -232,7 +232,7 @@ publishMods {
     displayName = "${property("mod.version")} for ${property("mod.mc_title")}"
     version = "${property("mod.version")}-$buildNum+mc${sc.current.version}"
     changelog = latestChange
-    type = STABLE
+    type = if (sc.current.parsed < "26") STABLE else BETA
     modLoaders.add("fabric")
 
     dryRun = !present("MODRINTH_TOKEN")

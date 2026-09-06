@@ -12,7 +12,6 @@ import com.codex.composer.internal.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +22,12 @@ import com.codex.composer.api.v1.util.misc.EventStacker;
 import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.networking.ScrollActionPayload;
 import net.fabricmc.loader.api.FabricLoader;
+
+//? if minecraft: >=26.2 {
+/*import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+*///? } else {
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+//? }
 
 //? if minecraft: <=1.21.6 {
 import net.fabricmc.loader.api.ModContainer;
@@ -96,7 +101,11 @@ public class Composer implements ModInitializer {
             })
         );
 
+        //? if minecraft: <26.2 {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MultiblockLoader());
+        //? } else {
+        /*ResourceLoader.get(ResourceType.SERVER_DATA).registerReloadListener(identify("multiblocks"), new MultiblockLoader());
+        *///? }
 
         FabricLoader.getInstance()
                 .getEntrypointContainers("composer-post-init", ComposerPostInitialization.class)

@@ -36,7 +36,7 @@ public class PlushBlock extends AbstractPlushieBlock {
 
     @Override
     protected void playSound(World world, BlockState state, BlockPos pos, PlayerEntity player) {
-        Vec3d mid = pos.toCenterPos();
+        Vec3d mid = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         world.playSound(null, mid.x, mid.y, mid.z, ModSounds.LILBRO_SQUISH, SoundCategory.BLOCKS, 1f, 1f);
     }
 

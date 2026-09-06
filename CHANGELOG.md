@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3] - 2026-09-06
+
+### Added
+- A registerReference to the deferred sound registry
+
+### Removed
+- The SemiLangProvider abstraction as well as the old ComposerSemiLanguageProvider in favor of SemiLanguageProvider
+- 
+
 ## [4.2] - 2026-06-30
 
 ### Added
