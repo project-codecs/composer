@@ -6,7 +6,7 @@ It provides shared systems, utilities, and architectural building blocks used ac
     
 Composer does **not** add gameplay content on its own (except for a plushie). It exists to support other mods at runtime and during development.
 
-For more details, take a look at the [wiki](https://moddedmc.wiki/composer-reloaded/latest)! <br>
+For more details, take a look at the [wiki](https://moddedmc.wiki/en/project/composer/latest)! <br>
 Information like style and contributing guidelines are also there!
 
 ---
