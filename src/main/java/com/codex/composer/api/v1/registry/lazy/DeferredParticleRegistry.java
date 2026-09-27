@@ -42,6 +42,11 @@ public class DeferredParticleRegistry extends EmptyDeferredRegistry {
                     }
                 });
     }
+
+    public <P extends ParticleEffect, T extends ParticleType<P>> T register(String name, T type) {
+        Identifier id = Identifier.of(modId, name);
+        return Registry.register(Registries.PARTICLE_TYPE, id, type);
+    }
     //?}
 
     //? if minecraft: <=1.20.4{

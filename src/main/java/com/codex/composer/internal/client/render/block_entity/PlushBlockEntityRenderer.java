@@ -4,9 +4,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import org.jetbrains.annotations.NotNull;
 
 //? if minecraft: <=1.21.4
 import net.minecraft.client.render.RenderLayers;
@@ -14,7 +14,7 @@ import net.minecraft.client.render.RenderLayers;
 //? if minecraft: >=1.21.5
 //import net.minecraft.util.math.Vec3d;
 
-//? if minecraft: >=1.21.5 <=1.21.6
+//? if minecraft: >=1.21.5 <=1.21.6 || =1.21.10
 //import net.minecraft.client.render.RenderLayer;
 
 //? if minecraft: =1.21.6
@@ -32,27 +32,102 @@ import net.minecraft.util.math.MathHelper;
 /*import net.minecraft.client.render.block.entity.state.BlockEntityRenderState;
 import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.state.CameraRenderState;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.OverlayTexture;
+import com.codex.composer.api.v1.block.entity.AbstractPlushieBlockEntity;
+import com.codex.composer.internal.registry.ModBlockEntities;
+import net.minecraft.client.render.command.ModelCommandRenderer;
+import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.Nullable;
+*///? }
+
+//? if minecraft: >=1.21.9 <26 {
+//import net.minecraft.client.render.model.BlockStateModel;
+//import net.minecraft.world.BlockRenderView;
+//import net.minecraft.client.render.block.BlockRenderManager;
+//import net.minecraft.client.MinecraftClient;
+//import net.minecraft.client.render.RenderLayers;
+//import com.codex.composer.mixin.impl.local.BlockRenderManagerAccessor;
+//import net.minecraft.util.math.random.Random;
+//? }
+
+//? if minecraft: >=26 {
+/*import net.minecraft.client.render.block.BlockModelManager;
+import net.minecraft.client.render.block.BlockRenderState;
+import net.minecraft.client.render.entity.EntityRendererId;
 *///? }
 
 @SuppressWarnings("ClassCanBeRecord")
 @Environment(EnvType.CLIENT)
-public class PlushBlockEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T/*? if minecraft: >=1.21.9 {*//*, BlockEntityRenderState*//*? }*/> {
-    //? if minecraft: <=1.21.6
+public class PlushBlockEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T/*? if minecraft: >=1.21.9 {*//*, PlushBlockEntityRenderer.PlushBlockEntityRenderState*//*? }*/> {
+    //? if minecraft: <26 {
     private final BlockRenderManager renderManager;
+    //? } else {
+    /*private final BlockModelManager models;
+    *///? }
 
     public PlushBlockEntityRenderer(BlockEntityRendererFactory.@NotNull Context ctx) {
-        //? if minecraft: <=1.21.6
+        //? if minecraft: <=1.21.6 {
         this.renderManager = ctx.getRenderManager();
+        //? } else if minecraft: <26 {
+        /*this.renderManager = ctx.renderManager();
+         *///? } else {
+        /*this.models = ctx.blockModelResolver();
+        *///? }
     }
 
     //? if minecraft: >=1.21.9 {
     /*@Override
-    public void render(BlockEntityRenderState state, MatrixStack matrices, OrderedRenderCommandQueue queue, CameraRenderState cameraState) { }
+    public void render(PlushBlockEntityRenderState state, MatrixStack matrices, OrderedRenderCommandQueue queue, CameraRenderState cameraState) {
+        matrices.push();
+
+        matrices.scale(1, 1 - state.squish, 1);
+        matrices.translate(0.5, 0, 0.5);
+        matrices.scale(1 + state.squish / 2, 1, 1 + state.squish / 2);
+        matrices.translate(-0.5, 0, -0.5);
+
+        //? if minecraft: >26 {
+        /^state.displayBlock.render(matrices, queue, state.lightmapCoordinates, OverlayTexture.DEFAULT_UV, 0);
+        ^///? } else {
+        BlockStateModel bm = this.renderManager.getModel(state.blockState);
+        var mr = ((BlockRenderManagerAccessor) renderManager).composer$getModelRenderer();
+        var vcp = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
+        mr.render(
+                state.renderView, bm.getParts(Random.create()), state.blockState, state.pos, matrices,
+                vcp.getBuffer(/^? if minecraft: >= 1.21.11{ ^//^RenderLayers.cutout()^//^? } else {^/RenderLayer.getCutout()/^? }^/), false, OverlayTexture.DEFAULT_UV
+        );
+        //? }
+
+        matrices.pop();
+    }
 
     @Override
-    public BlockEntityRenderState createRenderState() {
-        return new BlockEntityRenderState();
+    public PlushBlockEntityRenderState createRenderState() {
+        return new PlushBlockEntityRenderState();
+    }
+
+    @Override
+    public void updateRenderState(T be, PlushBlockEntityRenderState state, float tickDelta, Vec3d cameraPos, ModelCommandRenderer.@Nullable CrumblingOverlayCommand crumblingOverlay) {
+        BlockEntityRenderState.updateBlockEntityRenderState(be, state, crumblingOverlay);
+        double squish = be instanceof AbstractPlushieBlockEntity plushie ? plushie.squash : 0;
+        double lastSquish = squish * 3;
+        state.type = ModBlockEntities.PLUSH;
+        state.squish = (float) Math.pow(1 - 1f / (1f + MathHelper.lerp(tickDelta, lastSquish, squish)), 2);
+
+        //? if minecraft: <26
+        state.renderView = be.getWorld();
+
+        //? if minecraft: >26
+        //models.setBlockRenderState(state.displayBlock, be.getCachedState(), EntityRendererId.create());
+    }
+
+    public static final class PlushBlockEntityRenderState extends BlockEntityRenderState {
+        //? if minecraft: <26
+        public BlockRenderView renderView = null;
+
+        //? if minecraft: >26
+        //public BlockRenderState displayBlock = new BlockRenderState();
+
+        public float squish = 0f;
     }
 
     *///? } else {

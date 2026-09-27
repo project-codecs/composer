@@ -48,6 +48,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
 
     public AbstractPlushieBlock(Settings settings) {
         super(settings);
+        setDefaultState(getStateManager().getDefaultState().with(WATERLOGGED, false));
     }
 
     protected abstract void playSound(World world, BlockState state, BlockPos pos, PlayerEntity player);
@@ -74,11 +75,9 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
     public BlockRenderType getRenderType(BlockState state) {
         //? if minecraft: <=1.20.6 {
         /*return BlockRenderType.ENTITYBLOCK_ANIMATED;
-         *///? } else if minecraft: >=1.21.9 {
-        /*return BlockRenderType.MODEL;
         *///? } else {
         return BlockRenderType.INVISIBLE;
-        //? }
+         //? }
     }
 
     @Override
@@ -134,7 +133,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
     }
 
     @Override
-            //? if minecraft: <=1.21 {
+    //? if minecraft: <=1.21 {
     /*public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);

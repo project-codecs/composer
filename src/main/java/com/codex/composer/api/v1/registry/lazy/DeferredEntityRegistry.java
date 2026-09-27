@@ -26,8 +26,6 @@ public class DeferredEntityRegistry extends EmptyDeferredRegistry {
         return Registry.register(Registries.ENTITY_TYPE, id, type);
     }
 
-    //? if minecraft: >=1.21.3
-
     //? if minecraft: <26.2 {
     @SuppressWarnings("deprecation")
     public <T extends Entity> EntityType<T> register(String name, FabricEntityTypeBuilder<T> builder) {
