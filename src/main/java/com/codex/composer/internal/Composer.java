@@ -8,6 +8,9 @@ import com.codex.composer.internal.command.*;
 import com.codex.composer.internal.config.ComposerServerConfig;
 import com.codex.composer.internal.data.loader.MultiblockLoader;
 import com.codex.composer.internal.multiblock.MultiblockUpdateHandler;
+import com.codex.composer.internal.networking.ClearOverlaysPayload;
+import com.codex.composer.internal.networking.ShowCreditsPayload;
+import com.codex.composer.internal.networking.ShowOverlayPayload;
 import com.codex.composer.internal.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -79,6 +82,12 @@ public class Composer implements ModInitializer {
         ModOverlaySerializers.initialize();
 
         ScrollActionPayload.registerHandler();
+
+        //? if minecraft: >=1.20.6 {
+        ClearOverlaysPayload.registerPacket();
+        ShowCreditsPayload.registerPacket();
+        ShowOverlayPayload.registerPacket();
+        //?}
 
         EventStacker.registerAll(
                 CommandRegistrationCallback.EVENT,

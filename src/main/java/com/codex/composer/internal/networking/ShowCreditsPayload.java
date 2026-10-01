@@ -53,10 +53,15 @@ public record ShowCreditsPayload(boolean credits, boolean poem) implements /*? i
     @Environment(EnvType.CLIENT)
     public static void registerHandler() {
         //? if minecraft: >=1.20.6 {
-        PayloadTypeRegistry./*? if legacy {*/playS2C/*? } else {*//*clientboundPlay*//*? }*/().register(ID, CODEC);
         ClientPlayNetworking.registerGlobalReceiver(ID, new ShowCreditsHandler());
         //?} else {
         /*ClientPlayNetworking.registerGlobalReceiver(TYPE, new ShowCreditsHandler());
         *///?}
     }
+
+    //? if minecraft: >=1.20.6 {
+    public static void registerPacket() {
+        PayloadTypeRegistry./*? if legacy {*/playS2C/*? } else {*//*clientboundPlay*//*? }*/().register(ID, CODEC);
+    }
+    //? }
 }
