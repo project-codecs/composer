@@ -8,27 +8,11 @@ Default block entity implementation of the plushie block.
 Inheritors do not need to implement any extra methods.
 
 ### Example implementation:
-#### From [Composer]
+#### From [Composer](https://github.com/project-codecs/composer)
 ``` java
-public class PlushBlock extends AbstractPlushieBlock {
-    public PlushBlock(Settings settings) {... }
-
-    //? if minecraft: >=1.20.4 {
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return BlockWithEntity.createCodec(PlushBlock::new);
+public class LilBroPlushBlockEntity extends AbstractPlushieBlockEntity {
+    public LilBroPlushBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.PLUSH, pos, state);
     }
-    //? }
-
-    @Override
-    protected void playSound(World world, BlockState state, BlockPos pos, PlayerEntity player) {
-        Vec3d mid = pos.toCenterPos();
-        world.playSound(null, mid.x, mid.y, mid.z, ModSounds.LILBRO_SQUISH, SoundCategory.BLOCKS, 1f, 1f);
-    }
-
-    @Override
-    protected BlockEntityType<AbstractPlushieBlockEntity> getType() { return ModBlockEntities.PLUSH; }
-
-    @Override
-    public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {...}
 }
+

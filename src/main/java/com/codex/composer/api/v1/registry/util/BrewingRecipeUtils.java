@@ -56,8 +56,6 @@ public class BrewingRecipeUtils {
         register(RegistryEntry.of(input), ingredient, output);
     }
 
-
-
     public static void register(RegistryEntry<Potion> input, Ingredient ingredient, RegistryEntry<Potion> output) {
         BrewingRecipeRegistry.Builder builder = new BrewingRecipeRegistry.Builder(null);
         builder.registerPotionRecipe(input, ingredient, output);

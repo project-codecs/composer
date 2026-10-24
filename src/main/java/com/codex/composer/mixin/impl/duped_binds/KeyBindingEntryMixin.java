@@ -10,7 +10,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import com.codex.composer.internal.Composer;
-import com.codex.composer.internal.client.config.ComposerClientConfig;
+import com.codex.composer.internal.client.config.DupedBindsConfig;
 import com.codex.composer.internal.client.duped_binds.BindTracker;
 import com.codex.composer.internal.client.duped_binds.RainbowColor;
 import org.spongepowered.asm.mixin.Final;
@@ -33,9 +33,9 @@ public abstract class KeyBindingEntryMixin {
     private int flowed_combat$recolorBinding(int value) {
         if (Composer.disableDupedBinds()) return value;
         if (BindTracker.bindAllowed(binding)) {
-            RainbowColor.stepColor(ComposerClientConfig.INSTANCE.rainbowEffectSpeed.get());
+            RainbowColor.stepColor(DupedBindsConfig.INSTANCE.rainbowEffectSpeed.getValue());
             this.update();
-            return ComposerClientConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds ?
+            return DupedBindsConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds.getValue() ?
                     RainbowColor.currentColor :
                     Formatting.AQUA.getColorValue() == null ? 0xFF000000 : Formatting.AQUA.getColorValue();
         } else {
@@ -47,7 +47,7 @@ public abstract class KeyBindingEntryMixin {
     private Text flowed_combat$updateBindingColor(Text value) {
         if (Composer.disableDupedBinds()) return value;
         if (BindTracker.bindAllowed(binding)) {
-            return ComposerClientConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds ?
+            return DupedBindsConfig.INSTANCE.rainbowEffectOnDuplicateKeybinds.getValue() ?
                     binding.getBoundKeyLocalizedText().copy().setStyle(Style.EMPTY.withColor(RainbowColor.currentColor)) :
                     binding.getBoundKeyLocalizedText().copy().formatted(Formatting.AQUA);
         } else {

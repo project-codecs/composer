@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataWriter;
@@ -12,12 +13,8 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3i;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 public abstract class ComposerMultiblockProvider implements DataProvider {
     private final List<CompletableFuture<?>> futures = new ArrayList<>();
@@ -49,6 +46,8 @@ public abstract class ComposerMultiblockProvider implements DataProvider {
         private final Identifier id;
         private final List<List<String>> layers = new ArrayList<>();
         private final Map<Character, JsonElement> pattern = new HashMap<>();
+        private final Map<Identifier, JsonObject> extensions = new LinkedHashMap<>();
+        private final Set<Identifier> referencedExtensions = new HashSet<>();
         private Vec3i controllerPos = null;
         private int rowWidth = -1;
         private int layerWidth = -1;
@@ -66,9 +65,21 @@ public abstract class ComposerMultiblockProvider implements DataProvider {
             return new PatternBuilder(this, character);
         }
 
+        public ExtensionBuilder extension(Identifier extensionId) {
+            return new ExtensionBuilder(this, extensionId);
+        }
+
+        public ExtensionBuilder extension(String extensionId) {
+            return extension(Identifier.of(id.getNamespace(), extensionId));
+        }
+
         public MultiblockJsonBuilder controller(Vec3i pos) {
             this.controllerPos = pos;
             return this;
+        }
+
+        public MultiblockJsonBuilder controller(int x, int y, int z) {
+            return controller(new Vec3i(x, y, z));
         }
 
         private MultiblockJsonBuilder push(LayerBuilder builder) {
@@ -79,8 +90,21 @@ public abstract class ComposerMultiblockProvider implements DataProvider {
             return this;
         }
 
-        private MultiblockJsonBuilder push(char character, JsonElement obj) {
-            pattern.put(character, obj);
+        private MultiblockJsonBuilder push(char character, JsonElement value, Identifier[] accepted) {
+            if (accepted.length == 0) {
+                pattern.put(character, value);
+            } else {
+                JsonObject obj = new JsonObject();
+                obj.add("block", value);
+
+                JsonArray array = new JsonArray();
+                for (Identifier ext : accepted) {
+                    array.add(ext.toString());
+                    referencedExtensions.add(ext);
+                }
+                obj.add("extensions", array);
+                pattern.put(character, obj);
+            }
             return this;
         }
 
@@ -104,6 +128,10 @@ public abstract class ComposerMultiblockProvider implements DataProvider {
                 }
             }));
 
+            for (Identifier ref : referencedExtensions) {
+                if (!extensions.containsKey(ref)) throw new IllegalArgumentException("Pattern references extension '" + ref + "' which was never defined with extension()!");
+            }
+
             JsonObject controllerPos = new JsonObject();
             controllerPos.addProperty("x", this.controllerPos.getX());
             controllerPos.addProperty("y", this.controllerPos.getY());
@@ -113,6 +141,12 @@ public abstract class ComposerMultiblockProvider implements DataProvider {
             json.add("layers", layers);
             json.add("pattern", pattern);
             json.add("controller_pos", controllerPos);
+
+            if (!extensions.isEmpty()) {
+                JsonObject exts = new JsonObject();
+                extensions.forEach((key, value) -> exts.add(key.toString(), value));
+                json.add("extensions", exts);
+            }
 
             provider.futures.add(DataProvider.writeToPath(
                     writer,
@@ -130,12 +164,55 @@ public abstract class ComposerMultiblockProvider implements DataProvider {
                 this.character = character;
             }
 
-            public MultiblockJsonBuilder block(Block block) {
-                return parent.push(character, new JsonPrimitive(Registries.BLOCK.getId(block).toString()));
+            public MultiblockJsonBuilder block(Block block, Identifier... extensions) {
+                return parent.push(character, new JsonPrimitive(Registries.BLOCK.getId(block).toString()), extensions);
             }
 
-            public MultiblockJsonBuilder tag(TagKey<Block> tag) {
-                return parent.push(character, new JsonPrimitive("#" + tag.id()));
+            public MultiblockJsonBuilder tag(TagKey<Block> tag, Identifier... extensions) {
+                return parent.push(character, new JsonPrimitive("#" + tag.id()), extensions);
+            }
+        }
+
+        public static class ExtensionBuilder {
+            private final MultiblockJsonBuilder parent;
+            private final Identifier id;
+            private final JsonArray blocks = new JsonArray();
+            private int min = 0;
+            private int max = Integer.MAX_VALUE;
+
+            private ExtensionBuilder(MultiblockJsonBuilder parent, Identifier id) {
+                this.parent = parent;
+                this.id = id;
+            }
+
+            public ExtensionBuilder block(Block block) {
+                blocks.add(Registries.BLOCK.getId(block).toString());
+                return this;
+            }
+
+            public ExtensionBuilder tag(TagKey<Block> tag) {
+                blocks.add("#" + tag.id());
+                return this;
+            }
+
+            public ExtensionBuilder min(int min) {
+                this.min = min;
+                return this;
+            }
+
+            public ExtensionBuilder max(int max) {
+                this.max = max;
+                return this;
+            }
+
+            public MultiblockJsonBuilder end() {
+                if (blocks.isEmpty()) throw new IllegalStateException("Extension '" + id + "' needs at least one block or tag!");
+                JsonObject obj = new JsonObject();
+                obj.add("block", blocks.size() == 1 ? blocks.get(0) : blocks);
+                if (min > 0) obj.addProperty("min", min);
+                if (max != Integer.MAX_VALUE) obj.addProperty("max", max);
+                parent.extensions.put(id, obj);
+                return parent;
             }
         }
 

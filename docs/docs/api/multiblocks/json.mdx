@@ -1,0 +1,58 @@
+---
+title: Multiblock JSON
+---
+Multiblock definitions are loaded from `data/<namespace>/multiblocks/<name>.json`. They can be written by hand or generated with a [Multiblock Provider](../datagen/multiblock).
+
+```json
+{
+  "id": "example_mod:big_furnace",
+  "controller_pos": { "x": 1, "y": 1, "z": 0 },
+  "layers": [
+    [
+      "SSS",
+      "SSS",
+      "SSS"
+    ],
+    [
+      "SSS",
+      "I O",
+      "SFS"
+    ],
+    [
+      "SSS",
+      "SSS",
+      "SSS"
+    ]
+  ],
+  "pattern": {
+    "S": "minecraft:cobblestone",
+    "F": "example_mod:big_furnace",
+    "I": { "block": "minecraft:cobblestone", "extensions": ["input"] },
+    "O": { "block": "minecraft:cobblestone", "extensions": ["output"] }
+  },
+  "extensions": {
+    "input":  { "block": "minecraft:dispenser", "max": 1 },
+    "output": { "block": "minecraft:barrel", "max": 1 }
+  }
+}
+```
+## Layers and coordinates
+If you've ever made a shaped crafting recipe, this should look familiar to you. The multiblock JSON schema was designed to resemble it, except in 3D. There are layers, and a pattern mapping each character in said layers to blocks, tags, and extensions.
+
+Each layer is written like a plan view, as seen by a player standing in front of the controller looking at the structure: the **last row is the front** (nearest to the player) and the first row is the back. Columns read left to right from the player's point of view. <br/>
+The best way to visualise this, is if you took layer definitions formatted like you see it in the above example, stacked them on top of each other with the first one being on the bottom, and looked at them from the front.
+
+`controller_pos` uses the same layout, 0-indexed: `x` counts columns from the left, `y` counts layers from the bottom, and `z` counts rows from the front (the last row is `z = 0`). In the example, `F` is in column 1 of the last row of layer 1, so the controller is at `(1, 1, 0)`.
+
+The structure is rotated around the controller to match the controller's [orientation](./host#orientation). All rows of all layers must be the same width, and all layers the same number of rows.
+
+## Pattern values
+A pattern value is one of:
+- A block id: `"minecraft:bricks"`
+- A block tag, if the ID is prefixed by a #: `"#minecraft:logs"`
+- An array of those, any of which is accepted
+- An object `{ "block": ..., "extensions": [...] }`, where `block` is any of the above and `extensions` lists the [extension](./extensions) ids that may replace it at positions using this key
+
+There are two default patterns, both of which can be overridden, though it is not recommended:
+- `*`, which matches any block.
+- `(space)`, which matches any air block.

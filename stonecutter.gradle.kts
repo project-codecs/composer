@@ -14,10 +14,6 @@ stonecutter parameters {
     dependencies["fapi"] = node.project.property("deps.fabric_api") as String
 
     replacements {
-        string(current.parsed >= "1.20.6") {
-            replace("dev.onyxstudios", "org.ladysnake")
-        }
-
         string(current.parsed >= "26") {
             replace("FabricDataOutput", "FabricPackOutput")
             replace("FabricBlockLootTableProvider", "FabricBlockLootSubProvider")

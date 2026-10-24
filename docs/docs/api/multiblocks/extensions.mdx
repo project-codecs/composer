@@ -1,0 +1,65 @@
+---
+title: Multiblock Extensions
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.multiblock <br/>
+Canonical Name: com.codex.composer.api.v1.multiblock.MultiblockExtension
+
+An extension is a block that may take the place of a normal block of a multiblock, at specific positions. They are meant for things like input and output hatches. Yes I got the idea from GregTech. No I am not apologetic about it whatsoever.
+
+Which extensions may replace a block is decided per pattern key. A key that accepts an extension accepts both its normal block and that extension, and only at the positions where that key is used. This is how you can say that an output may only replace one specific block of a wall.
+
+## Defining extensions
+In the multiblock's JSON (see [Multiblock JSON](./json)), or in datagen (see [Multiblock Provider](../datagen/multiblock)):
+```json
+"pattern": {
+  "B": "minecraft:bricks",
+  "I": { "block": "minecraft:bricks", "extensions": ["input"] },
+  "O": { "block": "minecraft:bricks", "extensions": ["output"] }
+},
+"extensions": {
+  "input":  { "block": "minecraft:dispenser", "max": 1 },
+  "output": { "block": "minecraft:barrel", "min": 0, "max": 1 }
+}
+```
+| Field | Description |
+| --- | --- |
+| `block` | A block id, a `#tag`, or an array of those. |
+| `min` | How many of this extension must exist for the multiblock to be complete, default `0`. |
+| `max` | How many may exist, default unlimited. |
+
+Extension ids without a namespace use the multiblock's namespace.
+
+If a block matches both an extension and the normal block of its position, it counts as the extension. Although you should never get in a situation where this could be an issue.
+If you do, reconsider what actions led to you using a block as both an extension and a normal block.
+
+## Using extensions in a controller
+```java
+Identifier INPUT = Identifier.of("example_mod", "input");
+
+List<BlockPos> inputs = controller.getExtensions(INPUT);
+List<Inventory> inventories = controller.getExtensionBlockEntities(INPUT, Inventory.class);
+```
+`onExtensionsChanged` on the [host](./host) is called whenever the set changes.
+
+Example from Starstruck: moving items through the extensions of a formed kiln, using Fabric's Transfer API: <br/>
+Note: This example is very outdated and was only used for debugging, please don't complain to me about it being bad.
+```java
+for (BlockPos p : controller.getExtensions(ModMultiblocks.KILN_INPUT)) {
+    Storage<ItemVariant> source = ItemStorage.SIDED.find(world, p, null);
+    if (source == null) continue;
+    try (Transaction transaction = Transaction.openOuter()) {
+        StorageUtil.move(source, self.getSlot(INPUT_SLOT), variant -> true, 8, transaction);
+        transaction.commit();
+    }
+}
+```
+
+## Extension block entities
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.multiblock <br/>
+Canonical Name: com.codex.composer.api.v1.multiblock.MultiblockExtensionBlockEntity
+
+Can optionally be implemented on the block entity of an extension block to be told which controller it belongs to.
+```java
+void onAttached(BlockPos controllerPos, Identifier extensionId); // A formed multiblock started using this block
+void onDetached(BlockPos controllerPos);                         // It stopped (broken or changed)
+```

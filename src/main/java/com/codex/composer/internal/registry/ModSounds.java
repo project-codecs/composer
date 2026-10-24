@@ -13,10 +13,10 @@ public class ModSounds {
     private static final DeferredSoundRegistry REGISTRY = new DeferredSoundRegistry(Composer.MOD_ID);
 
     //? if minecraft: <=1.20.1 {
-    /*public static final TranslatableSoundEvent LILBRO_SQUISH = REGISTRY.register("lilbro_squish", "lilbro_squish");
+    /*public static final TranslatableSoundEvent ZN0N_SQUISH = REGISTRY.register("zn0n_squish", "zn0n_squish");
     public static final TranslatableSoundEvent VINE_BOOM = REGISTRY.register("vine_boom", "vine_boom");
     *///?} else {
-    public static final SoundEvent LILBRO_SQUISH = REGISTRY.register("lilbro_squish");
+    public static final SoundEvent ZN0N_SQUISH = REGISTRY.register("zn0n_squish");
     public static final SoundEvent VINE_BOOM = REGISTRY.register("vine_boom");
      //?}
 

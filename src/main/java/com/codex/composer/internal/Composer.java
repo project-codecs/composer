@@ -1,20 +1,16 @@
 package com.codex.composer.internal;
 
+import com.codex.composer.api.v1.multiblock.ingame.MultiblockController;
 import com.codex.composer.api.v1.registry.ComposerPostInitialization;
 import com.codex.composer.api.v1.util.misc.CachedLogger;
-import com.codex.composer.internal.cca.ModCardinalComponents;
-import com.codex.composer.internal.cca.chunk.MultiblocksComponent;
 import com.codex.composer.internal.command.*;
-import com.codex.composer.internal.config.ComposerServerConfig;
 import com.codex.composer.internal.data.loader.MultiblockLoader;
-import com.codex.composer.internal.multiblock.MultiblockUpdateHandler;
-import com.codex.composer.internal.networking.ClearOverlaysPayload;
-import com.codex.composer.internal.networking.ShowCreditsPayload;
-import com.codex.composer.internal.networking.ShowOverlayPayload;
 import com.codex.composer.internal.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 import com.codex.composer.internal.runtime.ServerHolderImpl;
 import com.codex.composer.api.v1.util.misc.AbstractPseudoRegistry;
 import com.codex.composer.api.v1.util.misc.EventStacker;
-import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.networking.ScrollActionPayload;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -36,17 +31,26 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import com.codex.composer.internal.client.config.DupedBindsConfig;
+//? }
+
+//? if minecraft: >=1.20.6 {
+import com.codex.composer.internal.networking.ClearOverlaysPayload;
+import com.codex.composer.internal.networking.ShowCreditsPayload;
+import com.codex.composer.internal.networking.ShowOverlayPayload;
 //? }
 
 public class Composer implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(Composer.class);
     public static final CachedLogger CACHED_LOGGER = new CachedLogger(LOGGER);
     public static final String MOD_ID = "composer";
-    private static boolean dupedKeybindsEnabled = false;
+    private static boolean dupedKeybindsEnabled = true;
 
     @Override
     public void onInitialize() {
         //? if minecraft: <=1.21.6 {
+        DupedBindsConfig.initialize();
+
         for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
             ModMetadata meta = mod.getMetadata();
 
@@ -64,8 +68,7 @@ public class Composer implements ModInitializer {
         }
         //? }
 
-        ComposerServerConfig.initialize();
-        ModDynamicTooltips.initialize();
+        ModTooltips.initialize();
         ModBlockEntities.initialize();
         ModArgumentTypes.initialize();
         ModStatistics.initialize();
@@ -74,10 +77,13 @@ public class Composer implements ModInitializer {
         ModBlocks.initialize();
         ModItems.initialize();
 
+        ServerTickEvents./*~ if !legacy 'WORLD' -> 'LEVEL' {*/END_WORLD_TICK/*~}*/.register(MultiblockController::processPending);
+        ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register(MultiblockController::onLoad);
+        ServerBlockEntityEvents.BLOCK_ENTITY_UNLOAD.register(MultiblockController::onUnload);
+
         //? if minecraft: >=1.20.6
         ModDataComponentTypes.initialize();
 
-        ComposerClientConfig.initialize();
         ModRegistries.initialize();
         ModOverlaySerializers.initialize();
 
@@ -100,14 +106,6 @@ public class Composer implements ModInitializer {
                 ServerLifecycleEvents.SERVER_STARTED,
                 ServerHolderImpl.INSTANCE::accept,
                 AbstractPseudoRegistry::runAfterInit
-        );
-
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> server.getWorlds().forEach(world -> {
-                MultiblocksComponent component = ModCardinalComponents.MULTIBLOCKS.get(world);
-                if (component.multiblocks.isEmpty()) return;
-
-                MultiblockUpdateHandler.runUpdates(world, component, null);
-            })
         );
 
         //? if minecraft: <26.2 {

@@ -1,7 +1,6 @@
 package com.codex.composer.internal.data.assets.languages;
 
 import com.codex.composer.api.v1.datagen.lang.SemiLanguageProvider;
-import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.registry.ModBlocks;
 import com.codex.composer.internal.registry.ModItemGroups;
 import com.codex.composer.internal.registry.ModSounds;
@@ -10,21 +9,16 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
+//? if minecraft: <=1.21.6
+import com.codex.composer.internal.client.config.DupedBindsConfig;
+
 public class ModShakespeareanProvider extends SemiLanguageProvider {
     @Override
     public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         block(ModBlocks.PLUSH, "LilBro's Plush Effigy");
         stat(ModStatistics.PLUSH_BOOP, "LilBro Effigies Prodded");
         group(ModItemGroups.COMPOSER, "The Composer's Merry Trifling Additions");
-
-        enumTranslatable(
-                ComposerClientConfig.BindsMode.class,
-                "None Whatsoever",
-                "Vanilla & Such Mods as Doth Employ Composer",
-                "All Manner of Things"
-        );
-
-        sound(ModSounds.LILBRO_SQUISH, "The Plush Effigy Hath Been Prodded");
+        sound(ModSounds.ZN0N_SQUISH, "The Plush Effigy Hath Been Prodded");
 
         prefix("composer.command");
         add("exception.player_not_found", "The player hath not been found.");
@@ -36,13 +30,6 @@ public class ModShakespeareanProvider extends SemiLanguageProvider {
         add("success_credits", "Displaying credits unto %s players.");
         add("success_poem", "Displaying the end poem unto %s players.");
         add("screen.close", "Hold %s to dismiss this");
-
-        prefix("composer.feature");
-        add("enable", "Feature %s hath been enabled");
-        add("disable", "Feature %s hath been disabled");
-        add("missing", "Feature %s is unknown to us");
-        add("description.missing", "No description hath been provided.");
-        add("prefix", "Composer's Features");
 
         prefix("composer.overlay");
         add("prefix", "Composer's Utilities");
@@ -64,14 +51,19 @@ public class ModShakespeareanProvider extends SemiLanguageProvider {
 
         prefix("composer");
         add("registry.prefix", "Composer's Utilities");
-        add("dynamic_tooltips.hidden", "Press %s to reveal %s");
-        add("dynamic_tooltips.details", "ye particulars");
 
         prefix("composer.tooltips");
         add("soulbound", "This item is bound to thy soul");
-        add("soulbound.not", "This item is not bound to thy soul");
-        add("soulbound.details", "binding particulars");
-        add("soulbound.droppable", "This item may be dropped even whilst bound to thy soul");
         add("soulbound.droppable.not", "This item may not be dropped whilst bound to thy soul");
+
+        //? if minecraft: <=1.21.6 {
+        prefix("option.composer");
+        add("composer.config.title", "Duplicate Keybinds", false);
+        add("rainbow_speed", "Speed of the Rainbow Effect");
+        add("rainbow_dupes", "Rainbow Effect Upon Duplicates");
+        add("dupes_mode", "Mode of Duplicate Keybinds");
+        add("dupes_mode.tooltip", "Maketh it so that should two things bear the selfsame key unto them, both shall be activated, rather than but one.");
+        translatableEnum(DupedBindsConfig.BindsMode.class, "None", "Minecraft & Mods That Use Composer", "All");
+        //? }
     }
 }

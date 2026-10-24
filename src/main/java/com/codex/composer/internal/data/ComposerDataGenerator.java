@@ -7,9 +7,6 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import com.codex.composer.internal.data.data.ModBlockLootTableProvider;
 import com.codex.composer.internal.data.data.ModRecipeProvider;
 
-//? if !release
-//import com.codex.composer.internal.data.data.ModMultiblockProvider;
-
 public class ComposerDataGenerator implements DataGeneratorEntrypoint {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
@@ -20,8 +17,5 @@ public class ComposerDataGenerator implements DataGeneratorEntrypoint {
 
         pack.addProvider(ModBlockLootTableProvider::new);
         pack.addProvider(ModRecipeProvider::new);
-
-        //? if !release
-        //pack.addProvider(ModMultiblockProvider::new);
     }
 }

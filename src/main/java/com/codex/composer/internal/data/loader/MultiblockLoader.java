@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 
 //? if minecraft: >=26.2 {
 /*import net.minecraft.resource.SynchronousResourceReloader;
-*///? } else {
+ *///? } else {
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 //? }
 
@@ -32,9 +32,16 @@ public class MultiblockLoader implements /*? if minecraft: >=26.2 { *//*Synchron
 
         manager.findResources("multiblocks", path -> path.getPath().endsWith(".json")).forEach((id, res) -> {
             MultiblockJsonLoader.ParsedMultiblock parsed = MultiblockJsonLoader.parse(id, res);
+            if (parsed == null) {
+                Composer.LOGGER.warn("Failed to read multiblock '{}'!", id);
+                return;
+            }
 
-            if (parsed == null) Composer.LOGGER.warn("Failed to read multiblock '{}'!", id.toString());
-            else registry.register(parsed.getId(), JsonBackedMultiblock.ofParsed(parsed));
+            try {
+                registry.register(parsed.id(), JsonBackedMultiblock.ofParsed(parsed));
+            } catch (IllegalStateException e) {
+                Composer.LOGGER.warn("Invalid multiblock '{}': {}", id, e.getMessage());
+            }
         });
 
         registry.finishedLoadingFiles();

@@ -1,7 +1,6 @@
 package com.codex.composer.internal.data.assets.languages;
 
 import com.codex.composer.api.v1.datagen.lang.SemiLanguageProvider;
-import com.codex.composer.internal.client.config.ComposerClientConfig;
 import com.codex.composer.internal.registry.ModBlocks;
 import com.codex.composer.internal.registry.ModItemGroups;
 import com.codex.composer.internal.registry.ModSounds;
@@ -10,21 +9,16 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
+//? if minecraft: <=1.21.6
+import com.codex.composer.internal.client.config.DupedBindsConfig;
+
 public class ModLolcatProvider extends SemiLanguageProvider {
     @Override
     public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         block(ModBlocks.PLUSH, "LilBro Plushie (SO SQUISHY)");
         stat(ModStatistics.PLUSH_BOOP, "LilBro Plushiez Booped (hehehe)");
         group(ModItemGroups.COMPOSER, "Composer's Silly Lil Addishuns (iz funni)");
-
-        enumTranslatable(
-                ComposerClientConfig.BindsMode.class,
-                "Nun",
-                "Vanilla & Modz Dat Use Composer",
-                "ALL TEH THINGZ"
-        );
-
-        sound(ModSounds.LILBRO_SQUISH, "Plushie Booped!! :3");
+        sound(ModSounds.ZN0N_SQUISH, "Plushie Booped!! :3");
 
         prefix("composer.command");
         add("exception.player_not_found", "Dat player iz not founded. :(");
@@ -36,13 +30,6 @@ public class ModLolcatProvider extends SemiLanguageProvider {
         add("success_credits", "Showing creditz to %s playerz!");
         add("success_poem", "Showing end poem to %s playerz!");
         add("screen.close", "Hold %s to maek it go away");
-
-        prefix("composer.feature");
-        add("enable", "Feachur %s iz now ON!! yay");
-        add("disable", "Feachur %s iz now off. :(");
-        add("missing", "Idk wat feachur %s iz??");
-        add("description.missing", "Nobody wroted a descripshun. lazy.");
-        add("prefix", "Composer's Feachurz");
 
         prefix("composer.overlay");
         add("prefix", "Composer Overlays (ooh shiny)");
@@ -64,14 +51,19 @@ public class ModLolcatProvider extends SemiLanguageProvider {
 
         prefix("composer");
         add("registry.prefix", "Composer Utilitiez (very useful, much wow)");
-        add("dynamic_tooltips.hidden", "Press %s to see %s (iz hidden rn)");
-        add("dynamic_tooltips.details", "da detailz");
 
         prefix("composer.tooltips");
         add("soulbound", "Dis item iz soulbound (iz yours 4evr)");
-        add("soulbound.not", "Dis item iz NOT soulbound");
-        add("soulbound.details", "binding detailz");
-        add("soulbound.droppable", "U can drop dis item even tho it iz soulbound");
         add("soulbound.droppable.not", "U CANNOT drop dis item when it iz soulbound");
+
+        //? if minecraft: <=1.21.6 {
+        prefix("option.composer");
+        add("composer.config.title", "Duplicat Keybindz", false);
+        add("rainbow_speed", "Rainbow Effec Speed");
+        add("rainbow_dupes", "Rainbow Effec On Duplicat Keybindz");
+        add("dupes_mode", "Duplicat Keybindz Mode");
+        add("dupes_mode.tooltip", "Mekz it so if two thingz haz teh same key bound 2 dem, both get activated insteada just wun.");
+        translatableEnum(DupedBindsConfig.BindsMode.class, "Nuthin", "Minecraft & Modz That Use Composer", "All teh thingz");
+        //? }
     }
 }

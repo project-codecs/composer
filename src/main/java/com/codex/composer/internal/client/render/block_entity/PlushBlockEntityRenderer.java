@@ -14,7 +14,7 @@ import net.minecraft.client.render.RenderLayers;
 //? if minecraft: >=1.21.5
 //import net.minecraft.util.math.Vec3d;
 
-//? if minecraft: >=1.21.5 <=1.21.6 || =1.21.10
+//? if minecraft: >=1.21.5 <=1.21.10
 //import net.minecraft.client.render.RenderLayer;
 
 //? if minecraft: =1.21.6
@@ -41,14 +41,14 @@ import org.jetbrains.annotations.Nullable;
 *///? }
 
 //? if minecraft: >=1.21.9 <26 {
-//import net.minecraft.client.render.model.BlockStateModel;
-//import net.minecraft.world.BlockRenderView;
-//import net.minecraft.client.render.block.BlockRenderManager;
-//import net.minecraft.client.MinecraftClient;
-//import net.minecraft.client.render.RenderLayers;
-//import com.codex.composer.mixin.impl.local.BlockRenderManagerAccessor;
-//import net.minecraft.util.math.random.Random;
-//? }
+/*import net.minecraft.client.render.model.BlockStateModel;
+import net.minecraft.world.BlockRenderView;
+import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.RenderLayers;
+import com.codex.composer.mixin.impl.local.BlockRenderManagerAccessor;
+import net.minecraft.util.math.random.Random;
+*///? }
 
 //? if minecraft: >=26 {
 /*import net.minecraft.client.render.block.BlockModelManager;

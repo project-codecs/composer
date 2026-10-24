@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0] - 2026-10-24
+
+### Added
+- Multiblock extensions for things like input and output hatches by @lilbrocodes
+- Vanilla-based config screen on 1.21.5 and lower to replace Composer's client config by @lilbrocodes
+
+### Changed
+- Rewrote (most of) the multiblock system to not use CCA, be more efficient and add extensions by @lilbrocodes
+- Synced up all the languages to have the same translation keys by @lilbrocodes
+- Made all previously 'developer only' commands be available always by @lilbrocodes
+- Updated links in documentation & made proper documentation for multiblocks and the language generator changes by @lilbrocodes
+
+### Removed
+- Dependency on CCA by @lilbrocodes
+- Dependency on Fzzy Config by @lilbrocodes
+- Dynamic Tooltips by @lilbrocodes
+
 ## [4.3.2] - 2026-10-01
 
 ### Fixed

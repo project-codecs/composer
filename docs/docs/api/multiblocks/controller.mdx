@@ -1,0 +1,46 @@
+---
+title: Multiblock Controller
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.multiblock <br/>
+Canonical Name: com.codex.composer.api.v1.multiblock.MultiblockController
+
+The state of one multiblock instance. A [`MultiblockHost`](./host) creates exactly one in a field:
+```java
+private final MultiblockController controller = new MultiblockController(this);
+```
+The constructor takes a block entity that implements `MultiblockHost`.
+
+## How it works
+Originally, there used to be a big list of multiblock instances in the entire world, but that is stupid, so now the multiblock controller blocks themselves store a multiblock controller, and handle it themselves. When a block changes, every loaded controller near it (within 16 blocks) checks whether the change is inside its structure and, if so, queues itself. The queue is emptied at the end of the world tick, where each queued controller validates once. Controllers also validate when their block entity loads.
+
+If part of the structure is in an unloaded chunk, or the multiblock definition isn't loaded yet, validation is retried on the next tick.
+
+## State
+```java
+boolean isFormed();
+@Nullable Multiblock getMultiblock();
+@Nullable BlockBox getStructureBounds();     // world-space box of the (rotated) structure
+void requestValidation();                    // Force a re-check at the end of this tick
+void restoreFormed(boolean formed);          // For loading from NBT, mostly for backwards compatibility. Doesn't fire events.
+```
+
+## Extensions
+Only filled while the multiblock is formed. See [Extensions](./extensions).
+```java
+List<BlockPos> getExtensions(Identifier id);
+Map<Identifier, List<BlockPos>> getExtensions();
+Optional<BlockPos> getFirstExtension(Identifier id);
+int countExtensions(Identifier id);
+<T extends BlockEntity> List<T> getExtensionBlockEntities(Identifier id, Class<T> type);
+```
+
+## Miscellaneous
+```java
+/* Gets the controller of the multiblock host at the given position, if there is one. */
+static Optional<MultiblockController> at(BlockView world, BlockPos pos);
+```
+
+## Limitations
+- Only blocks within `MultiblockController.SEARCH_RADIUS` (16) blocks of a controller trigger its validation, so multiblocks should fit in that range.
+- Only horizontal orientations are supported.
+- The state lives on the server. Clients don't know whether a multiblock is formed unless you sync it yourself.

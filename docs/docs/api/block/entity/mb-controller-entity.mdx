@@ -1,0 +1,15 @@
+---
+title: Multiblock Controller Block Entity
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.block.entity <br/>
+Canonical Name: com.codex.composer.api.v1.block.entity.MultiblockControllerBlockEntity
+
+Optional convenience base class for controller block entities that don't need to extend anything else. It implements [`MultiblockHost`](../../multiblock/host), creates the [`MultiblockController`](../../multiblock/controller) for you and saves and restores the formed state.
+
+Inheritors need to implement:
+```java
+Identifier multiblock();
+```
+Everything else (`getOrientation`, the event hooks) can be overridden as described on the host page. The controller is available through `getMultiblockController()`.
+
+If you are making a block entity that must extend another base block entity class (e.g. AbstractFurnaceBlockEntity), just don't use this.

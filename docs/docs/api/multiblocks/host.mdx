@@ -1,0 +1,102 @@
+---
+title: Multiblock Host
+---
+Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.multiblock <br/>
+Canonical Name: com.codex.composer.api.v1.multiblock.MultiblockHost
+
+Interface that marks any given block entity as a multiblock controller. It is done this way, so it works on things that already extend something else, but a QoL class exists which is a basic block entity that implements this.
+
+The host owns a [`MultiblockController`](./controller), which keeps the state of the multiblock (is it formed, where are its extensions) and does multiblock validation.
+
+Inheritors need to implement the following:
+```java
+Identifier multiblock();                        // The multiblock definition to check for.
+MultiblockController getMultiblockController(); /* Return the controller of this block entity, 99% of
+                                                  the time being a private final field you set once. */
+```
+
+Also provides the following overrideable methods:
+```java
+/* The world direction the definition's +Z axis points to. SOUTH (the default) means unrotated.
+   Only horizontal directions are supported.*/
+default Direction getOrientation(BlockState state) {...}
+
+/* Event hooks. Only fired on the server. */
+default void onMultiblockFormed() {}
+default void onMultiblockBroken() {}
+default void onExtensionsChanged() {}
+```
+Validation is deferred to the end of the world tick, so many block changes in one tick (an explosion, `/fill`) cost a single validation per controller. Events are therefore never fired in the middle of a block change.
+
+## Orientation
+`getOrientation` returns the direction the definition's **+Z axis** (front -> back) points toward. For a controller that sits at the front of its structure and has a horizontal facing, the structure extends behind it, so:
+```java
+@Override
+public Direction getOrientation(BlockState state) {
+    return state.get(Properties.HORIZONTAL_FACING).getOpposite();
+}
+```
+Layers are written like a plan view, as seen by a player standing in front of the controller looking at the structure. Left in the layer text is left for that player, whichever way the structure is rotated.
+
+This system was written with the assumption that most multiblock controller blocks would be at the front of their multiblock, which may not make much sense but neither does any of this library, so deal with it.
+
+## Persistence
+The controller doesn't save anything by itself. Save `isFormed()` in your block entity's NBT and restore it with `restoreFormed(boolean)` when loading. Otherwise the multiblock looks unformed until its first validation after load, which happens at the end of the first tick.
+
+## Example implementation:
+**From [Starstruck](https://github.com/LilBroCodes/starstruck) (Code currently private, sorry)**
+```java
+public class KilnBlockEntity extends AbstractFurnaceBlockEntity implements MultiblockHost {
+    private final MultiblockController controller = new MultiblockController(this);
+
+    public KilnBlockEntity(BlockPos pos, BlockState state) {...}
+
+    @Override
+    public MultiblockController getMultiblockController() {
+        return controller;
+    }
+
+    @Override
+    public Identifier multiblock() {
+        return ModMultiblocks.KILN; // Identifier constant
+    }
+
+    @Override
+    public Direction getOrientation(BlockState state) {
+        return state.get(Properties.HORIZONTAL_FACING).getOpposite();
+    }
+
+    public boolean isMultiblockFormed() {
+        return controller.isFormed();
+    }
+
+    public static void tickServer(ServerWorld world, BlockPos pos, BlockState state, KilnBlockEntity be) {
+        if (!be.isMultiblockFormed()) {
+            [...]
+
+            world.setBlockState(pos, state.with(Properties.LIT, false));
+            return;
+        } else {
+            [...]
+
+            world.setBlockState(pos, state.with(Properties.LIT, be.litTimeRemaining > 0));
+        }
+
+        [super].tick([...]);
+    }
+
+    @Override
+    protected void writeData(WriteView view) {
+        super.writeData(view);
+        view.putBoolean("multiblockFormed", controller.isFormed());
+    }
+
+    @Override
+    protected void readData(ReadView view) {
+        super.readData(view);
+        controller.restoreFormed(view.getBoolean("multiblockFormed", false));
+    }
+
+    [...]
+}
+```

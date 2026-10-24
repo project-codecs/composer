@@ -65,7 +65,6 @@ public class RegistryCommand extends ComposerCommand {
     }
 
     private int dumpPseudoRegistry(CommandContext<ServerCommandSource> ctx) {
-        if (shouldCancel()) return throwOnNonDebug(ctx);
         Identifier id = ctx.getArgument("id", Identifier.class);
         AbstractPseudoRegistry<?> registry = AbstractPseudoRegistry.registry(id);
 
@@ -82,7 +81,6 @@ public class RegistryCommand extends ComposerCommand {
     }
 
     private int dumpPseudoRegistries(CommandContext<ServerCommandSource> context) {
-        if (shouldCancel()) return throwOnNonDebug(context);
         return AbstractPseudoRegistry.identified()
                 .stream()
                 .map(AbstractPseudoRegistry::entry)
@@ -96,7 +94,6 @@ public class RegistryCommand extends ComposerCommand {
     }
 
     private int dumpRegistry(CommandContext<ServerCommandSource> ctx) {
-        if (shouldCancel()) return throwOnNonDebug(ctx);
         Identifier id = ctx.getArgument("id", Identifier.class);
         Registry<?> registry = Registries.REGISTRIES.get(id);
 
@@ -113,7 +110,6 @@ public class RegistryCommand extends ComposerCommand {
     }
 
     private int dumpRegistries(CommandContext<ServerCommandSource> context) {
-        if (shouldCancel()) return throwOnNonDebug(context);
         return Registries.REGISTRIES.getKeys()
                 .stream()
                 .map(RegistryKey::getValue)
@@ -183,10 +179,5 @@ public class RegistryCommand extends ComposerCommand {
     @Override
     protected Text buildPrefix() {
         return wrapBrackets(createGradient(Text.translatable("composer.registry.prefix"), 0xffaa00, 0xffff55));
-    }
-
-    @Override
-    protected boolean debugOnly() {
-        return true;
     }
 }

@@ -3,11 +3,14 @@ title: Getting Started
 ---
 This is a guide for getting started with using Composer for mod development! If you're not looking for that, [go back](./) where you came from!
 
-Installing composer is as streamline as any other maven package, except it also needs some extra care to handle. This documentation will be for Composer 3 and up,
-so if you are using any version older than that, please switch to a newer version as those versions have many bugs, or consult the [GitHub README](https://github.com/project-codecs/composer/blob/main/README.md#development-usage) for the legacy docs.
+Installing composer is as easy as any other maven package, if not for some annoyances. This documentation will be for Composer 5 and up,
+so if you are using any version older than that, please stop. If you REALLY need an old version of composer for some reason, look at old
+commits on the Composer [GitHub](https://github.com/project-codecs/composer) to see what it needs.
 
 Anyway, here's install guides for all your favourite package managers: <br/>
 Replace `(latest_version)` with the latest Composer version compatible with your Minecraft version.
+
+Also, importantly Composer needs a fairly new version of loom (0.17+), and gradle as well (9.5.0+)
 
 <details>
 <summary>Gradle (Groovy DSL) - build.gradle</summary>
@@ -25,13 +28,10 @@ repositories {
         name = "Composer Maven"
         url = "https://dl.cloudsmith.io/public/project-codex/composer/maven/"
     }
+
     maven {
-        name = "Cardinal Components"
-        url = "https://maven.ladysnake.org/releases"
-    }
-    maven {
-        name "Fuzzy Hamsters"
-        url "https://maven.fzzyhmstrs.me/"
+        name = "Ambarela Maven"
+        url = "https://dl.cloudsmith.io/public/project-codex/ambarella/maven/"
     }
 }
 
@@ -57,11 +57,8 @@ repositories {
     maven("https://dl.cloudsmith.io/public/project-codex/composer/maven/") {
         name = "Composer Maven"
     }
-    maven("https://maven.ladysnake.org/releases") {
-        name = "Cardinal Components"
-    }
-    maven("https://maven.fzzyhmstrs.me/") {
-        name = "Fuzzy Hamsters"
+    maven("https://dl.cloudsmith.io/public/project-codex/ambarella/maven/") {
+        name = "Ambarela Maven"
     }
 }
 

@@ -1,67 +1,105 @@
 ---
-title: Single-  language provider
+title: Single-language provider
 ---
 Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.datagen <br/>
 Canonical Name: com.codex.composer.api.v1.datagen.ComposerLanguageProvider
 
-Client assets generation provider offering a ton of utility methods for generating languages.
+Client assets generation provider offering a ton of utility methods for generating a language file. It extends Fabric's `FabricLanguageProvider`.
+
+To generate several languages, or to split one language over multiple classes, see the [multi-language provider](multi).
+
+The constructor depends on the Minecraft version, though both can just pe passed into FabricDataGenerator$Pack#addProvider
+```java
+/* 1.20.4 and below */
+ComposerLanguageProvider(FabricDataOutput dataOutput)
+/* 1.20.5 and above */
+ComposerLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup)
+```
 
 Inheritors have to implement:
 ```java
 void generate();
-
-/* Optional to override, used in prefix(key, value), suffix(key, value) and surround(key, value) */
-String prefix() default "";
-String suffix() default "";
 ```
-The class provides many methods for registering translations:
+
+## Prefix and suffix
+A provider can have a prefix and a suffix that are put around keys, to avoid repeating the beginning of every key (`advancements.starstruck.`, `text.config.starstruck-client.`, ...). Keys are joined with a dot.
 ```java
-void feature(FeatureHandle feature, String translation);
-void feature(Feature feature, String translation);
-void stat(Identifier identifier, String value);
-void group(RegistryKey<ItemGroup> key, String value);
-/* EnumTranslatable is from Fzzy Config */
-<T extends Enum<T> & EnumTranslatable> void enumTranslatable(Class<T> enumClass, String... values);
-// Only in 1.20.4 and below, SoundEvent was made final afterward
-void sound(TranslatableSoundEvent sound, String value);
-void sound(SoundEvent sound, String value);
+String prefix();            // Current prefix, "" by default
+String suffix();            // Current suffix, "" by default
+void prefix(String prefix); // Sets the prefix AND applies it automatically to add(key, value)
+void suffix(String suffix); // Same, for the suffix
+```
+There are two ways to use them:
+
+a) **"Inline"**: After calling `prefix(...)` and/or `suffix(...)`, every `add(String key, String value)` is wrapped with them. Or, well, there is an add(String, String, boolean) overload, where the boolean decides if the wrapping should happen.
+All the other methods in this class use add(..., false), so if you use an inline prefix and then run block(...), the block translation will not have the prefix added before it.
+```java
+prefix("advancements.starstruck");
+add("root", "Starstruck"); // advancements.starstruck.root
+```
+b) **"Explicitly"**: The following methods always use the current `prefix()` / `suffix()`, even when it hasn't been set with `prefix(String)`. This means you can also override `prefix()` / `suffix()` in your class instead of calling the setters.
+```java
+void pre(String key, String value); // prefix.key
+void suf(String key, String value); // key.suffix
+void sur(String key, String value); // prefix.key.suffix
+```
+When a prefix or suffix is applied automatically, a key that was already added is skipped silently instead of failing. Without it, adding the same key twice makes datagen throw (up).
+
+## Utility methods
+```java
+/* Raw keys */
+void add(String key, String value);                 // Affected by prefix(String) and suffix(String)
+void add(String key, String value, boolean append); // append = false writes the key as it is
+void add(Identifier identifier, String value);
+void append(Path existingLanguageFile) throws IOException; // Copies the entries of an existing lang file
+
+/* Registry objects */
+void item(ItemConvertible item, String value);
+void block(Block block, String value);              // On 1.21.3 and above, also adds the same name for the block's item
+void entity(EntityType<?> entityType, String value);
+void effect(StatusEffect statusEffect, String value);
+void stat(StatType<?> statType, String value);
+void stat(Identifier identifier, String value);     // stat.namespace.path
+void group(RegistryKey<ItemGroup> key, String value);       // itemGroup.path
+void registryKey(RegistryKey<ItemGroup> registryKey, String value); // Fabric's own key for the group
+
+/* Composer's Translatable */
 void add(Translatable translatable, String value);
 void add(Translatable translatable, String prefix, String value);
 void add(Translatable translatable, String prefix, String suffix, String value);
-/* Adds the value of prefix() before the key */
-void prefix(String key, String value);
-/* Adds the value of suffix() after the key */
-void suffix(String key, String value);
-/* Runs prefix(key, value) and suffix(key, value) */
-void surround(String key, String value);
-void add(String key, String value)
-void item(ItemConvertible item, String value)
-void block(Block block, String value)
-void registryKey(RegistryKey<ItemGroup> registryKey, String value)
-void entity(EntityType<?> entityType, String value)
-void stat(StatType<?> statType, String value);
-void effect(StatusEffect statusEffect, String value);
-void add(Identifier identifier, String value);
-void append(Path existingLanguageFile); throws IOException
+<T extends Enum<T> & Translatable> void translatableEnum(Class<T> enumClass, String... values);
+/* ^^ For this, the number of strings passed in `values` MUST be the same as the number of values
+   the `enumClass` has, otherwise an exception will be thrown. */
 
-/* 1.20.1 - 1.20.4 */
-void enchantment(Enchantment enchantment, String value)
-void attribute(EntityAttribute entityAttribute, String value)
+/* Sounds */
+void sound(SoundEvent sound, String value);         // Uses the sound's id as key
+void sound(TranslatableSoundEvent sound, String value); // Only in 1.20.4 and below, SoundEvent was made final afterward
 
-/* 1.20.4 - 1.20.6 */
-void enchantment(Enchantment enchantment, String value)
-void attribute(RegistryEntry<EntityAttribute> entityAttribute, String value)
-
-/*  1.21  -        */
-void enchantment(RegistryKey<Enchantment> enchantment, String value)
-void attribute(RegistryEntry<EntityAttribute> entityAttribute, String value)
+/* Keybinds */
+void bind(KeyBinding bind, String value);
 ```
+
+### Keybind categories
+```java
+/* 1.21.9 and above */
+void bind_category(KeyBinding.Category category, String value); // key.category.namespace.path
+
+/* 1.21.8 and below */
+void bind(KeyBinding bind, String keyTranslation, String categoryTranslation); // Both at once
+void bind_category(KeyBinding bind, String value);
+```
+Mojang decided to change how advancements are registered and used two times since 1.20.1, so you have to use different versions based on the Minecraft version:
+| Minecraft | Methods |
+| --- | --- |
+| 1.20.1 - 1.20.4 | `enchantment(Enchantment, String)`, `attribute(EntityAttribute, String)` |
+| 1.20.5 - 1.20.6 | `enchantment(Enchantment, String)`, `attribute(RegistryEntry<EntityAttribute>, String)` |
+| 1.21 and above | `enchantment(RegistryKey<Enchantment>, String)`, `attribute(RegistryEntry<EntityAttribute>, String)` |
 
 ## Example Implementation:
 **From Elixiry, for now unreleased mod made for Warfare SMP**
 ```java
 public class ElixiryLanguageProvider extends ComposerLanguageProvider {
-    public ElixiryLanguageProvider(FabricDataOutput dataOutput) {...}
+    public ElixiryLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {...}
 
     private static final List<...> potionTranslations = new ArrayList<>();
     private static final List<...> fullPotionTranslations = new ArrayList<>();
@@ -101,3 +139,4 @@ public class ElixiryLanguageProvider extends ComposerLanguageProvider {
     private void add(String id, Quartet<...> trans, String paperTranslation, String scrollTranslation) {...}
     private void buildPotionTranslations() {...}
 }
+```

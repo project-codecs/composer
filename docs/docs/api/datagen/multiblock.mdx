@@ -4,17 +4,34 @@ title: Composer multiblock provider
 Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.datagen <br/>
 Canonical Name: com.codex.composer.api.v1.datagen.ComposerMultiblockProvider
 
-Simple server data generation provider for composer's multiblock system.
+Simple server data generation provider for composer's multiblock system. It writes the [multiblock JSON](../multiblock/json).
 
 Inheritors have to implement:
 ```java
 void generate(DataWriter writer);
 ```
-Creation of multiblock builders can me done with:
+Creation of multiblock builders can be done with:
 ```java
-/* Creates a new MultiblockJsonBuilder. Once finished with setting parameters. use .write(DataWriter) to write it to disk. */
+/* Creates a new MultiblockJsonBuilder. Once finished with setting parameters, use .write(DataWriter) to write it to disk. */
 MultiblockJsonBuilder create(Identifier id);
 ```
+
+## Builder methods
+```java
+LayerBuilder layer();                      // New layer, from bottom to top
+PatternBuilder pattern(char character);    // Defines what a character means
+ExtensionBuilder extension(Identifier id); // Defines an extension, see below
+MultiblockJsonBuilder controller(Vec3i pos);
+void write(DataWriter writer);
+```
+`pattern(...)` offers:
+```java
+.block(Block block, Identifier... extensions)
+.tag(TagKey<Block> tag, Identifier... extensions)
+```
+The optional identifiers are the [extensions](../multiblock/extensions) that may replace that key's block.
+
+`extension(...)` offers `block(Block)`, `tag(TagKey<Block>)`, `min(int)`, `max(int)` and `end()`, which returns to the multiblock builder. `write` fails if a pattern key references an extension that was never defined.
 
 ## Example Implementation:
 **From [Starstruck](https://github.com/LilBroCodes/starstruck) (Code currently private, sorry)**
@@ -26,12 +43,13 @@ public class ModMultiblockProvider extends ComposerMultiblockProvider {
     public void generate(DataWriter writer) {
         create(ModMultiblocks.KILN)
                 .layer() // Creates a new layer builder
-                    .rows("BBB", 3) // Second parameter repeats that line n times
+                    .rows("BBB", 2) // Second parameter repeats that line n times
+                    .row("BIB") // Input hatch for fuel
                     .end() // -> MultiblockJsonBuilder
                 .layer()
                     .row("BBB")
-                    .row("B B")
-                    .row("BFB") // Here, the F is the controller at the second column of the second layer, first row, thus (1, 1, 0)
+                    .row("I O") // Input hatch on the left, output hatch on the right, as seen from the front
+                    .row("BFB") // The last row is the front. F is the controller, at (1, 1, 0)
                     .end()
                 .layer()
                     .row("BBB")
@@ -48,9 +66,14 @@ public class ModMultiblockProvider extends ComposerMultiblockProvider {
                     .row("* *") // Spaces count as air.
                     .row("***")
                     .end()
-                .controller(new Vec3i(1, 1, 0)) // Position of the controller related to bottom-left, 0-indexed. X is left->right, y is bottom->top and z is front->back
+                .controller(new Vec3i(1, 1, 0)) // Position of the controller. X is left->right, y is bottom->top and z is front->back, 0-indexed
                 .pattern('B').block(FIRE_BRICKS)
                 .pattern('F').block(KILN) // can also be .tag(TagKey<Block>) -> MultiblockJsonBuilder
+                .pattern('I').block(FIRE_BRICKS, ModMultiblocks.Extensions.INPUT) // Fire bricks, or the input extension
+                .pattern('O').block(FIRE_BRICKS, ModMultiblocks.Extensions.OUTPUT)
+                .extension(ModMultiblocks.Extensions.INPUT).block(ModBlocks.INPUT_HATCH).min(0).max(1).end()
+                .extension(ModMultiblocks.Extensions.OUTPUT).block(ModBlocks.OUTPUT_HATCH).min(0).max(1).end()
                 .write(writer);
     }
 }
+```

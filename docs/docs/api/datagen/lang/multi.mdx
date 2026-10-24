@@ -2,40 +2,51 @@
 title: Multi-language provider
 ---
 Package: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.codex.composer.api.v1.datagen.lang <br/>
-Canonical Name: com.codex.composer.api.v1.datagen.lang.ComposerMultiLanguageProvider & ComposerSemiLanguageProvider
+Canonical Name: com.codex.composer.api.v1.datagen.lang.ComposerMultiLanguageProvider & SemiLanguageProvider
 
 Composer offers the ability for mods to use data generation to generate files for multiple languages, or just separate language
-file generation into multiple classes to take advantage of the prefix() functionality.
+file generation into multiple classes to take advantage of the prefix functionality.
 
-There are two classes for this, [ComposerSemiLanguageProvider](#composersemilanguageprovider) and [ComposerMultiLanguageProvider](#composermultilanguageprovider).
-## ComposerSemiLanguageProvider
-This is a semi-duplicate of the normal [ComposerLanguageProvider](single). It contains basically all of the same utilities, except it doesn't
-implement DataProvider and generate anything on it's own and is rather only used my [ComposerMultiLanguageProvider](#composermultilanguageprovider).
-## ComposerMultiLanguageProvider
-Wrapper class for multiple instances of [ComposerSemiLanguageProvider](#composersemilanguageprovider)s. You register different languages
-much like you would different data providers to a FabricDataGenerator.Pack:
+There are two classes for this, [SemiLanguageProvider](#semilanguageprovider) and [ComposerMultiLanguageProvider](#composermultilanguageprovider).
+## SemiLanguageProvider
+This is a semi-duplicate of the normal [ComposerLanguageProvider](single). It has all of the same utility methods (prefixes and suffixes included), except it isn't a data provider and doesn't generate anything on its own. It is only used by [ComposerMultiLanguageProvider](#composermultilanguageprovider), which hands it the translation builder to write into.
+
+Inheritors have to implement:
 ```java
-/* Initialize the LanguagePack. If no base language is set an IllegalStateException will be thrown.
-   Multiple providers can be registered for the same language code.
+void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup);
+```
+Unlike the single provider, the registry lookup is passed to `generate` instead of the constructor, and there are no constructor parameters to forward.
 
-   If there are multiple language codes, the provider will check if the base language's keys match the keys of
-   all other languages. Warnings will be sent both if other languages have keys missing that the base language
-   does have, and if other languages have extra keys that the base language does not have.*/
-void init(LanguagePack pack);
+## ComposerMultiLanguageProvider
+A data provider that wraps multiple instances of [SemiLanguageProvider](#semilanguageprovider)s. You register different languages
+much like you would different data providers to a FabricDataGenerator.Pack. Inheritors have to implement:
+```java
+ComposerMultiLanguageProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup)
+
+/* Called from the constructor. Register all providers here. */
+protected abstract void init(LanguagePack pack);
 
 class LanguagePack {
-    private [final map of languages, baseLanguage];
-
     /* Adds a new provider with setDefault=false */
-    public <T extends ComposerSemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider);
-    public <T extends ComposerSemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider, boolean setDefault);
+    public <T extends SemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider);
 
-    /* Sets the base language. */
+    /* If setDefault is true, the language becomes the base language. */
+    public <T extends SemiLanguageProvider> T addProvider(String languageCode, Supplier<T> provider, boolean setDefault);
+
+    /* Sets the base language. Null removes it. */
     public void setBaseLanguage(@Nullable String languageCode);
 }
 ```
+Multiple providers can be registered for the same language code, their translations are merged into one file: `assets/<modid>/lang/<languageCode>.json`.
+
+### Validation
+- A key may only be added once per language, across all of its providers. A duplicate makes datagen throw a `RuntimeException`.
+- If a base language is set, the keys of every other language are compared to it, and the differences are printed to the error output as warnings: keys that a language is missing, and keys that a language has but the base language does not. Datagen does not fail because of them.
+- If the base language has no providers registered, an `IllegalStateException` is thrown.
+- If no base language is set, nothing cross-language validation is done.
+
 ## Example Implementations:
-#### From Composer:
+#### From [Composer](https://github.com/project-codecs/composer):
 ```java
 public class ModLanguageProvider extends ComposerMultiLanguageProvider {
     public ModLanguageProvider(...) {...}
@@ -51,32 +62,26 @@ public class ModLanguageProvider extends ComposerMultiLanguageProvider {
 ```
 ----
 ```java
-public class ModEnglishProvider extends ComposerSemiLanguageProvider {
+public class ModEnglishProvider extends SemiLanguageProvider {
     @Override
-    public void generate(...) {
+    public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         block(ModBlocks.PLUSH, "LilBro Plush");
         stat(ModStatistics.PLUSH_BOOP, "LilBro Plushies Booped");
         group(ModItemGroups.COMPOSER, "Composer's Silly Little Additions");
 
         [...] // Many translations
     }
-
-    @Override
-    public String prefix() { return "composer"; }
 }
 
-public class ModShakespeareanProvider extends ComposerSemiLanguageProvider {
+public class ModShakespeareanProvider extends SemiLanguageProvider {
     @Override
-    public void generate(...) {
+    public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         block(ModBlocks.PLUSH, "LilBro's Plush Effigy");
         stat(ModStatistics.PLUSH_BOOP, "LilBro Effigies Prodded");
         group(ModItemGroups.COMPOSER, "The Composer's Merry Trifling Additions");
 
         [...] // Many translations
     }
-
-    @Override
-    public String prefix() { return "composer"; }
 }
 ```
 #### Starstruck uses it for separating translations into (General, Compendium), Advancements and Config:
@@ -85,7 +90,7 @@ public class ModLanguageProvider extends ComposerMultiLanguageProvider {
     public ModLanguageProvider(...) {...}
 
     @Override
-    protected void init(ComposerMultiLanguageProvider.LanguagePack pack) {
+    protected void init(LanguagePack pack) {
         pack.addProvider("en_us", ModEnglishLanguage::new, true);
         pack.addProvider("en_us", ModEnglishCompendium::new);
         pack.addProvider("en_us", ModEnglishConfigTexts.Client::new);
@@ -95,9 +100,9 @@ public class ModLanguageProvider extends ComposerMultiLanguageProvider {
 ```
 ----
 ```java
-public class ModEnglishAdvancements extends ComposerSemiLanguageProvider {
+public class ModEnglishAdvancements extends SemiLanguageProvider {
     @Override
-    public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
+    public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         add("root", "Starstruck", "Deep into an unknown world");                                   // advancements.starstruck.root
         add("arrival", "Where am I?", "Crash land on planet §k?????");                             // advancements.starstruck.arrival
 
@@ -112,18 +117,18 @@ public class ModEnglishAdvancements extends ComposerSemiLanguageProvider {
     public String prefix() { return "advancements.starstruck"; }
 
     private void add(String id, String name, String description) {
-        prefix(id, name);
-        prefix(id + ".description", description);
+        pre(id, name);                        // Explicit prefix, because prefix() is overridden
+        pre(id + ".description", description);
     }
 }
 
 public class ModEnglishConfigTexts {
-    public static class Client extends ComposerSemiLanguageProvider {
+    public static class Client extends SemiLanguageProvider {
         @Override
         public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
-            prefix("title", "Starstruck Client Config"); // text.config.starstruck-client.title
-            prefix("category.cam", "C.A.M.");            // text.config.starstruck-client.category.cam
-            prefix("category.title", "Title Screen");    // text.config.starstruck-client.category.title
+            pre("title", "Starstruck Client Config"); // text.config.starstruck-client.title
+            pre("category.cam", "C.A.M.");            // text.config.starstruck-client.category.cam
+            pre("category.title", "Title Screen");    // text.config.starstruck-client.category.title
 
             [...]
         }
@@ -132,3 +137,5 @@ public class ModEnglishConfigTexts {
         public String prefix() { return "text.config.starstruck-client"; }
     }
 }
+```
+Instead of overriding `prefix()`, you can call `prefix("text.config.starstruck-client")` at the start of `generate` and use plain `add(key, value)`.

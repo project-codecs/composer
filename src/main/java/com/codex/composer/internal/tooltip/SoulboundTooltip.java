@@ -1,38 +1,34 @@
 package com.codex.composer.internal.tooltip;
 
 import com.codex.composer.api.v1.item.settings.component.SoulboundComponent;
-import com.codex.composer.api.v1.tooltips.TooltipContext;
-import com.codex.composer.api.v1.tooltips.layout.Modifier;
-import com.codex.composer.api.v1.tooltips.layout.Section;
-import com.codex.composer.api.v1.tooltips.impl.SimpleDynamicTooltip;
-import com.codex.composer.api.v1.util.misc.LanguageUtils;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
+//? if minecraft: <=1.20.4 {
+/*import net.minecraft.client.item.TooltipContext;
+*///? } else if minecraft: <=1.20.6 {
+/*import net.minecraft.client.item.TooltipType;
+import net.minecraft.item.Item;
+*///? } else {
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.item.Item;
+//? }
 
 import java.util.List;
 
-public class SoulboundTooltip extends SimpleDynamicTooltip {
-    @Override
-    public Section root() {
-        Section droppable = Section.builder()
-                .modifier(ctx -> Modifier.ALT)
-                .content(ctx -> List.of(Text.translatable(LanguageUtils.negate("composer.tooltips.soulbound.droppable", SoulboundComponent.canDropSoulbound(ctx.stack)))))
-                .build();
+public enum SoulboundTooltip implements ItemTooltipCallback {
+    INST;
 
-        return Section.builder()
-                .details(Text.translatable("composer.tooltips.soulbound.details"))
-                .modifier(ctx -> SoulboundComponent.isSoulbound(ctx.stack) ? null : Modifier.SHIFT)
-                .content(ctx -> List.of(Text.translatable(LanguageUtils.negate("composer.tooltips.soulbound", SoulboundComponent.isSoulbound(ctx.stack)))))
-                .children().push(droppable).end()
-                .build();
-    }
-
-    @Override
-    public boolean isRelevant(TooltipContext context) {
-        return SoulboundComponent.isSoulbound(context.stack);
-    }
-
-    @Override
-    public Location where() {
-        return Location.AFTER_NAME;
+    //? if minecraft: <=1.20.4 {
+    /*public void getTooltip(ItemStack stack, TooltipContext ctx, List<Text> lines) {
+    *///?} else {
+    public void getTooltip(ItemStack stack, Item.TooltipContext ctx, TooltipType type, List<Text> lines) {
+    //?}
+        if (!SoulboundComponent.isSoulbound(stack)) return;
+        lines.add(Text.translatable("composer.tooltips.soulbound").formatted(Formatting.GRAY));
+        if (/*~ if minecraft: <=1.20.4 'type' -> 'ctx' {*/type/*~}*/.isAdvanced() && SoulboundComponent.shouldNotDrop(stack))
+            lines.add(Text.translatable("composer.tooltips.soulbound.droppable.not").formatted(Formatting.GRAY));
     }
 }

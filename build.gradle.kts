@@ -44,7 +44,6 @@ repositories {
     strictMaven("https://www.cursemaven.com", "CurseForge", "curse.maven")
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
     strictMaven("https://maven.ladysnake.org/releases", "Ladysnake")
-    strictMaven("https://maven.fzzyhmstrs.me/", "FZZY Maven")
     strictMaven("https://maven.terraformersmc.com/", "Terraformers")
     strictMaven("https://maven.nucleoid.xyz/", "Nucleoid")
     strictMaven("https://repo.codemc.io/repository/relativitymc/", "RelativityMc")
@@ -55,21 +54,12 @@ repositories {
 }
 
 dependencies  {
-    fun cca(): String { return if (sc.current.parsed >= "1.20.6") "org.ladysnake" else "dev.onyxstudios" }
-    fun ccaWorld(): String { return if (sc.current.parsed < "26") "world" else "leveldata" }
     fun yarn(): String { return if (sc.current.parsed <= "1.21.11") "net.fabricmc:yarn" else "org.relativitymc:modern-yarn" }
     
     minecraft("com.mojang:minecraft:${sc.current.version}")
     mappings("${yarn()}:${property("deps.yarn")}:v2")
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
-
-    modImplementation("me.fzzyhmstrs:fzzy_config:${property("deps.fzzy")}")
-
-    modImplementation("${cca()}.cardinal-components-api:cardinal-components-base:${property("deps.cca")}")
-    modImplementation("${cca()}.cardinal-components-api:cardinal-components-${ccaWorld()}:${property("deps.cca")}")
-    include("${cca()}.cardinal-components-api:cardinal-components-base:${property("deps.cca")}")
-    include("${cca()}.cardinal-components-api:cardinal-components-${ccaWorld()}:${property("deps.cca")}")
 
     testImplementation(platform("org.junit:junit-bom:${property("junit_version")}"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -82,7 +72,6 @@ dependencies  {
         if (it) {
             if (sc.current.version == "1.21.11") modRuntimeOnly("org.sinytra:wiki-exporter-fabric:${property("r.deps.wiki_exporter")}")
             modLocalRuntime("com.terraformersmc:modmenu:${property("r.deps.mod_menu")}")
-            modLocalRuntime("${cca()}.cardinal-components-api:cardinal-components-api:${property("deps.cca")}")
         }
     }
 }
@@ -128,16 +117,12 @@ java {
 val canPublish = present("CLOUDSMITH_USERNAME") && present("CLOUDSMITH_API_KEY")
 tasks {
     processResources {
-        fun ccaExt(): String { return if (sc.current.parsed < "26") "" else "-base" }
-
         val props = mapOf(
             "id" to project.property("mod.id"),
             "name" to project.property("mod.name"),
             "version" to project.property("mod.version"),
             "minecraft" to project.property("mod.mc_dep"),
             "loader" to project.property("deps.fabric_loader"),
-            "cca" to project.property("deps.cca"),
-            "cca_ext" to ccaExt(),
             "fapi" to project.property("deps.fabric_api"),
             "aw" to project.property("mod.mc_title")
         )
@@ -194,9 +179,7 @@ tasks {
                   group: ${project.property("mod.group")},
                   minecraft: ${project.property("mod.mc_dep")},
                   loader: ${project.property("deps.fabric_loader")},
-                  cca: ${project.property("deps.cca")},
                   fapi: ${project.property("deps.fabric_api")},
-                  fzzy: ${project.findProperty("deps.fzzy") ?: "none"}
                 """.trimIndent()
                 )
             }
@@ -232,7 +215,12 @@ publishMods {
     displayName = "${property("mod.version")} for ${property("mod.mc_title")}"
     version = "${property("mod.version")}-$buildNum+mc${sc.current.version}"
     changelog = latestChange
-    type = if (sc.current.parsed < "26") STABLE else BETA
+    type = if (sc.current.parsed >= "26") BETA else when (property("mod.release").toString().lowercase()) {
+        "stable" -> STABLE
+        "beta" -> BETA
+        "alpha" -> ALPHA
+        else -> error("Invalid mod.release: ${property("mod.release")}")
+    }
     modLoaders.add("fabric")
 
     dryRun = !present("MODRINTH_TOKEN")
@@ -241,19 +229,10 @@ publishMods {
         projectId = property("publish.modrinth") as String
         accessToken = env("MODRINTH_TOKEN")
         minecraftVersions.addAll(property("mod.mc_targets").toString().split(' '))
+
         requires {
             slug = "fabric-api"
             version = project.property("deps.fabric_api").toString()
-        }
-
-        requires {
-            slug = "cardinal-components-api"
-            version = project.property("deps.cca").toString()
-        }
-
-        requires {
-            slug = "fzzy-config"
-            version = project.property("deps.fzzy").toString()
         }
 
         optional {

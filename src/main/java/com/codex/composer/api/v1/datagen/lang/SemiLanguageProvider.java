@@ -1,6 +1,5 @@
 package com.codex.composer.api.v1.datagen.lang;
 
-import me.fzzyhmstrs.fzzy_config.util.EnumTranslatable;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
 import net.minecraft.client.option.KeyBinding;
@@ -49,23 +48,20 @@ public abstract class SemiLanguageProvider {
     public void suffix(String suffix) { this.suffix = suffix; suffixInlined = suffix != null && !suffix.isBlank(); }
 
     public void stat(Identifier identifier, String value) {
-        add("stat.%s.%s".formatted(identifier.getNamespace(), identifier.getPath()), value);
+        add("stat.%s.%s".formatted(identifier.getNamespace(), identifier.getPath()), value, false);
     }
 
     public void group(RegistryKey<ItemGroup> key, String value) {
-        add(String.format("itemGroup.%s", key.getValue().getPath()), value);
+        add(String.format("itemGroup.%s", key.getValue().getPath()), value, false);
     }
 
-    public <T extends Enum<T> & EnumTranslatable> void enumTranslatable(Class<T> enumClass, String... values) {
-        T[] constants = enumClass.getEnumConstants();
-        if (constants.length != values.length) {
-            throw new IllegalArgumentException(
-                    "Expected " + constants.length + " values, but got " + values.length
-            );
-        }
+    public <T extends Enum<T> & Translatable> void translatableEnum(Class<T> tClass, String... values) {
+        if (tClass.getEnumConstants() == null) throw new IllegalArgumentException("translatableEnum used on a non-enum class!");
+        if (tClass.getEnumConstants().length != values.length) throw new IllegalArgumentException("translatableEnum requires the same amount of values as the given enum has!");
 
-        String prefix = constants[0].prefix();
-        for (int i = 0; i < constants.length; i++) add("%s.%s".formatted(prefix, constants[i].name()), values[i]);
+        for (int i = 0; i < tClass.getEnumConstants().length; i++) {
+            add(tClass.getEnumConstants()[i], values[i]);
+        }
     }
 
     //? if minecraft: <=1.20.4 {
@@ -87,20 +83,20 @@ public abstract class SemiLanguageProvider {
     }
 
     public void add(Translatable translatable, String prefix, String suffix, String value) {
-        add(translatable.getTranslationKey(prefix, suffix), value);
+        add(translatable.getTranslationKey(prefix, suffix), value, false);
     }
 
     public void bind(KeyBinding bind, String value) {
         //? if minecraft: >=1.21.9 {
         /*add(bind.getId(), value);
         *///? } else {
-        add(bind.getTranslationKey(), value);
+        add(bind.getTranslationKey(), value, false);
         //? }
     }
 
     //? if minecraft: >=1.21.9 {
     /*public void bind_category(KeyBinding.Category category, String value) {
-        add(String.format("key.category.%s.%s", category.id().getNamespace(), category.id().getPath()), value);
+        add(String.format("key.category.%s.%s", category.id().getNamespace(), category.id().getPath()), value, false);
     }
     *///? } else {
     public void bind(KeyBinding bind, String keyTranslation, String categoryTranslation) {
@@ -138,8 +134,6 @@ public abstract class SemiLanguageProvider {
         else if (append && suffixInlined) suf(key, value);
         else builder.add(key, value);
     }
-
-    // Vanilla redirect
 
     public void item(ItemConvertible item, String value) {
         builder.add(item.asItem(), value);

@@ -19,9 +19,6 @@
     ],
     "main": [
       "com.codex.composer.internal.Composer"
-    ],
-    "cardinal-components": [
-      "com.codex.composer.internal.cca.ModCardinalComponents"
     ]
   },
   "mixins": [
@@ -30,13 +27,9 @@
   "depends": {
     "fabricloader": ">=${loader}",
     "fabric-api": ">=${fapi}",
-    "minecraft": "${minecraft}",
-    "cardinal-components${cca_ext}": ">=${cca}"
+    "minecraft": "${minecraft}"
   },
   "custom": {
-    "cardinal-components": [
-      "composer:multiblocks"
-    ],
     "modmenu": {
       "badges": [ "library" ],
       "update_checker": false

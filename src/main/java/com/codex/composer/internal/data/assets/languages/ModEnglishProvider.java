@@ -5,26 +5,20 @@ import com.codex.composer.internal.registry.ModBlocks;
 import com.codex.composer.internal.registry.ModItemGroups;
 import com.codex.composer.internal.registry.ModSounds;
 import com.codex.composer.internal.registry.ModStatistics;
-import com.codex.composer.internal.client.config.ComposerClientConfig;
 import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
+//? if minecraft: <=1.21.6
+import com.codex.composer.internal.client.config.DupedBindsConfig;
+
 public class ModEnglishProvider extends SemiLanguageProvider {
     @Override
     public void generate(CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
-        block(ModBlocks.PLUSH, "LilBro Plush");
-        stat(ModStatistics.PLUSH_BOOP, "LilBro Plushies Booped");
+        block(ModBlocks.PLUSH, "zn0n_ Plush");
+        stat(ModStatistics.PLUSH_BOOP, "zn0n_ Plushies Booped");
         group(ModItemGroups.COMPOSER, "Composer's Silly Little Additions");
-
-        enumTranslatable(
-                ComposerClientConfig.BindsMode.class,
-                "None",
-                "Vanilla & Mods that use Composer",
-                "All"
-        );
-
-        sound(ModSounds.LILBRO_SQUISH, "Plush Booped");
+        sound(ModSounds.ZN0N_SQUISH, "Plush Booped");
 
         prefix("composer.command");
         add("exception.player_not_found", "Player not found.");
@@ -36,13 +30,6 @@ public class ModEnglishProvider extends SemiLanguageProvider {
         add("success_credits", "Showing credits to %s players.");
         add("success_poem", "Showing end poem to %s players.");
         add("screen.close", "Hold %s to close");
-
-        prefix("composer.feature");
-        add("enable", "Enabled feature %s");
-        add("disable", "Disabled feature %s");
-        add("missing", "Unknown feature %s");
-        add("description.missing", "No description was provided.");
-        add("prefix", "Composer Features");
 
         prefix("composer.overlay");
         add("prefix", "Composer Overlays");
@@ -64,14 +51,19 @@ public class ModEnglishProvider extends SemiLanguageProvider {
 
         prefix("composer");
         add("registry.prefix", "Composer Utilities");
-        add("dynamic_tooltips.hidden", "Press %s to show %s");
-        add("dynamic_tooltips.details", "details");
 
         prefix("composer.tooltips");
         add("soulbound", "This item is soulbound");
-        add("soulbound.not", "This item is not soulbound");
-        add("soulbound.details", "binding details");
-        add("soulbound.droppable", "This item is droppable when soulbound");
         add("soulbound.droppable.not", "This item is not droppable when soulbound");
+
+        //? if minecraft: <=1.21.6 {
+        prefix("option.composer");
+        add("composer.config.title", "Duplicate Keybinds", false);
+        add("rainbow_speed", "Rainbow Effect Speed");
+        add("rainbow_dupes", "Rainbow Effect On Duplicates");
+        add("dupes_mode", "Duplicate Keybinds Mode");
+        add("dupes_mode.tooltip", "Makes it so if two things have the same key bound to them, both are activated instead of just one of them.");
+        translatableEnum(DupedBindsConfig.BindsMode.class, "None", "Minecraft & Mods That Use Composer", "All");
+        //? }
     }
 }

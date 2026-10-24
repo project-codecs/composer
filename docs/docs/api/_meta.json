@@ -1,0 +1,11 @@
+{
+    "block": "Blocks",
+    "datagen": "Datagen",
+    "events": "Events",
+    "item": "Items",
+    "multiblocks": "Multiblocks",
+    "registry": "Registration",
+    "data.mdx": "",
+    "overlay.mdx": "",
+    "utils.mdx": ""
+}

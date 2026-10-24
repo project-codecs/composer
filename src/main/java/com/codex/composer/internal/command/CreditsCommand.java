@@ -31,7 +31,6 @@ public class CreditsCommand extends ComposerCommand {
     }
 
     private int roll(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
-        if (shouldCancel()) return throwOnNonDebug(ctx);
         CreditsType type = CreditsTypeArgumentType.get(ctx, "type");
         List<ServerPlayerEntity> players = (List<ServerPlayerEntity>) EntityArgumentType.getPlayers(ctx, "for"); // Safe to type cast because internally it is an ArrayList<SPE>
 
@@ -43,11 +42,6 @@ public class CreditsCommand extends ComposerCommand {
     @Override
     protected Text buildPrefix() {
         return wrapBrackets(createGradient(Text.translatable("composer.registry.prefix"), 0xffaa00, 0xffff55));
-    }
-
-    @Override
-    protected boolean debugOnly() {
-        return true;
     }
 
     public enum CreditsType implements StringIdentifiable {

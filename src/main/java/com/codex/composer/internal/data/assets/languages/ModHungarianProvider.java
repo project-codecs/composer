@@ -6,10 +6,12 @@ import com.codex.composer.internal.registry.ModBlocks;
 import com.codex.composer.internal.registry.ModItemGroups;
 import com.codex.composer.internal.registry.ModSounds;
 import com.codex.composer.internal.registry.ModStatistics;
-import com.codex.composer.internal.client.config.ComposerClientConfig;
 import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
+
+//? if minecraft: <=1.21.6
+import com.codex.composer.internal.client.config.DupedBindsConfig;
 
 public class ModHungarianProvider extends SemiLanguageProvider {
     @Override
@@ -17,15 +19,7 @@ public class ModHungarianProvider extends SemiLanguageProvider {
         block(ModBlocks.PLUSH, "LilBroCodes plüss");
         stat(ModStatistics.PLUSH_BOOP, "Megbökött LilBroCodes plüssök");
         group(ModItemGroups.COMPOSER, "A Composer vicces kis cuccai");
-
-        enumTranslatable(
-                ComposerClientConfig.BindsMode.class,
-                "Nincs",
-                "Vanilla és Composert használó modok",
-                "Összes"
-        );
-
-        sound(ModSounds.LILBRO_SQUISH, "Plüss megbökve");
+        sound(ModSounds.ZN0N_SQUISH, "Plüss megbökve");
 
         prefix("composer.command");
         add("exception.player_not_found", "A játékos nem található.");
@@ -37,13 +31,6 @@ public class ModHungarianProvider extends SemiLanguageProvider {
         add("success_credits", "Stáblista megjelenítése %s játékosnak.");
         add("success_poem", "End-vers megjelenítése %s játékosnak.");
         add("screen.close", "Tartsd lenyomva: %s a bezáráshoz");
-
-        prefix("composer.feature");
-        add("enable", "%s funkció engedélyezve");
-        add("disable", "%s funkció letiltva");
-        add("missing", "Ismeretlen funkció: %s");
-        add("description.missing", "Nem érkezett leírás.");
-        add("prefix", "Composer funkciók");
 
         prefix("composer.overlay");
         add("prefix", "Composer átfedések");
@@ -65,14 +52,19 @@ public class ModHungarianProvider extends SemiLanguageProvider {
 
         prefix("composer");
         add("registry.prefix", "Composer segédeszközök");
-        add("dynamic_tooltips.hidden", "Nyomd meg a(z) %s-t hogy lásd %s");
-        add("dynamic_tooltips.details", "a részleteket");
 
         prefix("composer.tooltips");
         add("soulbound", "Ez a tárgy lélekhez kötött");
-        add("soulbound.not", "Ez a tárgy nincs lélekhez kötve");
-        add("soulbound.details", "e tárgy kötési részleteit");
-        add("soulbound.droppable", "Ez a tárgy lélekhez kötötten is dobható el");
         add("soulbound.droppable.not", "Ez a tárgy lélekhez kötötten nem dobható el");
+
+        //? if minecraft: <=1.21.6 {
+        prefix("option.composer");
+        add("composer.config.title", "Duplikált Billentyűk", false);
+        add("rainbow_speed", "Szivárványos Effekt Sebessége");
+        add("rainbow_dupes", "Szivárványos Effekt a Duplikáltakon");
+        add("dupes_mode", "Duplikált Billentyű Mód");
+        add("dupes_mode.tooltip", "Ha ez be van kapcsolva, akkor ha két dologra ugyan az a gomb van beállítva, mind a kettő aktiválva lesz.");
+        translatableEnum(DupedBindsConfig.BindsMode.class, "Semmi", "Minecraft & Modok Melyek a Composer-t Használják", "Minden");
+        //? }
     }
 }
