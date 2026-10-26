@@ -2,6 +2,7 @@ package com.codex.composer.internal.client;
 
 import com.codex.composer.internal.networking.*;
 import com.codex.composer.internal.overlay.OverlayHandler;
+import com.codex.composer.internal.registry.ModTooltips;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import com.codex.composer.internal.Composer;
@@ -51,5 +52,7 @@ public class ComposerClient implements ClientModInitializer {
         ClearOverlaysPayload.registerHandler();
         ShowOverlayPayload.registerHandler();
         ShowCreditsPayload.registerHandler();
+
+        ModTooltips.initialize();
     }
 }

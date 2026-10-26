@@ -68,7 +68,6 @@ public class Composer implements ModInitializer {
         }
         //? }
 
-        ModTooltips.initialize();
         ModBlockEntities.initialize();
         ModArgumentTypes.initialize();
         ModStatistics.initialize();
