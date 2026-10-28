@@ -44,7 +44,7 @@ This system was written with the assumption that most multiblock controller bloc
 The controller doesn't save anything by itself. Save `isFormed()` in your block entity's NBT and restore it with `restoreFormed(boolean)` when loading. Otherwise the multiblock looks unformed until its first validation after load, which happens at the end of the first tick.
 
 ## Example implementation:
-**From [Starstruck](https://github.com/LilBroCodes/starstruck) (Code currently private, sorry)**
+**From [Starstruck](https://github.com/zn0n3/starstruck) (Code currently private, sorry)**
 ```java
 public class KilnBlockEntity extends AbstractFurnaceBlockEntity implements MultiblockHost {
     private final MultiblockController controller = new MultiblockController(this);
