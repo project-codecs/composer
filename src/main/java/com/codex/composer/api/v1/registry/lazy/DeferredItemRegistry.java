@@ -1,6 +1,8 @@
 package com.codex.composer.api.v1.registry.lazy;
 
+import com.codex.composer.api.v1.registry.util.ComposedBlockFamily;
 import net.minecraft.block.Block;
+import net.minecraft.data.family.BlockFamily;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -10,8 +12,11 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import org.jetbrains.annotations.NotNull;
@@ -88,6 +93,31 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
 
     public <B extends Block, S extends Item.Settings> BlockItem register(B block, String name, S settings, boolean addToGroup) {
         return register(name, s -> new BlockItem(block, s), settings, addToGroup);
+    }
+
+    public Function<BlockFamily.Variant, BlockItem> register(ComposedBlockFamily family, boolean addToGroup) {
+        family.locked();
+        EnumMap<BlockFamily.Variant, BlockItem> map = new EnumMap<>(BlockFamily.Variant.class);
+
+        if (family.ownsBase()) {
+            Identifier id = Registries.BLOCK.getId(family.getBase());
+            if (!Objects.equals(id.getNamespace(), modId)) throw new IllegalStateException("Mismatched mod id!");
+            BlockItem base = register(family.getBase(), id.getPath(), addToGroup);
+
+            return variant -> variant == null ? base : map.get(variant);
+        }
+
+        family.getVariants().stream().filter(Predicate.not(ComposedBlockFamily.DO_NOT_REGISTER_ITEM::contains)).forEach(variant -> {
+            Identifier id = Registries.BLOCK.getId(family.get(variant));
+            if (!Objects.equals(id.getNamespace(), modId)) throw new IllegalStateException("Mismatched mod id!");
+            map.put(variant, register(family.get(variant), id.getPath(), addToGroup));
+        });
+
+        return map::get;
+    }
+
+    public Function<BlockFamily.Variant, BlockItem> register(ComposedBlockFamily family) {
+        return register(family, true);
     }
 
     //? if minecraft: >=1.21.3

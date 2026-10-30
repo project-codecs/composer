@@ -1,5 +1,7 @@
 package com.codex.composer.api.v1.datagen;
 
+import com.codex.composer.api.v1.datagen.lang.FamilyTranslationBuilder;
+import com.codex.composer.api.v1.registry.util.ComposedBlockFamily;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
 import net.minecraft.client.option.KeyBinding;
@@ -87,6 +89,13 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
         for (int i = 0; i < tClass.getEnumConstants().length; i++) {
             add(tClass.getEnumConstants()[i], values[i]);
         }
+    }
+
+    public FamilyTranslationBuilder family(ComposedBlockFamily family) {
+        return new FamilyTranslationBuilder(family, (block, name, hasItem) -> {
+            if (hasItem) block(block, name);
+            else builder.add(block, name);
+        });
     }
 
     //? if minecraft: <=1.20.4 {

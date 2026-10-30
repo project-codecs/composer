@@ -1,5 +1,6 @@
 package com.codex.composer.api.v1.datagen;
 
+import com.codex.composer.api.v1.registry.util.ComposedBlockFamily;
 import com.google.gson.JsonElement;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataOutput;
@@ -13,7 +14,10 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
+import net.minecraft.data.family.BlockFamily;
+import net.minecraft.item.BlockItem;
 import net.minecraft.registry.Registries;
 
 //? if minecraft: <=1.21.3 {
@@ -60,6 +64,28 @@ import com.google.common.collect.Maps;
     public void blockItemModelFor(Item item, Block from) {
         Identifier id = Registries.BLOCK.getId(from);
         itemModelGenerator.register(item, new Model(Optional.ofNullable(Identifier.of(id.getNamespace(), "block/" + id.getPath())), Optional.empty()));
+    }
+
+    public void blockItemModelFor(BlockItem blockItem) {
+        if (blockItem == null) return;
+        blockItemModelFor(blockItem, blockItem.getBlock());
+    }
+
+    public void cubeAllBlockFamily(BlockStateModelGenerator generator, ComposedBlockFamily family) {
+        generator.registerCubeAllModelTexturePool(family.getBase()).family(family.getResult());
+    }
+
+    public void blockItemModelsFor(Function<BlockFamily.Variant, BlockItem> itemSet) {
+        Stream.of(itemSet.apply(null),
+                itemSet.apply(BlockFamily.Variant.CHISELED),
+                itemSet.apply(BlockFamily.Variant.CRACKED),
+                itemSet.apply(BlockFamily.Variant.CUT),
+                itemSet.apply(BlockFamily.Variant.POLISHED),
+                itemSet.apply(BlockFamily.Variant.MOSAIC),
+                itemSet.apply(BlockFamily.Variant.PRESSURE_PLATE),
+                itemSet.apply(BlockFamily.Variant.CUSTOM_FENCE_GATE),
+                itemSet.apply(BlockFamily.Variant.FENCE_GATE)
+        ).filter(Objects::nonNull).forEach(this::blockItemModelFor);
     }
 
     @Override
@@ -128,6 +154,28 @@ public abstract class ComposerModelProvider implements DataProvider {
     public void blockItemModelFor(Item item, Block from) {
         Identifier id = Registries.BLOCK.getId(from);
         itemModelGenerator.register(item, new Model(Optional.of(Identifier.of(id.getNamespace(), "block/" + id.getPath())), Optional.empty()));
+    }
+
+    public void blockItemModelFor(BlockItem blockItem) {
+        if (blockItem == null) return;
+        blockItemModelFor(blockItem, blockItem.getBlock());
+    }
+
+    public void cubeAllBlockFamily(BlockStateModelGenerator generator, ComposedBlockFamily family) {
+        generator.registerCubeAllModelTexturePool(family.getBase()).family(family.getResult());
+    }
+
+    public void blockItemModelsFor(Function<BlockFamily.Variant, BlockItem> itemSet) {
+        Stream.of(itemSet.apply(null),
+                itemSet.apply(BlockFamily.Variant.CHISELED),
+                itemSet.apply(BlockFamily.Variant.CRACKED),
+                itemSet.apply(BlockFamily.Variant.CUT),
+                itemSet.apply(BlockFamily.Variant.POLISHED),
+                itemSet.apply(BlockFamily.Variant.MOSAIC),
+                itemSet.apply(BlockFamily.Variant.PRESSURE_PLATE),
+                itemSet.apply(BlockFamily.Variant.CUSTOM_FENCE_GATE),
+                itemSet.apply(BlockFamily.Variant.FENCE_GATE)
+        ).filter(Objects::nonNull).forEach(this::blockItemModelFor);
     }
 
     @Override

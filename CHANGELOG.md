@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1] -2026-10-30
+
+### Added
+- Composed block families for registering entire families automatically by @zn0n_
+- Composer block tag provider for the block family system by @zn0n_
+- Dynamic registry registration by @zn0n_
+- Dynamic registry utilities by @zn0n_
+
 ## [5.0.2] - 2026-10-28
 
 ### Changed

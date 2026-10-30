@@ -16,6 +16,8 @@
         "credits.ClientPlayNetworkHandlerMixin",
         "credits.CreditsAndAttributionScreenMixin",
         "credits.CreditsScreenMixin",
+        "datagen.BlockStateModelGeneratorMixin$BlockTexturePoolMixin",
+        "datagen.BlockStateModelGeneratorMixin",
         "duped_binds.ControlsOptionsScreenMixin",
         "duped_binds.GameOptionsMixin",
         "duped_binds.KeyBindingEntryMixin",
