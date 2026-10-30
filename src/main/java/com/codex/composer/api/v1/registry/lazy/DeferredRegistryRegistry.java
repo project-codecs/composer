@@ -1,6 +1,7 @@
 package com.codex.composer.api.v1.registry.lazy;
 
 import com.mojang.serialization.Lifecycle;
+import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.minecraft.registry.*;
 import net.minecraft.util.Identifier;
 import com.codex.composer.internal.Composer;
@@ -14,6 +15,7 @@ import static net.minecraft.registry.Registries.ROOT;
 //? if minecraft: >=1.20.6 {
 import net.minecraft.registry.entry.RegistryEntryInfo;
 import net.minecraft.Bootstrap;
+import com.mojang.serialization.Codec;
 //? }
 
 @SuppressWarnings("unchecked")
@@ -76,6 +78,18 @@ public class DeferredRegistryRegistry {
         //noinspection rawtypes
         ROOT.add((RegistryKey) key, registry, RegistryEntryInfo.DEFAULT);
         return registry;
+    }
+
+    public <T> RegistryKey<Registry<T>> createDynamic(Identifier id, Codec<T> codec) {
+        RegistryKey<Registry<T>> key = RegistryKey.ofRegistry(id);
+        DynamicRegistries.register(key, codec);
+        return key;
+    }
+
+    public <T> RegistryKey<Registry<T>> createDynamicSynced(Identifier id, Codec<T> codec, DynamicRegistries.SyncOption... options) {
+        RegistryKey<Registry<T>> key = RegistryKey.ofRegistry(id);
+        DynamicRegistries.registerSynced(key, codec, options);
+        return key;
     }
     //? }
 

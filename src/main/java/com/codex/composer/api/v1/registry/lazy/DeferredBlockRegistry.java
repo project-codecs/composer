@@ -1,16 +1,17 @@
 package com.codex.composer.api.v1.registry.lazy;
 
+import com.codex.composer.api.v1.registry.util.ComposedBlockFamily;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+
 import java.util.function.UnaryOperator;
 
 //? if minecraft: >=1.21.3 {
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-
 //? }
 
 public class DeferredBlockRegistry extends EmptyDeferredRegistry {
@@ -36,6 +37,14 @@ public class DeferredBlockRegistry extends EmptyDeferredRegistry {
 
     public Block register(String name, UnaryOperator<AbstractBlock.Settings> settings) {
         return register(name, settings.apply(AbstractBlock.Settings.create()));
+    }
+
+    public ComposedBlockFamily family(String baseName, ComposedBlockFamily.BaseType type) {
+        return new ComposedBlockFamily(this, baseName, null, type);
+    }
+
+    public ComposedBlockFamily family(String baseName, Block existingBase, ComposedBlockFamily.BaseType type) {
+        return new ComposedBlockFamily(this, baseName, existingBase, type);
     }
 
     @FunctionalInterface

@@ -109,7 +109,6 @@ fabricApi {
 
 java {
     withSourcesJar()
-    withJavadocJar()
     targetCompatibility = requiredJava
     sourceCompatibility = requiredJava
 }
@@ -132,7 +131,7 @@ tasks {
         filesMatching("fabric.mod.json") { expand(props) }
 
         val mixinJava = "JAVA_${requiredJava.majorVersion}"
-        filesMatching("*.mixins.json") { expand("java" to mixinJava) }
+        filesMatching("*.mixins.json") { filter { line -> line.replace($$"${java}", mixinJava) } }
     }
 
     register<Delete>("cleanArtifacts") {
@@ -195,13 +194,6 @@ tasks {
                 "$buildNum-mc${sc.current.version}" +
                 if (name == "remapSourcesJar") "-sources.jar" else ".jar"
             )
-        }
-    }
-
-    javadoc {
-        options {
-            (this as CoreJavadocOptions).addBooleanOption("Xdoclint:none", true)
-            this.addStringOption("quiet")
         }
     }
 }
