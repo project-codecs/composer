@@ -98,14 +98,13 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
     public Function<BlockFamily.Variant, BlockItem> register(ComposedBlockFamily family, boolean addToGroup) {
         family.locked();
         EnumMap<BlockFamily.Variant, BlockItem> map = new EnumMap<>(BlockFamily.Variant.class);
+        BlockItem base;
 
         if (family.ownsBase()) {
             Identifier id = Registries.BLOCK.getId(family.getBase());
             if (!Objects.equals(id.getNamespace(), modId)) throw new IllegalStateException("Mismatched mod id!");
-            BlockItem base = register(family.getBase(), id.getPath(), addToGroup);
-
-            return variant -> variant == null ? base : map.get(variant);
-        }
+            base = register(family.getBase(), id.getPath(), addToGroup);
+        } else base = null;
 
         family.getVariants().stream().filter(Predicate.not(ComposedBlockFamily.DO_NOT_REGISTER_ITEM::contains)).forEach(variant -> {
             Identifier id = Registries.BLOCK.getId(family.get(variant));
@@ -113,7 +112,7 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
             map.put(variant, register(family.get(variant), id.getPath(), addToGroup));
         });
 
-        return map::get;
+        return family.ownsBase() ? variant -> variant == null ? base : map.get(variant) : map::get;
     }
 
     public Function<BlockFamily.Variant, BlockItem> register(ComposedBlockFamily family) {
