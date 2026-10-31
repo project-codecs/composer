@@ -26,7 +26,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 //? } else
 //import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 
-//? if minecraft: >=1.20.6
+//? if >=1.20.6
 import net.minecraft.registry.RegistryKeys;
 
 public class DeferredItemRegistry extends EmptyDeferredRegistry {
@@ -112,20 +112,20 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
             map.put(variant, register(family.get(variant), id.getPath(), addToGroup));
         });
 
-        return family.ownsBase() ? variant -> variant == null ? base : map.get(variant) : map::get;
+        return family.bindItemMap(family.ownsBase() ? variant -> variant == null ? base : map.get(variant) : map::get);
     }
 
     public Function<BlockFamily.Variant, BlockItem> register(ComposedBlockFamily family) {
         return register(family, true);
     }
 
-    //? if minecraft: >=1.21.3
+    //? if >=1.21.3
     @SuppressWarnings("unchecked")
     private <I extends Item, S extends Item.Settings> I register(String name, @NotNull Function<? super S, I> provider, @NotNull S settings, boolean addToGroup) {
         Identifier id = Identifier.of(modId, name);
 
         S finalSettings = settings;
-        //? if minecraft: >=1.21.3
+        //? if >=1.21.3
         finalSettings = (S) finalSettings.registryKey(RegistryKey.of(RegistryKeys.ITEM, id));
 
         I item = provider.apply(finalSettings);

@@ -1,12 +1,12 @@
 package com.codex.composer.api.v1.registry.lazy;
 
-//? if minecraft: >= 1.21 {
+//? if >=1.21 {
 import net.minecraft.component.ComponentType;
-//? } else if minecraft: >=1.20.6 {
+//? } else if >=1.20.6 {
 /*import net.minecraft.component.DataComponentType;
  *///? }
 
-//? if minecraft: >=1.20.6 {
+//? if >=1.20.6 {
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

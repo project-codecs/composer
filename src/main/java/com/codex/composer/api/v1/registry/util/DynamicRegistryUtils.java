@@ -48,13 +48,13 @@ public class DynamicRegistryUtils {
         return getRegistry(manager, key).orElseThrow(() -> new IllegalStateException("Registry not found: " + key.getValue()));
     }
 
-    //~ if minecraft: <=1.21 'getOptional' -> 'getOrEmpty' {
+    //~ if <=1.21 'getOptional' -> 'getOrEmpty' {
     public static <T> Optional<T> getValue(World world, RegistryKey<Registry<T>> key, Identifier id) {
-        return getRegistry(world, key).flatMap(reg -> reg.getOptional(RegistryKey.of(key, id)))/*? if minecraft: >=1.21.3 {*/.map(RegistryEntry.Reference::value)/*?}*/;
+        return getRegistry(world, key).flatMap(reg -> reg.getOptional(RegistryKey.of(key, id)))/*? if >=1.21.3 {*/.map(RegistryEntry.Reference::value)/*?}*/;
     }
 
     public static <T> Optional<T> getValue(DynamicRegistryManager manager, RegistryKey<Registry<T>> key, Identifier id) {
-        return getRegistry(manager, key).flatMap(reg -> reg.getOptional(RegistryKey.of(key, id)))/*? if minecraft: >=1.21.3 {*/.map(RegistryEntry.Reference::value)/*?}*/;
+        return getRegistry(manager, key).flatMap(reg -> reg.getOptional(RegistryKey.of(key, id)))/*? if >=1.21.3 {*/.map(RegistryEntry.Reference::value)/*?}*/;
     }
 
     public static <T> T getValueOrThrow(World world, RegistryKey<Registry<T>> key, Identifier id) {
@@ -62,7 +62,7 @@ public class DynamicRegistryUtils {
     }
     //~}
 
-    //? if minecraft: >= 1.21.3 {
+    //? if >=1.21.3 {
     public static <T> Optional<RegistryEntry.Reference<T>> getEntry(World world, RegistryKey<Registry<T>> key, Identifier id) {
         return getRegistry(world, key).flatMap(reg -> reg.getOptional(RegistryKey.of(key, id)));
     }
@@ -92,13 +92,13 @@ public class DynamicRegistryUtils {
         return getRegistry(world, key).map(reg -> List.copyOf(reg.getIds())).orElseGet(List::of);
     }
 
-    //~ if minecraft: <=1.21 'RegistryWrapper::streamEntries' -> 'Registry::streamEntries' {
+    //~ if <=1.21 'RegistryWrapper::streamEntries' -> 'Registry::streamEntries' {
     public static <T> Stream<RegistryEntry.Reference<T>> streamEntries(World world, RegistryKey<Registry<T>> key) {
         return getRegistry(world, key).map(RegistryWrapper::streamEntries).orElseGet(Stream::empty);
     }
     //~}
 
-    //~ if minecraft: <=1.21 'getOptional' -> 'getEntryList' {
+    //~ if <=1.21 'getOptional' -> 'getEntryList' {
     public static <T> List<RegistryEntry<T>> getTagEntries(World world, RegistryKey<Registry<T>> key, TagKey<T> tag) {
         return getRegistry(world, key).flatMap(reg -> reg.getOptional(tag)).map(named -> named.stream().toList()).orElseGet(List::of);
     }
@@ -108,8 +108,8 @@ public class DynamicRegistryUtils {
         return getRegistry(world, key).map(reg -> reg.getEntry(value).isIn(tag)).orElse(false);
     }
 
-    //? if minecraft: >=1.20.6 {
-    //~ if minecraft: <=1.21 'access.getOptional' -> 'access.getOptionalWrapper' {
+    //? if >=1.20.6 {
+    //~ if <=1.21 'access.getOptional' -> 'access.getOptionalWrapper' {
     public static <T> Optional<? extends RegistryWrapper.Impl<T>> getCommandRegistry(CommandRegistryAccess access, RegistryKey<Registry<T>> key) {
         return access.getOptional(key);
     }

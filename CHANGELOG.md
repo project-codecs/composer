@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2] - 2026-10-31
+
+### Added
+- Even more automatic block set generation by @zn0n_
+- Automatic ore set generation by @zn0n_
+- Composer data pack, which allows for multiple data providers of the same type, even conflicting ones by @zn0n_
+
+### Changed
+- Replaced all instances of "if minecraft: " with just "if ", as it's a better shorthand and works the same by @zn0n_
+
 ## [5.1.1] - 2026-10-30
 
 ### Fixed

@@ -9,7 +9,7 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-//? if minecraft: <=1.21.6
+//? if <=1.21.6
 import com.codex.composer.internal.client.config.DupedBindsConfig;
 
 public class ModLolcatProvider extends SemiLanguageProvider {
@@ -56,7 +56,7 @@ public class ModLolcatProvider extends SemiLanguageProvider {
         add("soulbound", "Dis item iz soulbound (iz yours 4evr)");
         add("soulbound.droppable.not", "U CANNOT drop dis item when it iz soulbound");
 
-        //? if minecraft: <=1.21.6 {
+        //? if <=1.21.6 {
         prefix("option.composer");
         add("composer.config.title", "Duplicat Keybindz", false);
         add("rainbow_speed", "Rainbow Effec Speed");

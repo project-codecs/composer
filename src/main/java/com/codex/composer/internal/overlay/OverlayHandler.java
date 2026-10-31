@@ -6,7 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 import com.codex.composer.api.v1.overlay.OverlayManager;
 import com.codex.composer.api.v1.overlay.impl.Overlay;
 
-//? if minecraft: >=1.21
+//? if >=1.21
 import net.minecraft.client.render.RenderTickCounter;
 
 @ApiStatus.Internal
@@ -25,7 +25,7 @@ public class OverlayHandler {
     }
 
     @ApiStatus.Internal
-    public static void render(DrawContext context, /*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f) {
+    public static void render(DrawContext context, /*? if <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f) {
         OverlayManager man = OverlayManager.getInstance();
         man.getVisible().forEach(overlay -> overlay.render(context, f));
     }

@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 import com.codex.composer.internal.Composer;
 import com.codex.composer.internal.networking.handler.ClearOverlaysHandler;
 
-//? if minecraft: <=1.20.4 {
+//? if <=1.20.4 {
 /*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 *///? } else {
@@ -17,14 +17,14 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.network.codec.PacketCodec;
 //? }
 
-public record ClearOverlaysPayload(boolean visible, boolean queue) implements /*? if minecraft: <=1.20.4 { *//*FabricPacket*//*? } else {*/CustomPayload/*?}*/ {
+public record ClearOverlaysPayload(boolean visible, boolean queue) implements /*? if <=1.20.4 { *//*FabricPacket*//*? } else {*/CustomPayload/*?}*/ {
     public static final Identifier oID = Composer.identify("clear_overlays_s2c");
 
     private static ClearOverlaysPayload read(PacketByteBuf buf) {
         return new ClearOverlaysPayload(buf.readBoolean(), buf.readBoolean());
     }
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*public static final Identifier ID = oID;
 
     @Override
@@ -34,7 +34,7 @@ public record ClearOverlaysPayload(boolean visible, boolean queue) implements /*
         buf.writeBoolean(queue);
     }
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*private static final PacketType<ClearOverlaysPayload> TYPE = PacketType.create(oID, ClearOverlaysPayload::read);
 
     @Override
@@ -52,14 +52,14 @@ public record ClearOverlaysPayload(boolean visible, boolean queue) implements /*
 
     @Environment(EnvType.CLIENT)
     public static void registerHandler() {
-        //? if minecraft: >=1.20.6 {
+        //? if >=1.20.6 {
         ClientPlayNetworking.registerGlobalReceiver(ID, new ClearOverlaysHandler());
         //?} else {
         /*ClientPlayNetworking.registerGlobalReceiver(TYPE, new ClearOverlaysHandler());
         *///?}
     }
 
-    //? if minecraft: >=1.20.6 {
+    //? if >=1.20.6 {
     public static void registerPacket() {
         PayloadTypeRegistry./*? if legacy {*/playS2C/*? } else {*//*clientboundPlay*//*? }*/().register(ID, CODEC);
     }

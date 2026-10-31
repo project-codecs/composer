@@ -17,7 +17,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-//? if minecraft: >=1.20.4 {
+//? if >=1.20.4 {
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.BlockWithEntity;
 //? }
@@ -27,7 +27,7 @@ public class PlushBlock extends AbstractPlushieBlock {
         super(settings);
     }
 
-    //? if minecraft: >=1.20.4 {
+    //? if >=1.20.4 {
     @Override
     protected MapCodec<? extends BlockWithEntity> getCodec() {
         return BlockWithEntity.createCodec(PlushBlock::new);

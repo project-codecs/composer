@@ -9,13 +9,13 @@ import static net.minecraft.advancement.criterion.InventoryChangedCriterion.Cond
 import static net.minecraft.item.Items.*;
 import static com.codex.composer.internal.registry.ModItems.PLUSHIE;
 
-//? if minecraft: <=1.20.1 {
+//? if <=1.20.1 {
 /*import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 
 import java.util.function.Consumer;
-*///? } else if minecraft: <=1.21.3 {
+*///? } else if <=1.21.3 {
 /*import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 
@@ -33,16 +33,16 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.data.recipe.RecipeGenerator;
 //?}
 
-//? if minecraft: =1.21.3
+//? if =1.21.3
 //import net.minecraft.data.server.recipe.RecipeGenerator;
 
-//? if minecraft: >=1.21.3
+//? if >=1.21.3
 import net.minecraft.registry.RegistryKeys;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 public class ModRecipeProvider extends FabricRecipeProvider {
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*public ModRecipeProvider(FabricDataOutput output) {
         super(output);
     }
@@ -58,9 +58,9 @@ public class ModRecipeProvider extends FabricRecipeProvider {
     //?}
 
     @Override
-    //? if minecraft: <=1.20.1 {
+    //? if <=1.20.1 {
     /*public void generate(Consumer<RecipeJsonProvider> exporter) {
-    *///? } else if minecraft: <1.21.3 {
+    *///? } else if <1.21.3 {
     /*public void generate(RecipeExporter exporter) {
     *///? } else {
     protected RecipeGenerator getRecipeGenerator(RegistryWrapper.WrapperLookup registryLookup, RecipeExporter exporter) {
@@ -86,12 +86,12 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 CookingRecipeJsonBuilder.createCampfireCooking(
                         Ingredient.ofItems(PLUSHIE),
                         RecipeCategory.MISC,
-                        /*? if minecraft: <=1.20.1 { *//*AIR*//*? } else { */PLUSHIE/*? }*/,
+                        /*? if <=1.20.1 { *//*AIR*//*? } else { */PLUSHIE/*? }*/,
                         0f,
                         10
                 ).criterion("has_plush", items(PLUSHIE)).offerTo(exporter, "cook_plush");
 
-            //? if minecraft: >= 1.21.3 {
+            //? if >=1.21.3 {
             }};
             //? }
     }

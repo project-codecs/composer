@@ -14,8 +14,8 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util/*? if minecraft: >=26.2 { *//*.math*//*? } */.BlockMirror;
-import net.minecraft.util/*? if minecraft: >=26.2 { *//*.math*//*? } */.BlockRotation;
+import net.minecraft.util/*? if >=26.2 { *//*.math*//*? } */.BlockMirror;
+import net.minecraft.util/*? if >=26.2 { *//*.math*//*? } */.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -25,10 +25,10 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-//? if minecraft: >=1.21
+//? if >=1.21
 import net.minecraft.state.property.EnumProperty;
 
-//? if minecraft: <=1.21 {
+//? if <=1.21 {
 /*import net.minecraft.world.WorldAccess;
 import net.minecraft.state.property.DirectionProperty;
 *///? } else {
@@ -37,13 +37,13 @@ import net.minecraft.world.tick.ScheduledTickView;
 import net.minecraft.util.math.random.Random;
 //? }
 
-//? if minecraft: <=1.20.4 {
+//? if <=1.20.4 {
 /*import net.minecraft.util.Hand;
 @SuppressWarnings("deprecation")
 *///? }
 public abstract class AbstractPlushieBlock extends BlockWithEntity implements Waterloggable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
-    public static final /*? if minecraft: <=1.20.6 { *//*DirectionProperty*//*? } else {*/ EnumProperty<Direction> /*?}*/ FACING = Properties.HORIZONTAL_FACING;
+    public static final /*? if <=1.20.6 { *//*DirectionProperty*//*? } else {*/ EnumProperty<Direction> /*?}*/ FACING = Properties.HORIZONTAL_FACING;
     private static final VoxelShape SHAPE = createCuboidShape(3.0, 0.0, 3.0, 13.0, 15.0, 13.0);
 
     public AbstractPlushieBlock(Settings settings) {
@@ -58,12 +58,12 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
     }
 
     @Override
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*public ActionResult onUse(BlockState state, @NotNull World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
      *///? } else {
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         //?}
-        if (!world.isClient/*? if minecraft: >=1.21.9 { *//*()*//*?}*/) {
+        if (!world.isClient/*? if >=1.21.9 { *//*()*//*?}*/) {
             playSound(world, state, pos, player);
 
             if (world.getBlockEntity(pos) instanceof AbstractPlushieBlockEntity plushie) plushie.squish(1);
@@ -73,7 +73,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
     }
 
     public BlockRenderType getRenderType(BlockState state) {
-        //? if minecraft: <=1.20.6 {
+        //? if <=1.20.6 {
         /*return BlockRenderType.ENTITYBLOCK_ANIMATED;
         *///? } else {
         return BlockRenderType.INVISIBLE;
@@ -82,7 +82,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
 
     @Override
     public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        if (!world.isClient/*? if minecraft: >=1.21.9 { *//*()*//*?}*/) {
+        if (!world.isClient/*? if >=1.21.9 { *//*()*//*?}*/) {
             if (world.getBlockEntity(pos) instanceof AbstractPlushieBlockEntity plushie) plushie.squish(24);
         }
     }
@@ -106,7 +106,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return /*? if minecraft: <=1.20.1 { *//*checkType*//*? } else {*/validateTicker/*?}*/(type, getType(), AbstractPlushieBlockEntity::tick);
+        return /*? if <=1.20.1 { *//*checkType*//*? } else {*/validateTicker/*?}*/(type, getType(), AbstractPlushieBlockEntity::tick);
     }
 
     @Override
@@ -133,7 +133,7 @@ public abstract class AbstractPlushieBlock extends BlockWithEntity implements Wa
     }
 
     @Override
-    //? if minecraft: <=1.21 {
+    //? if <=1.21 {
     /*public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (state.get(WATERLOGGED)) world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);

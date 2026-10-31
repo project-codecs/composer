@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 
 public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*public ModBlockLootTableProvider(FabricDataOutput dataOutput) {
         super(dataOutput);
     }

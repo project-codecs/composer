@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier;
 import com.codex.composer.internal.Composer;
 import com.codex.composer.internal.networking.handler.ScrollActionHandler;
 
-//? if minecraft: <=1.20.4 {
+//? if <=1.20.4 {
 /*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 *///? } else {
@@ -16,14 +16,14 @@ import net.minecraft.network.codec.PacketCodec;
         //? }
 
 public record ScrollActionPayload(Identifier channel, double scrollAmount)
-        implements /*? if minecraft: <=1.20.4 { *//*FabricPacket*//*? } else {*/CustomPayload/*?}*/ {
+        implements /*? if <=1.20.4 { *//*FabricPacket*//*? } else {*/CustomPayload/*?}*/ {
     public static final Identifier oID = Composer.identify("scroll_action_c2s");
 
     private ScrollActionPayload(PacketByteBuf buf) {
         this(buf.readIdentifier(), buf.readDouble());
     }
 
-    //? if minecraft: <= 1.20.4 {
+    //? if <=1.20.4 {
     /*public static final Identifier ID = oID;
 
     @Override
@@ -33,7 +33,7 @@ public record ScrollActionPayload(Identifier channel, double scrollAmount)
         buf.writeDouble(scrollAmount);
     }
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*private static final PacketType<ScrollActionPayload> TYPE = PacketType.create(ID, ScrollActionPayload::new);
     @Override
     public PacketType<?> getType() {
@@ -49,7 +49,7 @@ public record ScrollActionPayload(Identifier channel, double scrollAmount)
     //? }
 
     public static void registerHandler() {
-        //? if minecraft: >=1.20.6 {
+        //? if >=1.20.6 {
         PayloadTypeRegistry./*? if legacy {*/playC2S/*? } else {*//*serverboundPlay*//*? }*/().register(ID, CODEC);
         ServerPlayNetworking.registerGlobalReceiver(ID, new ScrollActionHandler());
         //?} else {

@@ -127,7 +127,7 @@ public class RegistryCommand extends ComposerCommand {
     private Path createDumpFile(ServerCommandSource source, Identifier id) throws IOException {
         Path dumpDir = source.getServer()
                 .getRunDirectory()
-                /*? if minecraft: <=1.20.6 { *//*.toPath()*//*? }*/
+                /*? if <=1.20.6 { *//*.toPath()*//*? }*/
                 .resolve("dumps");
 
         Files.createDirectories(dumpDir);

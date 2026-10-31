@@ -4,7 +4,7 @@ import com.codex.composer.api.v1.datagen.ComposerModelProvider;
 import com.codex.composer.internal.registry.ModBlocks;
 import com.codex.composer.internal.registry.ModItems;
 
-//? if minecraft: <=1.21.3 {
+//? if <=1.21.3 {
 /*import net.minecraft.data.client.*;
 *///? } else
 import net.minecraft.client.data.*;

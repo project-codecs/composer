@@ -1,6 +1,6 @@
 package com.codex.composer.api.v1.data;
 
-//? if minecraft: <=1.21.4 {
+//? if <=1.21.4 {
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;

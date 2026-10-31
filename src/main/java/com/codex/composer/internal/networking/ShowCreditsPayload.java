@@ -8,7 +8,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import com.codex.composer.internal.Composer;
 
-//? if minecraft: <=1.20.4 {
+//? if <=1.20.4 {
 /*import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 *///? } else {
@@ -17,14 +17,14 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.network.codec.PacketCodec;
 //? }
 
-public record ShowCreditsPayload(boolean credits, boolean poem) implements /*? if minecraft: <=1.20.4 { *//*FabricPacket*//*? } else {*/CustomPayload/*?}*/ {
+public record ShowCreditsPayload(boolean credits, boolean poem) implements /*? if <=1.20.4 { *//*FabricPacket*//*? } else {*/CustomPayload/*?}*/ {
     public static final Identifier oID = Composer.identify("show_credits_s2c");
 
     private static ShowCreditsPayload read(PacketByteBuf buf) {
         return new ShowCreditsPayload(buf.readBoolean(), buf.readBoolean());
     }
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*public static final Identifier ID = oID;
 
     @Override
@@ -34,7 +34,7 @@ public record ShowCreditsPayload(boolean credits, boolean poem) implements /*? i
         buf.writeBoolean(poem);
     }
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*private static final PacketType<ShowCreditsPayload> TYPE = PacketType.create(oID, ShowCreditsPayload::read);
 
     @Override
@@ -52,14 +52,14 @@ public record ShowCreditsPayload(boolean credits, boolean poem) implements /*? i
 
     @Environment(EnvType.CLIENT)
     public static void registerHandler() {
-        //? if minecraft: >=1.20.6 {
+        //? if >=1.20.6 {
         ClientPlayNetworking.registerGlobalReceiver(ID, new ShowCreditsHandler());
         //?} else {
         /*ClientPlayNetworking.registerGlobalReceiver(TYPE, new ShowCreditsHandler());
         *///?}
     }
 
-    //? if minecraft: >=1.20.6 {
+    //? if >=1.20.6 {
     public static void registerPacket() {
         PayloadTypeRegistry./*? if legacy {*/playS2C/*? } else {*//*clientboundPlay*//*? }*/().register(ID, CODEC);
     }

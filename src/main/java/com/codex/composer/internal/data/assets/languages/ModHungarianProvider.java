@@ -10,7 +10,7 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-//? if minecraft: <=1.21.6
+//? if <=1.21.6
 import com.codex.composer.internal.client.config.DupedBindsConfig;
 
 public class ModHungarianProvider extends SemiLanguageProvider {
@@ -57,7 +57,7 @@ public class ModHungarianProvider extends SemiLanguageProvider {
         add("soulbound", "Ez a tárgy lélekhez kötött");
         add("soulbound.droppable.not", "Ez a tárgy lélekhez kötötten nem dobható el");
 
-        //? if minecraft: <=1.21.6 {
+        //? if <=1.21.6 {
         prefix("option.composer");
         add("composer.config.title", "Duplikált Billentyűk", false);
         add("rainbow_speed", "Szivárványos Effekt Sebessége");

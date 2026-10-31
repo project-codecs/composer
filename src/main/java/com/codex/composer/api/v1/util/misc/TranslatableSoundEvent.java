@@ -1,6 +1,6 @@
 package com.codex.composer.api.v1.util.misc;
 
-//? if minecraft: <=1.21 {
+//? if <=1.21 {
 /*import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 

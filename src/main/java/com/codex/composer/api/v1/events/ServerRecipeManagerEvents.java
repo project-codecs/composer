@@ -1,6 +1,6 @@
 package com.codex.composer.api.v1.events;
 
-//? if minecraft: >=1.21.3 {
+//? if >=1.21.3 {
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.recipe.RecipePropertySet;

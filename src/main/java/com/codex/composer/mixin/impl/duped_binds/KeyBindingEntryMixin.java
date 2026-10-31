@@ -4,7 +4,7 @@ import net.minecraft.client.gui.screen.option.ControlsListWidget;
 import org.spongepowered.asm.mixin.Mixin;
 
 
-//? if minecraft: <=1.21.6 {
+//? if <=1.21.6 {
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(ControlsListWidget.KeyBindingEntry.class)
 public abstract class KeyBindingEntryMixin {
-    //? if minecraft: <=1.21.6 {
+    //? if <=1.21.6 {
     @Shadow
     @Final
     private KeyBinding binding;

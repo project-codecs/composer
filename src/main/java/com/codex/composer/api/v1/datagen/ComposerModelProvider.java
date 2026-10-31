@@ -20,7 +20,7 @@ import net.minecraft.data.family.BlockFamily;
 import net.minecraft.item.BlockItem;
 import net.minecraft.registry.Registries;
 
-//? if minecraft: <=1.21.3 {
+//? if <=1.21.3 {
 /*import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.BlockStateSupplier;
@@ -42,12 +42,12 @@ import net.minecraft.client.data.*;
 import org.apache.commons.lang3.NotImplementedException;
 //? }
 
-//? if minecraft: >=1.21.5 {
+//? if >=1.21.5 {
 /*import net.minecraft.client.render.model.json.BlockModelDefinition;
 import com.google.common.collect.Maps;
 *///? }
 
-//? if minecraft: <=1.21.3 {
+//? if <=1.21.3 {
 /*public abstract class ComposerModelProvider implements DataProvider {
     private ItemModelGenerator itemModelGenerator;
     private final DataOutput.PathResolver blockstatesPathResolver;
@@ -223,21 +223,21 @@ public abstract class ComposerModelProvider implements DataProvider {
     }
 
     @Environment(EnvType.CLIENT)
-    public static class BlockStateSuppliers implements Consumer</*? if minecraft: <=1.21.4 { */BlockStateSupplier/*? } else {*//*BlockModelDefinitionCreator*//*?}*/> {
-        private final Map<Block, /*? if minecraft: <=1.21.4 { */BlockStateSupplier/*? } else {*//*BlockModelDefinitionCreator*//*?}*/> blockStateSuppliers = new HashMap<>();
+    public static class BlockStateSuppliers implements Consumer</*? if <=1.21.4 { */BlockStateSupplier/*? } else {*//*BlockModelDefinitionCreator*//*?}*/> {
+        private final Map<Block, /*? if <=1.21.4 { */BlockStateSupplier/*? } else {*//*BlockModelDefinitionCreator*//*?}*/> blockStateSuppliers = new HashMap<>();
 
         BlockStateSuppliers() {
         }
 
-        public void accept(/*? if minecraft: <=1.21.4 { */BlockStateSupplier/*? } else {*//*BlockModelDefinitionCreator*//*?}*/ blockStateSupplier) {
+        public void accept(/*? if <=1.21.4 { */BlockStateSupplier/*? } else {*//*BlockModelDefinitionCreator*//*?}*/ blockStateSupplier) {
             Block block = blockStateSupplier.getBlock();
-            /*? if minecraft: <=1.21.4 { */BlockStateSupplier/*? } else {*//*BlockModelDefinitionCreator*//*?}*/ blockStateSupplier2 = this.blockStateSuppliers.put(block, blockStateSupplier);
+            /*? if <=1.21.4 { */BlockStateSupplier/*? } else {*//*BlockModelDefinitionCreator*//*?}*/ blockStateSupplier2 = this.blockStateSuppliers.put(block, blockStateSupplier);
             if (blockStateSupplier2 != null) {
                 throw new IllegalStateException("Duplicate blockstate definition for " + block);
             }
         }
 
-        //? if minecraft: <=1.21.4 {
+        //? if <=1.21.4 {
         public CompletableFuture<?> writeAllToPath(DataWriter writer, DataOutput.PathResolver pathResolver) {
             return ComposerModelProvider.writeAllToPath(writer, (block) -> pathResolver.resolveJson(block.getRegistryEntry().registryKey().getValue()), this.blockStateSuppliers);
         }
@@ -257,7 +257,7 @@ public abstract class ComposerModelProvider implements DataProvider {
         ItemAssets() {
         }
 
-        //? if minecraft: >=1.21.11 {
+        //? if >=1.21.11 {
         /*public void accept(Item item, ItemModel.Unbaked model, ItemAsset.Properties properties) {
             this.accept(item, new ItemAsset(model, properties));
         }

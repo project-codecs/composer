@@ -1,6 +1,6 @@
 package com.codex.composer.internal.client.screen;
 
-//? if minecraft: <=1.21.6 {
+//? if <=1.21.6 {
 import com.codex.composer.internal.client.config.DupedBindsConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -10,7 +10,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ThreePartsLayoutWidget;
 import net.minecraft.text.Text;
 
-//? if minecraft: <=1.20.4 {
+//? if <=1.20.4 {
 /*import java.util.function.Consumer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.screen.ScreenTexts;
@@ -23,7 +23,7 @@ public class DupedBindsConfigScreen extends GameOptionsScreen {
         super(parent, MinecraftClient.getInstance().options, Text.translatableWithFallback("composer.config.title", "Duplicate Keybinds"));
     }
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*@Override
     protected void init() {
         super.init();
@@ -47,7 +47,7 @@ public class DupedBindsConfigScreen extends GameOptionsScreen {
 
     *///? }
 
-    //? if minecraft: >=1.20.6 {
+    //? if >=1.20.6 {
     public static void modify(ControlsOptionsScreen screen) {
         screen.layout.addHeader(
                 ButtonWidget.builder(Text.translatableWithFallback("composer.config.title", "Duplicate Keybinds"), btn -> MinecraftClient.getInstance().setScreen(new DupedBindsConfigScreen(screen)))
@@ -64,7 +64,7 @@ public class DupedBindsConfigScreen extends GameOptionsScreen {
     }
     *///? }
 
-    //? if minecraft: >=1.21 {
+    //? if >=1.21 {
     @Override
     protected void addOptions() {
         assert body != null;

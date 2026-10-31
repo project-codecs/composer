@@ -17,16 +17,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//? if minecraft: >=1.21.4 {
+//? if >=1.21.4 {
 import net.minecraft.server.world.ServerWorld;
 //? }
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
-    @Shadow @Final /*? if minecraft: <=1.20.4 {*//*private *//*?}*/PlayerInventory inventory;
+    @Shadow @Final /*? if <=1.20.4 {*//*private *//*?}*/PlayerInventory inventory;
 
     @Inject(method = "dropInventory", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;vanishCursedItems()V"), cancellable = true)
-    public void composer$keepSoulboundItems(/*? if minecraft: >=1.21.4 {*/ServerWorld world, /*?}*/CallbackInfo ci) {
+    public void composer$keepSoulboundItems(/*? if >=1.21.4 {*/ServerWorld world, /*?}*/CallbackInfo ci) {
         List<ItemStack> soulboundStacks = new ArrayList<>();
         for (int i = 0; i < inventory.size(); i++) {
             ItemStack stack = inventory.getStack(i);

@@ -15,7 +15,7 @@ import net.minecraft.data/*? if <=1.21.3 {*//*.server*//*?}*/.tag.ValueLookupTag
 //import net.minecraft.data.tag.TagProvider;
 //? }
 
-public abstract class ComposerBlockTagProvider extends /*~ if minecraft: <=26.1.2 'TagProvider' -> 'ValueLookupTagProvider' {*/ValueLookupTagProvider/*~}*/<Block> {
+public abstract class ComposerBlockTagProvider extends /*~ if <=26.1.2 'TagProvider' -> 'ValueLookupTagProvider' {*/ValueLookupTagProvider/*~}*/<Block> {
     protected ComposerBlockTagProvider(DataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
         super(output, RegistryKeys.BLOCK, registriesFuture/*? if <=26.1.2 {*/, block -> Registries.BLOCK.getKey(block).orElseThrow()/*?}*/);
     }

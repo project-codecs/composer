@@ -16,7 +16,7 @@ public abstract class WorldChunkMixin {
     @Shadow public abstract World getWorld();
 
     @Inject(method = "setBlockState", at = @At("RETURN"))
-    //? if minecraft: <=1.21.4 {
+    //? if <=1.21.4 {
     private void composer$onBlockChanged(BlockPos pos, BlockState state, boolean moved, CallbackInfoReturnable<BlockState> cir) {
     //? } else {
     /*private void composer$onBlockChanged(BlockPos pos, BlockState state, int flags, CallbackInfoReturnable<BlockState> cir) {

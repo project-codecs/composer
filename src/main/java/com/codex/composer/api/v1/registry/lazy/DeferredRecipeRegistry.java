@@ -6,7 +6,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
-//? if minecraft: >=1.21.3 {
+//? if >=1.21.3 {
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.registry.RegistryKey;
 import com.codex.composer.api.v1.events.ServerRecipeManagerEvents;
@@ -40,7 +40,7 @@ public class DeferredRecipeRegistry extends EmptyDeferredRegistry {
         return new RecipeTypeEntry<>(type, recipeSerializer);
     }
 
-    //? if minecraft: >=1.21.3 {
+    //? if >=1.21.3 {
     public RecipeBookCategory registerCategory(String name) {
         return Registry.register(
                 Registries.RECIPE_BOOK_CATEGORY,

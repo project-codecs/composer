@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.function.UnaryOperator;
 
-//? if minecraft: >=1.21.3 {
+//? if >=1.21.3 {
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 //? }
@@ -40,11 +40,11 @@ public class DeferredBlockRegistry extends EmptyDeferredRegistry {
     }
 
     public ComposedBlockFamily family(String baseName, ComposedBlockFamily.BaseType type) {
-        return new ComposedBlockFamily(this, baseName, null, type);
+        return new ComposedBlockFamily(modId, baseName, null, type);
     }
 
     public ComposedBlockFamily family(String baseName, Block existingBase, ComposedBlockFamily.BaseType type) {
-        return new ComposedBlockFamily(this, baseName, existingBase, type);
+        return new ComposedBlockFamily(modId, baseName, existingBase, type);
     }
 
     @FunctionalInterface

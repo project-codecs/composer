@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-//? if minecraft: <=1.21.3 {
+//? if <=1.21.3 {
 /*import net.minecraft.data.client.Model;
 import net.minecraft.data.client.TextureKey;
 *///? } else {
@@ -29,7 +29,7 @@ public class DisplayModel extends Model {
         this.display = display;
     }
 
-    //? if minecraft: <=1.21.3 {
+    //? if <=1.21.3 {
     /*@Override
     public JsonObject createJson(Identifier id, Map<TextureKey, Identifier> textures) {
         JsonObject json = super.createJson(id, textures);

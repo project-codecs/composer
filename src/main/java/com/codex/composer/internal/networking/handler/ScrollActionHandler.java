@@ -8,12 +8,12 @@ import com.codex.composer.internal.networking.ScrollActionPayload;
 
 import java.util.List;
 
-//? if minecraft: <=1.20.4 {
+//? if <=1.20.4 {
 /*import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.server.network.ServerPlayerEntity;
  *///? }
 
-//? if minecraft: <=1.20.4 {
+//? if <=1.20.4 {
 /*public class ScrollActionHandler implements ServerPlayNetworking.PlayPacketHandler<ScrollActionPayload> {
 *///?} else {
  public class ScrollActionHandler implements ServerPlayNetworking.PlayPayloadHandler<ScrollActionPayload> {
@@ -24,7 +24,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
             ServerScrollEvents.LOW_PRIORITY
     );
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*@Override
     public void receive(ScrollActionPayload payload, ServerPlayerEntity player, PacketSender sender) {
         for (Event<ServerScrollAction> event : priorities)

@@ -12,16 +12,16 @@ import com.codex.composer.internal.client.render.block_entity.PlushBlockEntityRe
 import com.codex.composer.internal.registry.ModBlockEntities;
 import com.codex.composer.internal.registry.ModBlocks;
 
-//? if minecraft: >=1.21.4 <=1.21.5 {
+//? if >=1.21.4 <=1.21.5 {
 import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
-//? } else if minecraft: >=1.21.6 {
+//? } else if >=1.21.6 {
 /*import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 *///? } else {
 /*import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
  *///? }
 
-//? if minecraft: <=1.21.5 {
+//? if <=1.21.5 {
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.client.render.RenderLayer;
 //? } elif legacy {
@@ -32,14 +32,14 @@ import net.minecraft.client.render.BlockRenderLayer;
 public class ComposerClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        //? if minecraft: <=1.21.5 {
+        //? if <=1.21.5 {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.PLUSH, RenderLayer.getCutout());
         //? } elif legacy
         //BlockRenderLayerMap.putBlock(ModBlocks.PLUSH, BlockRenderLayer.CUTOUT);
 
         BlockEntityRendererFactories.register(ModBlockEntities.PLUSH, PlushBlockEntityRenderer::new);
 
-        //? if minecraft: >=1.21.4 <=1.21.5 {
+        //? if >=1.21.4 <=1.21.5 {
         HudLayerRegistrationCallback.EVENT.register(w -> w.addLayer(IdentifiedLayer.of(Composer.identify("overlays"), OverlayHandler::render)));
         //? } elif minecraft: >=1.21.5 {
         /*HudElementRegistry.addLast(Composer.identify("overlays"), OverlayHandler::render);

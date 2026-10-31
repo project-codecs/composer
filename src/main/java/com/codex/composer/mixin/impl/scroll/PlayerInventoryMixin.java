@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 
-//? if minecraft: <=1.21 {
+//? if <=1.21 {
 /*import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import net.minecraft.client.MinecraftClient;
@@ -32,7 +32,7 @@ public class PlayerInventoryMixin {
             ClientScrollEvents.LOW_PRIORITY
     );
 
-    //? if minecraft: <=1.21 {
+    //? if <=1.21 {
     /*@Inject(method = "scrollInHotbar", at = @At("HEAD"), cancellable = true)
     public void composer$triggerActions(double scrollAmount, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();

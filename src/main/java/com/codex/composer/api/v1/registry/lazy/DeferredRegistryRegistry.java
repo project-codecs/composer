@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 import static net.minecraft.registry.Registries.ROOT;
 
-//? if minecraft: >=1.20.6 {
+//? if >=1.20.6 {
 import net.minecraft.registry.entry.RegistryEntryInfo;
 import net.minecraft.Bootstrap;
 import com.mojang.serialization.Codec;
@@ -22,7 +22,7 @@ import com.mojang.serialization.Codec;
 public class DeferredRegistryRegistry {
     private final Map<Identifier, Supplier<?>> defaultEntries = new LinkedHashMap<>();
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*public <T> Registry<T> create(RegistryKey<? extends Registry<T>> key, Initializer<T> initializer) {
         return create(key, Lifecycle.stable(), initializer);
     }

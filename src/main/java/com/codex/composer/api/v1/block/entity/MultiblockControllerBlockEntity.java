@@ -7,7 +7,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 
-//? if minecraft: <=1.21.5 {
+//? if <=1.21.5 {
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 //? } else {
@@ -28,17 +28,17 @@ public abstract class MultiblockControllerBlockEntity extends BlockEntity implem
         return controller;
     }
 
-    //? if minecraft: <=1.21.5 {
+    //? if <=1.21.5 {
     @Override
     //~ if <=1.20.4 'protected' -> 'public'
-    protected void readNbt(NbtCompound nbt/*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
-        super.readNbt(nbt/*? if minecraft: >= 1.20.6 { */, registries /*?}*/);
-        controller.restoreFormed(nbt.getBoolean(FORMED)/*? if minecraft: >=1.21.5 {*//*.orElse(false)*//*? }*/);
+    protected void readNbt(NbtCompound nbt/*? if >=1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
+        super.readNbt(nbt/*? if >=1.20.6 { */, registries /*?}*/);
+        controller.restoreFormed(nbt.getBoolean(FORMED)/*? if >=1.21.5 {*//*.orElse(false)*//*? }*/);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt/*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
-        super.writeNbt(nbt/*? if minecraft: >= 1.20.6 { */, registries /*?}*/);
+    protected void writeNbt(NbtCompound nbt/*? if >=1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
+        super.writeNbt(nbt/*? if >=1.20.6 { */, registries /*?}*/);
         nbt.putBoolean(FORMED, controller.isFormed());
     }
     //? } else {

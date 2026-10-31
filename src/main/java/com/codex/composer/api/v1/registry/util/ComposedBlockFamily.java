@@ -5,14 +5,34 @@ import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.data.family.BlockFamily;
 import net.minecraft.data.family.BlockFamily.Variant;
+import net.minecraft.item.BlockItem;
+import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
+
+//? if >=1.21.3
+import net.minecraft.data./*? if <=1.21.3 {*//*server.*//*?}*/recipe.RecipeGenerator;
+
+//? if <=1.21 {
+/*import net.minecraft.data.server.recipe.RecipeProvider;
+//~ if <=1.20.1 'RecipeExporter' -> 'RecipeJsonProvider'
+import net.minecraft.data.server.recipe.RecipeExporter;
+*///? }
+
+//? if <=1.20.1 {
+/*import java.util.function.Consumer;
+*///? } else {
+import net.minecraft.resource.featuretoggle.FeatureFlags;
+import net.minecraft.resource.featuretoggle.FeatureSet;
+//? }
 
 public final class ComposedBlockFamily {
     public static final Set<Variant> DO_NOT_REGISTER_ITEM = Set.of(Variant.WALL_SIGN/*? if >=26.2 {*//*, Variant.WALL_HANGING_SIGN, Variant.WALL_HANGING_SIGN*//*?}*/);
@@ -38,6 +58,12 @@ public final class ComposedBlockFamily {
             this.minableTag = minableTag;
             this.buttonPressTicks = buttonPressTicks;
         }
+    }
+
+    private static final Map<String, List<ComposedBlockFamily>> ALL = new LinkedHashMap<>();
+
+    public static List<ComposedBlockFamily> allOf(String modId) {
+        return Collections.unmodifiableList(ALL.getOrDefault(modId, List.of()));
     }
 
     @FunctionalInterface public interface RegisterListener { void onRegistered(String name, Block block); }
@@ -77,43 +103,43 @@ public final class ComposedBlockFamily {
         spec(Variant.BUTTON, b -> {
             BlockSetType set = b.blockSetType;
             int ticks = b.type.buttonPressTicks;
-            //~ if minecraft: <=1.20.1 'set, ticks, s' -> 's, set, ticks, b.woodType != null'
+            //~ if <=1.20.1 'set, ticks, s' -> 's, set, ticks, b.woodType != null'
             b.addSuffixed(Variant.BUTTON, b.destroyOnPush(b.baseSettings().noCollision().strength(0.5F)), s -> new ButtonBlock(set, ticks, s));
         }, (f, b) -> f.button(b.block(Variant.BUTTON)));
 
         spec(Variant.PRESSURE_PLATE, b -> {
             BlockSetType set = b.blockSetType;
-            //~ if minecraft: <=1.20.1 'set, s' -> 'b.woodType == null ? PressurePlateBlock.ActivationRule.EVERYTHING : PressurePlateBlock.ActivationRule.MOBS, s, set'
+            //~ if <=1.20.1 'set, s' -> 'b.woodType == null ? PressurePlateBlock.ActivationRule.EVERYTHING : PressurePlateBlock.ActivationRule.MOBS, s, set'
             b.addSuffixed(Variant.PRESSURE_PLATE, b.destroyOnPush(b.baseSettings().noCollision().strength(0.5F)), s -> new PressurePlateBlock(set, s));
         }, (f, b) -> f.pressurePlate(b.block(Variant.PRESSURE_PLATE)));
 
         spec(Variant.DOOR, b -> {
             BlockSetType set = b.blockSetType;
-            //~ if minecraft: <=1.20.1 'set, s' -> 's, set'
+            //~ if <=1.20.1 'set, s' -> 's, set'
             b.addSuffixed(Variant.DOOR, b.destroyOnPush(b.baseSettings().strength(3.0F).nonOpaque()), s -> new DoorBlock(set, s));
         }, (f, b) -> f.door(b.block(Variant.DOOR)));
 
         spec(Variant.TRAPDOOR, b -> {
             BlockSetType set = b.blockSetType;
-            //~ if minecraft: <=1.20.1 'set, s' -> 's, set'
+            //~ if <=1.20.1 'set, s' -> 's, set'
             b.addSuffixed(Variant.TRAPDOOR, b.baseSettings().strength(3.0F).nonOpaque(), s -> new TrapdoorBlock(set, s));
         }, (f, b) -> f.trapdoor(b.block(Variant.TRAPDOOR)));
 
         spec(Variant.FENCE, b -> b.addSuffixed(Variant.FENCE, b.baseSettings(), FenceBlock::new), (f, b) -> f.fence(b.block(Variant.FENCE)));
         spec(Variant.FENCE_GATE, b -> {
             WoodType wood = b.requireWoodType(Variant.FENCE_GATE);
-            //~ if minecraft: <=1.20.1 'wood, s' -> 's, wood'
+            //~ if <=1.20.1 'wood, s' -> 's, wood'
             b.addSuffixed(Variant.FENCE_GATE, b.baseSettings(), s -> new FenceGateBlock(wood, s));
         }, (f, b) -> f.fenceGate(b.block(Variant.FENCE_GATE)));
 
         spec(Variant.SIGN, b -> {
             WoodType wood = b.requireWoodType(Variant.SIGN);
             String signName = b.nameOf(Variant.SIGN, b.prefix + "_sign");
-            //~ if minecraft: <=1.20.1 'wood, s' -> 's, wood'
+            //~ if <=1.20.1 'wood, s' -> 's, wood'
             Block sign = b.registerNamed(signName, b.signSettings(), s -> new SignBlock(wood, s));
             b.blocks.put(Variant.SIGN, sign);
-            //~ if minecraft: <=1.21 'lootTable(sign.getLootTableKey())' -> 'dropsLike(sign)'
-            //~ if minecraft: <=1.20.1 'wood, s' -> 's, wood'
+            //~ if <=1.21 'lootTable(sign.getLootTableKey())' -> 'dropsLike(sign)'
+            //~ if <=1.20.1 'wood, s' -> 's, wood'
             b.wallSign = b.registerNamed(wallSignName(signName), b.signSettings().lootTable(sign.getLootTableKey()), s -> new WallSignBlock(wood, s));
             b.blocks.put(Variant.WALL_SIGN, b.wallSign);
         }, (f, b) -> f.sign(b.block(Variant.SIGN), b.wallSign));
@@ -126,7 +152,7 @@ public final class ComposedBlockFamily {
         spec(Variant.CUSTOM_FENCE, b -> b.addSuffixed(Variant.CUSTOM_FENCE, b.baseSettings(), FenceBlock::new), (f, b) -> f.customFence(b.block(Variant.CUSTOM_FENCE)));
         spec(Variant.CUSTOM_FENCE_GATE, b -> {
             WoodType wood = b.requireWoodType(Variant.CUSTOM_FENCE_GATE);
-            //~ if minecraft: <=1.20.1 'wood, s' -> 's, wood'
+            //~ if <=1.20.1 'wood, s' -> 's, wood'
             b.addSuffixed(Variant.CUSTOM_FENCE_GATE, b.baseSettings(), s -> new FenceGateBlock(wood, s));
         }, (f, b) -> f.customFenceGate(b.block(Variant.CUSTOM_FENCE_GATE)));
         
@@ -177,6 +203,7 @@ public final class ComposedBlockFamily {
     }
 
     private final DeferredBlockRegistry registry;
+    private final String modId;
     private final String baseName;
     private final BaseType type;
     private final @Nullable Block existingBase;
@@ -192,11 +219,9 @@ public final class ComposedBlockFamily {
 
     private boolean generateModels = true;
     private boolean generateRecipes = true;
-    //? if minecraft: >=26.1.2 {
-    /*private boolean generateStonecutterRecipes = false;
+    private boolean generateStonecutterRecipes = false;
     //? if >=26.2
     //private boolean generateCrackingRecipes = true;
-    *///?}
     private @Nullable String group;
     private @Nullable String unlockCriterionName;
 
@@ -207,9 +232,11 @@ public final class ComposedBlockFamily {
     private @Nullable BlockFamily.Builder result;
     private @Nullable TagKey<Block> minableTag;
     private final List<TagKey<Block>> extraTags = new ArrayList<>();
+    private @Nullable Function<Variant, BlockItem> itemMap;
 
-    public ComposedBlockFamily(DeferredBlockRegistry registry, String baseName, @Nullable Block existingBase, BaseType type) {
-        this.registry = registry;
+    public ComposedBlockFamily(String modId, String baseName, @Nullable Block existingBase, BaseType type) {
+        this.modId = modId;
+        this.registry = new DeferredBlockRegistry(modId);
         this.baseName = baseName;
         this.existingBase = existingBase;
         this.type = type;
@@ -279,6 +306,17 @@ public final class ComposedBlockFamily {
     public Set<Variant> getVariants() {
         locked();
         return Collections.unmodifiableSet(blocks.keySet());
+    }
+
+    @ApiStatus.Internal
+    public Function<BlockFamily.Variant, BlockItem> bindItemMap(Function<BlockFamily.Variant, BlockItem> map) {
+        locked();
+        return this.itemMap = map;
+    }
+
+    @ApiStatus.Internal
+    public @Nullable Function<BlockFamily.Variant, BlockItem> itemMap() {
+        return itemMap;
     }
 
     public boolean ownsBase() {
@@ -367,20 +405,18 @@ public final class ComposedBlockFamily {
         return this;
     }
 
-    //? if >=26.1.2 {
-    /*public ComposedBlockFamily generateStonecutterRecipes() {
+    public ComposedBlockFamily generateStonecutterRecipes() {
         notLocked();
         this.generateStonecutterRecipes = true;
         return this;
     }
 
-    //? if 26.2 {
-    /^public ComposedBlockFamily noGenerateCrackingRecipes() {
+    //? if >=26.2 {
+    /*public ComposedBlockFamily noGenerateCrackingRecipes() {
         notLocked();
         this.generateCrackingRecipes = false;
         return this;
     }
-    ^///?}
     *///?}
 
     public ComposedBlockFamily group(String group) {
@@ -393,6 +429,24 @@ public final class ComposedBlockFamily {
         notLocked();
         this.unlockCriterionName = unlockCriterionName;
         return this;
+    }
+
+    //~ if <=1.21 'RecipeGenerator' -> 'RecipeExporter'
+    //~ if <=1.20.1 'RecipeGenerator' -> 'Consumer<RecipeJsonProvider>'
+    public void generateRecipes(RecipeGenerator generator) {
+        locked();
+        //~ if <=1.21 'generator.' -> 'RecipeProvider.' {
+        generator.generateFamily(/*? if <=1.21 {*//*generator, *//*?}*/result.build()/*? if >1.20.1 {*/, FeatureSet.of(FeatureFlags.VANILLA)/*?}*/);
+
+        //? if <=1.21.11 {
+        if (generateStonecutterRecipes) getVariants().forEach(variant -> {
+            switch (variant) {
+                case STAIRS, WALL, CHISELED, CUT, POLISHED: generator.offerStonecuttingRecipe(/*? if <=1.21 {*//*generator, *//*?}*/RecipeCategory.BUILDING_BLOCKS, Objects.requireNonNull(get(variant)), base, 1); break;
+                case SLAB: generator.offerStonecuttingRecipe(/*? if <=1.21 {*//*generator, *//*?}*/RecipeCategory.BUILDING_BLOCKS, Objects.requireNonNull(get(variant)), base, 2); break;
+            }
+        });
+        //? }
+        //~}
     }
 
     public BlockFamily getResult() {
@@ -437,6 +491,8 @@ public final class ComposedBlockFamily {
         *///?}
         if (group != null) family.group(group);
         if (unlockCriterionName != null) family.unlockCriterionName(unlockCriterionName);
+
+        ALL.computeIfAbsent(modId, id -> new ArrayList<>()).add(this);
 
         result = family;
         return new Pair<>(this, family);
@@ -485,11 +541,11 @@ public final class ComposedBlockFamily {
     private void registerHangingSign(Variant hanging, Variant wall) {
         WoodType wood = requireWoodType(hanging);
         String hangingName = nameOf(hanging, prefix + "_hanging_sign");
-        //~ if minecraft: <=1.20.1 'wood, s' -> 's, wood'
+        //~ if <=1.20.1 'wood, s' -> 's, wood'
         Block sign = registerNamed(hangingName, signSettings(), s -> new HangingSignBlock(wood, s));
         blocks.put(hanging, sign);
-        //~ if minecraft: <=1.21 'lootTable(sign.getLootTableKey())' -> 'dropsLike(sign)'
-        //~ if minecraft: <=1.20.1 'wood, s' -> 's, wood'
+        //~ if <=1.21 'lootTable(sign.getLootTableKey())' -> 'dropsLike(sign)'
+        //~ if <=1.20.1 'wood, s' -> 's, wood'
         blocks.put(wall, registerNamed(wallHangingSignName(hangingName), signSettings().lootTable(sign.getLootTableKey()), s -> new WallHangingSignBlock(wood, s)));
     }
 

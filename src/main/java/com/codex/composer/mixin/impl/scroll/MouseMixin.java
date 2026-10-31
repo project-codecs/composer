@@ -30,7 +30,7 @@ public class MouseMixin {
             ClientScrollEvents.LOW_PRIORITY
     );
 
-    //? if minecraft: >=1.21.4
+    //? if >=1.21.4
     @Inject(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getInventory()Lnet/minecraft/entity/player/PlayerInventory;"), cancellable = true)
     public void composer$triggerActions(long window, double horizontal, double vertical, CallbackInfo ci) {
         ClientWorld world = client.world;

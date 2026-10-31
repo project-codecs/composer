@@ -1,5 +1,7 @@
 package com.codex.composer.api.v1.datagen.lang;
 
+import com.codex.composer.api.v1.datagen.ores.OreSet;
+import com.codex.composer.api.v1.datagen.ores.OreTranslations;
 import com.codex.composer.api.v1.registry.util.ComposedBlockFamily;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
@@ -23,10 +25,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-//? if minecraft: <=1.20.4
+//? if <=1.20.4
 //import com.codex.composer.api.v1.util.misc.TranslatableSoundEvent;
 
-//? if minecraft: >=1.20.6
+//? if >=1.20.6
 import net.minecraft.registry.entry.RegistryEntry;
 
 public abstract class SemiLanguageProvider {
@@ -72,14 +74,21 @@ public abstract class SemiLanguageProvider {
         });
     }
 
-    //? if minecraft: <=1.20.4 {
+    public OreTranslations ore(OreSet set) {
+        return new OreTranslations(set, (variant, name) -> {
+            if (variant.isBlock()) block(set.tBlock(variant), name);
+            else item(set.tItem(variant), name);
+        });
+    }
+
+    //? if <=1.20.4 {
     /*public void sound(TranslatableSoundEvent sound, String value) {
         add(sound, value);
     }
     *///?}
 
     public void sound(SoundEvent sound, String value) {
-        add(sound./*? if minecraft: >=1.21.3 { */id/*?} else {*//*getId*//*? }*/(), value);
+        add(sound./*? if >=1.21.3 { */id/*?} else {*//*getId*//*? }*/(), value);
     }
 
     public void add(Translatable translatable, String value) {
@@ -95,14 +104,14 @@ public abstract class SemiLanguageProvider {
     }
 
     public void bind(KeyBinding bind, String value) {
-        //? if minecraft: >=1.21.9 {
+        //? if >=1.21.9 {
         /*add(bind.getId(), value);
         *///? } else {
         add(bind.getTranslationKey(), value, false);
         //? }
     }
 
-    //? if minecraft: >=1.21.9 {
+    //? if >=1.21.9 {
     /*public void bind_category(KeyBinding.Category category, String value) {
         add(String.format("key.category.%s.%s", category.id().getNamespace(), category.id().getPath()), value, false);
     }
@@ -149,7 +158,7 @@ public abstract class SemiLanguageProvider {
 
     public void block(Block block, String value) {
         builder.add(block, value);
-        //? if minecraft: >=1.21.3
+        //? if >=1.21.3
         item(block, value);
     }
 
@@ -161,7 +170,7 @@ public abstract class SemiLanguageProvider {
         builder.add(entityType, value);
     }
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*public void enchantment(Enchantment enchantment, String value) {
         builder.add(enchantment, value);
     }
@@ -169,7 +178,7 @@ public abstract class SemiLanguageProvider {
     public void attribute(EntityAttribute entityAttribute, String value) {
         builder.add(entityAttribute, value);
     }
-    *///?} else if minecraft: <=1.20.6 {
+    *///?} else if <=1.20.6 {
     /*public void enchantment(Enchantment enchantment, String value) {
         builder.add(enchantment, value);
     }

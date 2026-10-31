@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-//? if minecraft: >=1.21.3 {
+//? if >=1.21.3 {
 import net.minecraft.recipe.CampfireCookingRecipe;
 import net.minecraft.recipe.ServerRecipeManager;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
@@ -21,7 +21,7 @@ import net.minecraft.server.world.ServerWorld;
 @Mixin(CampfireBlockEntity.class)
 public abstract class CampfireBlockEntityMixin {
     @Inject(method = "litServerTick", at = @At("HEAD"), cancellable = true)
-    //? if minecraft: <=1.21 {
+    //? if <=1.21 {
     /*private static void composer$explodePlushies(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci) {
     *///? } else  {
     private static void composer$explodePlushies(ServerWorld world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, ServerRecipeManager.MatchGetter<SingleStackRecipeInput, CampfireCookingRecipe> recipeMatchGetter, CallbackInfo ci) {

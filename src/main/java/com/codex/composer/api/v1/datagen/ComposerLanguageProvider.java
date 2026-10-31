@@ -1,6 +1,8 @@
 package com.codex.composer.api.v1.datagen;
 
 import com.codex.composer.api.v1.datagen.lang.FamilyTranslationBuilder;
+import com.codex.composer.api.v1.datagen.ores.OreSet;
+import com.codex.composer.api.v1.datagen.ores.OreTranslations;
 import com.codex.composer.api.v1.registry.util.ComposedBlockFamily;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
@@ -20,7 +22,7 @@ import com.codex.composer.api.v1.util.misc.Translatable;
 import java.util.HashSet;
 import java.util.Set;
 
-//? if minecraft: <=1.20.4 {
+//? if <=1.20.4 {
 /*import com.codex.composer.api.v1.util.misc.TranslatableSoundEvent;
 *///? } else {
 import net.minecraft.registry.RegistryWrapper;
@@ -42,7 +44,7 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
     protected String suffix = "";
     private boolean suffixInlined = false;
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*public ComposerLanguageProvider(FabricDataOutput dataOutput) {
         super(dataOutput);
     }
@@ -52,14 +54,14 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
     }
     //? }
 
-    //? if minecraft: <=1.20.4
+    //? if <=1.20.4
     //@Override
     public void generateTranslations(TranslationBuilder translationBuilder) {
         this.builder = translationBuilder;
         generate();
     }
 
-    //? if minecraft: >=1.20.6 {
+    //? if >=1.20.6 {
     @Override
     public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
         generateTranslations(translationBuilder);
@@ -98,14 +100,21 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
         });
     }
 
-    //? if minecraft: <=1.20.4 {
+    public OreTranslations ore(OreSet set) {
+        return new OreTranslations(set, (variant, name) -> {
+            if (variant.isBlock()) block(set.tBlock(variant), name);
+            else item(set.tItem(variant), name);
+        });
+    }
+
+    //? if <=1.20.4 {
     /*public void sound(TranslatableSoundEvent sound, String value) {
         add(sound, value);
     }
     *///?}
 
     public void sound(SoundEvent sound, String value) {
-        add(sound./*? if minecraft: >=1.21.3 { */id/*?} else {*//*getId*//*? }*/(), value);
+        add(sound./*? if >=1.21.3 { */id/*?} else {*//*getId*//*? }*/(), value);
     }
 
     public void add(Translatable translatable, String value) {
@@ -121,14 +130,14 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
     }
 
     public void bind(KeyBinding bind, String value) {
-        //? if minecraft: >=1.21.9 {
+        //? if >=1.21.9 {
         /*add(bind.getId(), value);
          *///? } else {
         add(bind.getTranslationKey(), value, false);
         //? }
     }
 
-    //? if minecraft: >=1.21.9 {
+    //? if >=1.21.9 {
     /*public void bind_category(KeyBinding.Category category, String value) {
         add(String.format("key.category.%s.%s", category.id().getNamespace(), category.id().getPath()), value, false);
     }
@@ -175,7 +184,7 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
 
     public void block(Block block, String value) {
         builder.add(block, value);
-        //? if minecraft: >=1.21.3
+        //? if >=1.21.3
         item(block, value);
     }
 
@@ -187,7 +196,7 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
         builder.add(entityType, value);
     }
 
-    //? if minecraft: <=1.20.4 {
+    //? if <=1.20.4 {
     /*public void enchantment(Enchantment enchantment, String value) {
         builder.add(enchantment, value);
     }
@@ -195,7 +204,7 @@ public abstract class ComposerLanguageProvider extends FabricLanguageProvider {
     public void attribute(EntityAttribute entityAttribute, String value) {
         builder.add(entityAttribute, value);
     }
-    *///?} else if minecraft: <=1.20.6 {
+    *///?} else if <=1.20.6 {
     /*public void enchantment(Enchantment enchantment, String value) {
         builder.add(enchantment, value);
     }

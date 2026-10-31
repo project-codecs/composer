@@ -15,7 +15,7 @@ public final class FamilyTranslationBuilder {
     private final Sink sink;
     private final Map<Variant, String> names = new EnumMap<>(Variant.class);
     private @Nullable String baseName;
-    private @Nullable String prefix;
+    private String prefix = null, suffix = null;
 
     public FamilyTranslationBuilder(ComposedBlockFamily family, Sink sink) {
         this.family = family;
@@ -28,12 +28,12 @@ public final class FamilyTranslationBuilder {
     }
 
     public FamilyTranslationBuilder with(Variant variant, String name) {
-        names.put(variant, prefix == null ? name : prefix + " " + name);
+        String val = name;
+        if (prefix != null) val = prefix + " " + name;
+        if (suffix != null) val += " " + suffix;
+        names.put(variant, val);
         return this;
     }
-
-    public FamilyTranslationBuilder prefix(String prefix) { this.prefix = prefix; return this; }
-    public FamilyTranslationBuilder prefix() { return prefix(null); }
 
     public FamilyTranslationBuilder button(String trans) { return with(Variant.BUTTON, trans); }
     public FamilyTranslationBuilder chiseled(String trans) { return with(Variant.CHISELED, trans); }
@@ -52,6 +52,11 @@ public final class FamilyTranslationBuilder {
     public FamilyTranslationBuilder mosaic(String trans) { return with(Variant.MOSAIC, trans); }
     public FamilyTranslationBuilder customFence(String trans) { return with(Variant.CUSTOM_FENCE, trans); }
     public FamilyTranslationBuilder customFenceGate(String trans) { return with(Variant.CUSTOM_FENCE_GATE, trans); }
+
+    public FamilyTranslationBuilder prefix(String prefix) { this.prefix = prefix; return this; }
+    public FamilyTranslationBuilder prefix() { return prefix(null); }
+    public FamilyTranslationBuilder suffix(String suffix) { this.suffix = suffix; return this; }
+    public FamilyTranslationBuilder suffix() { return suffix(null); }
 
     //? if >=26.1.2 {
     /*public FamilyTranslationBuilder bricks(String trans) { return with(Variant.BRICKS, trans); }

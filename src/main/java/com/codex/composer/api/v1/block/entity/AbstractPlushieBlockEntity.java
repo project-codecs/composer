@@ -13,12 +13,12 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-//? if minecraft: >=1.21.6 {
+//? if >=1.21.6 {
 /*import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 *///? }
 
-//? if minecraft: >=1.20.6
+//? if >=1.20.6
 import net.minecraft.registry.RegistryWrapper;
 
 public abstract class AbstractPlushieBlockEntity extends BlockEntity {
@@ -47,15 +47,15 @@ public abstract class AbstractPlushieBlockEntity extends BlockEntity {
         this.markDirty();
     }
 
-    //? if minecraft: <=1.21.5 {
+    //? if <=1.21.5 {
     @Override
-    protected void writeNbt(@NotNull NbtCompound nbt /*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
+    protected void writeNbt(@NotNull NbtCompound nbt /*? if >=1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
         nbt.putDouble("squash", this.squash);
     }
 
     @Override
-    public void readNbt(@NotNull NbtCompound nbt /*? if minecraft: >= 1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
-        this.squash = nbt.getDouble("squash")/*? if minecraft: >=1.21.5 {*//*.orElse(0d)*//*? }*/;
+    public void readNbt(@NotNull NbtCompound nbt /*? if >=1.20.6 { */, RegistryWrapper.WrapperLookup registries /*?}*/) {
+        this.squash = nbt.getDouble("squash")/*? if >=1.21.5 {*//*.orElse(0d)*//*? }*/;
     }
     //? } else {
     /*@Override
@@ -75,7 +75,7 @@ public abstract class AbstractPlushieBlockEntity extends BlockEntity {
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt( /*? if minecraft: >= 1.20.6 { */RegistryWrapper.WrapperLookup registries /*?}*/) {
-        return this.createNbt( /*? if minecraft: >= 1.20.6 { */registries /*?}*/);
+    public NbtCompound toInitialChunkDataNbt( /*? if >=1.20.6 { */RegistryWrapper.WrapperLookup registries /*?}*/) {
+        return this.createNbt( /*? if >=1.20.6 { */registries /*?}*/);
     }
 }

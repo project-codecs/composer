@@ -9,7 +9,7 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-//? if minecraft: <=1.21.6
+//? if <=1.21.6
 import com.codex.composer.internal.client.config.DupedBindsConfig;
 
 public class ModShakespeareanProvider extends SemiLanguageProvider {
@@ -56,7 +56,7 @@ public class ModShakespeareanProvider extends SemiLanguageProvider {
         add("soulbound", "This item is bound to thy soul");
         add("soulbound.droppable.not", "This item may not be dropped whilst bound to thy soul");
 
-        //? if minecraft: <=1.21.6 {
+        //? if <=1.21.6 {
         prefix("option.composer");
         add("composer.config.title", "Duplicate Keybinds", false);
         add("rainbow_speed", "Speed of the Rainbow Effect");

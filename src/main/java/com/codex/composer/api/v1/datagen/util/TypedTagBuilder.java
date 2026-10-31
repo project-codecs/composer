@@ -1,6 +1,6 @@
 package com.codex.composer.api.v1.datagen.util;
 
-//? if minecraft: >=1.20.4 {
+//? if >=1.20.4 {
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.tag.TagBuilder;
 import net.minecraft.registry.tag.TagEntry;

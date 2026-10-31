@@ -1,6 +1,6 @@
 package com.codex.composer.api.v1.registry.lazy;
 
-//? if minecraft: >=1.21.4 <=1.21.5 {
+//? if >=1.21.4 <=1.21.5 {
 import com.codex.composer.api.v1.util.data.IdentifierMap;
 import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
@@ -32,7 +32,7 @@ public class DeferredHudLayerRegistry extends EmptyDeferredRegistry {
         layers.registerTo(wrapper::addLayer, IdentifiedLayer::of);
     }
 }
-//? } else if minecraft: >=1.21.6 {
+//? } else if >=1.21.6 {
 /*import com.codex.composer.api.v1.util.data.IdentifierMap;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;

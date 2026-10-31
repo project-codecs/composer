@@ -3,7 +3,7 @@ package com.codex.composer.mixin.impl.duped_binds;
 import net.minecraft.client.option.GameOptions;
 import org.spongepowered.asm.mixin.Mixin;
 
-//? if minecraft: <=1.21.6 {
+//? if <=1.21.6 {
 import net.minecraft.client.option.KeyBinding;
 import com.codex.composer.internal.Composer;
 import com.codex.composer.internal.client.duped_binds.BindTracker;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 @Mixin(value = GameOptions.class, priority = -1)
 public class GameOptionsMixin {
-    //? if minecraft: <=1.21.6 {
+    //? if <=1.21.6 {
     @Shadow
     @Final
     public KeyBinding[] allKeys;

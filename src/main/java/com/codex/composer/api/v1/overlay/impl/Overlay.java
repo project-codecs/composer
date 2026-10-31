@@ -8,7 +8,7 @@ import net.minecraft.util.StringIdentifiable;
 
 import java.util.Locale;
 
-//? if minecraft: >=1.21
+//? if >=1.21
 import net.minecraft.client.render.RenderTickCounter;
 
 public abstract class Overlay {
@@ -18,7 +18,7 @@ public abstract class Overlay {
         this.anchor = anchor;
     }
 
-    public abstract void render(DrawContext context, /*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f);
+    public abstract void render(DrawContext context, /*? if <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f);
     public abstract void tick();
     public abstract boolean shouldRemove();
     public abstract Identifier getId();

@@ -19,15 +19,15 @@ import net.minecraft.text.Text;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-//? if minecraft: >=1.21
+//? if >=1.21
 import net.minecraft.client.render.RenderTickCounter;
 
-//? if minecraft: >=1.21.3
+//? if >=1.21.3
 import net.minecraft.client.render.RenderLayer;
 
-//? if minecraft: >=1.21.6 {
+//? if >=1.21.6 {
 /*import com.mojang.blaze3d.pipeline.RenderPipeline;
-import net.minecraft.client./^? if minecraft: >=26.2 { ^//^render^//^? } else { ^/gl/^? }^/.RenderPipelines;
+import net.minecraft.client./^? if >=26.2 { ^//^render^//^? } else { ^/gl/^? }^/.RenderPipelines;
 *///? }
 
 public class Overlays {
@@ -104,7 +104,7 @@ public class Overlays {
         protected void init() {
             if (!shouldLoadTextures) return;
 
-            //? if minecraft: <=1.21.4 {
+            //? if <=1.21.4 {
             MinecraftClient client = MinecraftClient.getInstance();
             if (client.player == null) return;
 
@@ -132,8 +132,8 @@ public class Overlays {
         }
 
         @Override
-        protected void render(DrawContext context,/*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f, int x, int y) {
-            //? if minecraft: <=1.21.4 {
+        protected void render(DrawContext context,/*? if <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f, int x, int y) {
+            //? if <=1.21.4 {
             if (size == null) {
                 remove();
                 return;
@@ -166,7 +166,7 @@ public class Overlays {
 
             Opacitator.drawWithOpacity(
                     getOpacity(f),
-                    //? if minecraft: <=1.20.6 {
+                    //? if <=1.20.6 {
                     /*(ignored, ignored1) -> context.drawTexture(
                             texture,
                             x, y,
@@ -174,7 +174,7 @@ public class Overlays {
                             size.x(), size.y(),
                             size.x(), size.y()
                     )
-                    *///? } else if minecraft: <=1.21 {
+                    *///? } else if <=1.21 {
                     /*(alpha, ignored) -> context.drawTexturedQuad(
                             texture,
                             x, x + getSize().x(),
@@ -186,7 +186,7 @@ public class Overlays {
                     )
                     *///? } else {
                     (ignored, alpha) -> context.drawTexturedQuad(
-                            /*? if minecraft: <=1.21.5 {*/RenderLayer::getGuiTextured,/*? } else { *//*RenderPipelines.GUI_TEXTURED,*//*? } */
+                            /*? if <=1.21.5 {*/RenderLayer::getGuiTextured,/*? } else { *//*RenderPipelines.GUI_TEXTURED,*//*? } */
                             texture,
                             x, x + getSize().x(),
                             y, y + getSize().y(),
@@ -219,7 +219,7 @@ public class Overlays {
             }
 
             if (tex instanceof ResourceTexture res) {
-                //? if minecraft: <=1.21.3 {
+                //? if <=1.21.3 {
                 /*ResourceTexture.TextureData data = res.loadTextureData(MinecraftClient.getInstance().getResourceManager());
 
                 if (data == null || data.image == null) {
@@ -298,7 +298,7 @@ public class Overlays {
         }
 
         @Override
-        protected void render(DrawContext context, /*? if minecraft: <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f, int x, int y) {
+        protected void render(DrawContext context, /*? if <=1.20.6 {*//*float*//*? } else {*/RenderTickCounter/*? }*/ f, int x, int y) {
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
             float opacity = getOpacity(f);
             Opacitator.drawWithOpacity(opacity, false, (ignored, alpha) -> context.drawText(textRenderer, text, x, y, (alpha << 24) | color, shadow));

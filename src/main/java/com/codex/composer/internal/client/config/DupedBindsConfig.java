@@ -1,6 +1,6 @@
 package com.codex.composer.internal.client.config;
 
-//? if minecraft: <=1.21.6 {
+//? if <=1.21.6 {
 import com.codex.composer.api.v1.util.data.JsonUtils;
 import com.codex.composer.api.v1.util.misc.Translatable;
 import com.google.gson.*;

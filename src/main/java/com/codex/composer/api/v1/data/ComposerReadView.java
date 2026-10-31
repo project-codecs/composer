@@ -1,6 +1,6 @@
 package com.codex.composer.api.v1.data;
 
-//? if minecraft: >=1.21.6 {
+//? if >=1.21.6 {
 /*import com.mojang.serialization.Codec;
 import net.minecraft.storage.ReadView;
 import net.minecraft.util.Identifier;

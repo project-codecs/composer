@@ -21,20 +21,20 @@ import com.codex.composer.api.v1.util.misc.EventStacker;
 import com.codex.composer.internal.networking.ScrollActionPayload;
 import net.fabricmc.loader.api.FabricLoader;
 
-//? if minecraft: >=26.2 {
+//? if >=26.2 {
 /*import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 *///? } else {
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 //? }
 
-//? if minecraft: <=1.21.6 {
+//? if <=1.21.6 {
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import com.codex.composer.internal.client.config.DupedBindsConfig;
 //? }
 
-//? if minecraft: >=1.20.6 {
+//? if >=1.20.6 {
 import com.codex.composer.internal.networking.ClearOverlaysPayload;
 import com.codex.composer.internal.networking.ShowCreditsPayload;
 import com.codex.composer.internal.networking.ShowOverlayPayload;
@@ -48,7 +48,7 @@ public class Composer implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        //? if minecraft: <=1.21.6 {
+        //? if <=1.21.6 {
         DupedBindsConfig.initialize();
 
         for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
@@ -80,7 +80,7 @@ public class Composer implements ModInitializer {
         ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register(MultiblockController::onLoad);
         ServerBlockEntityEvents.BLOCK_ENTITY_UNLOAD.register(MultiblockController::onUnload);
 
-        //? if minecraft: >=1.20.6
+        //? if >=1.20.6
         ModDataComponentTypes.initialize();
 
         ModRegistries.initialize();
@@ -88,7 +88,7 @@ public class Composer implements ModInitializer {
 
         ScrollActionPayload.registerHandler();
 
-        //? if minecraft: >=1.20.6 {
+        //? if >=1.20.6 {
         ClearOverlaysPayload.registerPacket();
         ShowCreditsPayload.registerPacket();
         ShowOverlayPayload.registerPacket();
@@ -107,7 +107,7 @@ public class Composer implements ModInitializer {
                 AbstractPseudoRegistry::runAfterInit
         );
 
-        //? if minecraft: <26.2 {
+        //? if <26.2 {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new MultiblockLoader());
         //? } else {
         /*ResourceLoader.get(ResourceType.SERVER_DATA).registerReloadListener(identify("multiblocks"), new MultiblockLoader());
