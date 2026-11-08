@@ -26,34 +26,6 @@ jobs:
       - name: Build
         run: ./gradlew buildAndCollect collectArtifacts -Prelease=true -Pdev=false
 
-      - name: Get Build Artifacts
-        uses: actions/upload-artifact@v6
-        with:
-          name: Artifacts
-          path: artifacts/
-
-  qodana:
-    runs-on: ubuntu-latest
-    needs: build  # run Qodana after the build succeeds
-    permissions:
-      contents: write
-      pull-requests: write
-      checks: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
-
-      - name: Java Setup
-        uses: actions/setup-java@v4
-        with:
-          distribution: "corretto"
-          java-version: 25
-
-      - name: Gradle Setup
-        uses: gradle/actions/setup-gradle@v4
-
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2025.2
         with:
@@ -61,3 +33,9 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
+
+      - name: Get Build Artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: Artifacts
+          path: artifacts/
