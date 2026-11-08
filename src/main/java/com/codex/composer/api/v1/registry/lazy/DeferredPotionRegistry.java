@@ -7,7 +7,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
 
 //? minecraft: >=1.20.6
 import net.minecraft.registry.entry.RegistryEntry;
@@ -18,7 +17,7 @@ public class DeferredPotionRegistry extends EmptyDeferredRegistry {
     }
 
     public <T extends Potion> T register(String name, T potion) {
-        return Registry.register(Registries.POTION, Identifier.of(modId, name), potion);
+        return Registry.register(Registries.POTION, id(name), potion);
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -42,18 +41,14 @@ public class DeferredPotionRegistry extends EmptyDeferredRegistry {
         return register("strong_" + baseName, new Potion(baseName, effects));
     }
 
-    public void registerVariants(String baseName,
-                                 StatusEffectInstance normal,
-                                 StatusEffectInstance longVariant,
-                                 StatusEffectInstance strongVariant) {
-
+    public void registerVariants(String baseName, StatusEffectInstance normal, StatusEffectInstance longVariant, StatusEffectInstance strongVariant) {
         register(baseName, normal);
         register("long_" + baseName, new Potion(baseName, longVariant));
         register("strong_" + baseName, new Potion(baseName, strongVariant));
     }
 
     public RegistryKey<Potion> registerKey(String name) {
-        return RegistryKey.of(RegistryKeys.POTION, Identifier.of(modId, name));
+        return RegistryKey.of(RegistryKeys.POTION, id(name));
     }
 
     public Potion register(String name, RegistryKey<Potion> key, Potion potion) {

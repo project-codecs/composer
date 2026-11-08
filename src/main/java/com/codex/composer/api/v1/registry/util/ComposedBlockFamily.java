@@ -1,6 +1,7 @@
 package com.codex.composer.api.v1.registry.util;
 
 import com.codex.composer.api.v1.registry.lazy.DeferredBlockRegistry;
+import com.codex.composer.api.v2.registry.lazy.struct.ComposedItemFamily;
 import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.data.family.BlockFamily;
@@ -233,6 +234,7 @@ public final class ComposedBlockFamily {
     private @Nullable TagKey<Block> minableTag;
     private final List<TagKey<Block>> extraTags = new ArrayList<>();
     private @Nullable Function<Variant, BlockItem> itemMap;
+    private @Nullable ComposedItemFamily itemFamily;
 
     public ComposedBlockFamily(String modId, String baseName, @Nullable Block existingBase, BaseType type) {
         this.modId = modId;
@@ -308,17 +310,41 @@ public final class ComposedBlockFamily {
         return Collections.unmodifiableSet(blocks.keySet());
     }
 
+
+    /** @deprecated use {@link #bindItemFamily(ComposedItemFamily)} / {@link #getItems()} */
+    @Deprecated(since = "5.3", forRemoval = true)
     @ApiStatus.Internal
     public Function<BlockFamily.Variant, BlockItem> bindItemMap(Function<BlockFamily.Variant, BlockItem> map) {
         locked();
         return this.itemMap = map;
     }
 
+    /** @deprecated use {@link #itemFamily()} */
+    @Deprecated(since = "5.3", forRemoval = true)
     @ApiStatus.Internal
     public @Nullable Function<BlockFamily.Variant, BlockItem> itemMap() {
         return itemMap;
     }
 
+    public boolean isRegistered() {
+        return result != null;
+    }
+
+    @ApiStatus.Internal
+    public ComposedItemFamily bindItemFamily(ComposedItemFamily itemFamily) {
+        locked();
+        if (this.itemFamily != null) throw new IllegalStateException("Items for block family '" + baseName + "' were already registered.");
+        return this.itemFamily = itemFamily;
+    }
+
+    public @Nullable ComposedItemFamily itemFamily() {
+        return itemFamily;
+    }
+
+    public ComposedItemFamily getItems() {
+        if (itemFamily == null) throw new IllegalStateException("Items for block family '" + baseName + "' haven't been registered yet.");
+        return itemFamily;
+    }
     public boolean ownsBase() {
         return existingBase == null;
     }

@@ -14,6 +14,7 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.StatType;
 import net.minecraft.util.Identifier;
@@ -74,11 +75,29 @@ public abstract class SemiLanguageProvider {
         });
     }
 
+    public FamilyTranslationBuilder baseEnglishFamily(ComposedBlockFamily family, String baseNamePlural, String baseNameSingular) {
+        return FamilyTranslationBuilder.baseEnglish(family, (block, name, hasItem) -> {
+            if (hasItem) block(block, name);
+            else builder.add(block, name);
+        }, baseNamePlural, baseNameSingular);
+    }
+
+    public FamilyTranslationBuilder baseEnglishFamily(ComposedBlockFamily family, String baseName) {
+        return baseEnglishFamily(family, baseName, baseName);
+    }
+
     public OreTranslations ore(OreSet set) {
         return new OreTranslations(set, (variant, name) -> {
             if (variant.isBlock()) block(set.tBlock(variant), name);
             else item(set.tItem(variant), name);
         });
+    }
+
+    public OreTranslations baseEnglishOre(OreSet set, String baseName) {
+        return OreTranslations.baseEnglish(set, ((variant, name) -> {
+            if (variant.isBlock()) block(set.tBlock(variant), name);
+            else item(set.tItem(variant), name);
+        }), baseName);
     }
 
     //? if <=1.20.4 {
@@ -203,6 +222,12 @@ public abstract class SemiLanguageProvider {
     public void effect(StatusEffect statusEffect, String value) {
         builder.add(statusEffect, value);
     }
+
+    //? if >=1.20.6 {
+    public void tag(TagKey<?> key, String value) {
+        builder.add(key, value);
+    }
+    //? }
 
     public void add(Identifier identifier, String value) {
         builder.add(identifier, value);

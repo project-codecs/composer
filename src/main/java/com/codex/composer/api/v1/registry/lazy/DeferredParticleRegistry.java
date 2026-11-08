@@ -4,7 +4,6 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 
 //? if >=1.20.6 {
 import net.minecraft.network.RegistryByteBuf;
@@ -25,11 +24,8 @@ public class DeferredParticleRegistry extends EmptyDeferredRegistry {
     }
 
     //? if >=1.20.6 {
-    public <T extends ParticleEffect> ParticleType<T> register(
-            String name, MapCodec<T> codec, PacketCodec<? super RegistryByteBuf, T> packetCodec) {
-
-        Identifier id = Identifier.of(modId, name);
-        return Registry.register(Registries.PARTICLE_TYPE, id,
+    public <T extends ParticleEffect> ParticleType<T> register(String name, MapCodec<T> codec, PacketCodec<? super RegistryByteBuf, T> packetCodec) {
+        return Registry.register(Registries.PARTICLE_TYPE, id(name),
                 new ParticleType<T>(true) {
                     @Override
                     public MapCodec<T> getCodec() {
@@ -44,8 +40,7 @@ public class DeferredParticleRegistry extends EmptyDeferredRegistry {
     }
 
     public <P extends ParticleEffect, T extends ParticleType<P>> T register(String name, T type) {
-        Identifier id = Identifier.of(modId, name);
-        return Registry.register(Registries.PARTICLE_TYPE, id, type);
+        return Registry.register(Registries.PARTICLE_TYPE, id(name), type);
     }
     //?}
 
@@ -55,7 +50,7 @@ public class DeferredParticleRegistry extends EmptyDeferredRegistry {
             Codec<T> codec,
             @SuppressWarnings("deprecation") ParticleEffect.Factory<T> deserializer
     ) {
-        Identifier id = Identifier.of(modId, name);
+        Identifier id = id(name);
         return Registry.register(
                 Registries.PARTICLE_TYPE,
                 id,
@@ -69,8 +64,7 @@ public class DeferredParticleRegistry extends EmptyDeferredRegistry {
     }
     *///?}
 
-    public <T extends ParticleEffect> void registerClient(
-            ParticleType<T> type, /*? if legacy {*/ParticleFactoryRegistry.PendingParticleFactory/*? } else {*//*ParticleProviderRegistry.PendingParticleProvider*//*? }*/<T> factory) {
+    public <T extends ParticleEffect> void registerClient(ParticleType<T> type, /*? if legacy {*/ParticleFactoryRegistry.PendingParticleFactory/*? } else {*//*ParticleProviderRegistry.PendingParticleProvider*//*? }*/<T> factory) {
         /*? if legacy {*/ParticleFactoryRegistry/*? } else {*//*ParticleProviderRegistry*//*? }*/.getInstance().register(type, factory);
     }
 }

@@ -1,7 +1,9 @@
 package com.codex.composer.internal;
 
+import com.codex.composer.api.v1.events.ComposerLoadedEvent;
 import com.codex.composer.api.v1.multiblock.ingame.MultiblockController;
 import com.codex.composer.api.v1.registry.ComposerPostInitialization;
+import com.codex.composer.api.v1.registry.ComposerRegistries;
 import com.codex.composer.api.v1.util.misc.CachedLogger;
 import com.codex.composer.internal.command.*;
 import com.codex.composer.internal.data.loader.MultiblockLoader;
@@ -116,6 +118,8 @@ public class Composer implements ModInitializer {
         FabricLoader.getInstance()
                 .getEntrypointContainers("composer-post-init", ComposerPostInitialization.class)
                 .forEach(e -> e.getEntrypoint().initialize());
+
+        ComposerLoadedEvent.COMMON.invoker().run(FabricLoader.getInstance().getModContainer(Composer.MOD_ID).orElseThrow(), ComposerRegistries.OVERLAY_SERIALIZERS);
     }
 
     public static boolean disableDupedBinds() {

@@ -20,6 +20,14 @@ public class TypedTagBuilder<T> {
         this.converter = converter;
     }
 
+    public static <T> Provider<T> provider(Function<TagKey<T>, TagBuilder> provider, Function<T, Identifier> converter) {
+        return new Provider<>(provider, converter);
+    }
+
+    public static <T> Provider<T> provider(Function<TagKey<T>, TagBuilder> provider, Registry<T> registry) {
+        return new Provider<>(provider, registry::getId);
+    }
+
     public static <T> TypedTagBuilder<T> of(TagBuilder delegate, Function<T, Identifier> converter) {
         return new TypedTagBuilder<>(delegate, converter);
     }
@@ -87,6 +95,20 @@ public class TypedTagBuilder<T> {
 
     public TypedTagBuilder<T> addOptionalTag(Identifier id) {
         return this.add(TagEntry.createOptionalTag(id));
+    }
+
+    public static class Provider<T> {
+        private final Function<TagKey<T>, TagBuilder> provider;
+        private final Function<T, Identifier> registry;
+
+        public Provider(Function<TagKey<T>, TagBuilder> provider, Function<T, Identifier> registry) {
+            this.provider = provider;
+            this.registry = registry;
+        }
+
+        public TypedTagBuilder<T> of(TagKey<T> key) {
+            return TypedTagBuilder.of(provider.apply(key), registry);
+        }
     }
 }
 //? }

@@ -5,7 +5,6 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 
 import java.util.function.UnaryOperator;
 
@@ -20,12 +19,12 @@ public class DeferredBlockRegistry extends EmptyDeferredRegistry {
     }
 
     public <T extends Block> T register(String name, T block) {
-        return Registry.register(Registries.BLOCK, Identifier.of(modId, name), block);
+        return Registry.register(Registries.BLOCK, id(name), block);
     }
 
     public <T extends Block> T register(String name, BlockProvider<T> newBlock, AbstractBlock.Settings settings) {
         //? minecraft: >=1.21.3 {
-        return register(name, newBlock.provide(settings.registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(modId, name)))));
+        return register(name, newBlock.provide(settings.registryKey(RegistryKey.of(RegistryKeys.BLOCK, id(name)))));
         //? } else {
         /*return register(name, newBlock.provide(settings));
         *///? }

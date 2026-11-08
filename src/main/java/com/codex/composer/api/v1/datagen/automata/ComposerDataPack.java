@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("UnusedReturnValue")
-public final class ComposerDataPack {
+public class ComposerDataPack {
     private final MergedProvider group;
 
     private ComposerDataPack(FabricDataGenerator.Pack pack) {

@@ -1,6 +1,8 @@
 package com.codex.composer.api.v1.registry.lazy;
 
+import com.codex.composer.api.v0.registry.lazy.AbstractItemRegisterable;
 import com.codex.composer.api.v1.registry.util.ComposedBlockFamily;
+import com.codex.composer.api.v2.registry.lazy.struct.ComposedItemFamily;
 import net.minecraft.block.Block;
 import net.minecraft.data.family.BlockFamily;
 import net.minecraft.item.BlockItem;
@@ -19,6 +21,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 //? legacy {
@@ -29,7 +32,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 //? if >=1.20.6
 import net.minecraft.registry.RegistryKeys;
 
-public class DeferredItemRegistry extends EmptyDeferredRegistry {
+public class DeferredItemRegistry extends EmptyDeferredRegistry implements AbstractItemRegisterable {
     private final RegistryKey<ItemGroup> itemGroupKey;
     private final List<Item> registeredItems = new ArrayList<>();
 
@@ -40,6 +43,12 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
 
     public Item register(String name) {
         return register(name, Item::new, new Item.Settings(), true);
+    }
+
+    @Override
+    @ApiStatus.Internal
+    public BlockItem registerBlock(Block block, String name) {
+        return register(block, name);
     }
 
     public Item register(String name, UnaryOperator<Item.Settings> settingsBuilder) {
@@ -95,16 +104,20 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
         return register(name, s -> new BlockItem(block, s), settings, addToGroup);
     }
 
-    public Function<BlockFamily.Variant, BlockItem> register(ComposedBlockFamily family, boolean addToGroup) {
+    public ComposedItemFamily registerFamily(ComposedBlockFamily family) {
+        return registerFamily(family, true);
+    }
+
+    public ComposedItemFamily registerFamily(ComposedBlockFamily family, boolean addToGroup) {
         family.locked();
         EnumMap<BlockFamily.Variant, BlockItem> map = new EnumMap<>(BlockFamily.Variant.class);
-        BlockItem base;
+        BlockItem base = null;
 
         if (family.ownsBase()) {
             Identifier id = Registries.BLOCK.getId(family.getBase());
             if (!Objects.equals(id.getNamespace(), modId)) throw new IllegalStateException("Mismatched mod id!");
             base = register(family.getBase(), id.getPath(), addToGroup);
-        } else base = null;
+        }
 
         family.getVariants().stream().filter(Predicate.not(ComposedBlockFamily.DO_NOT_REGISTER_ITEM::contains)).forEach(variant -> {
             Identifier id = Registries.BLOCK.getId(family.get(variant));
@@ -112,9 +125,17 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
             map.put(variant, register(family.get(variant), id.getPath(), addToGroup));
         });
 
-        return family.bindItemMap(family.ownsBase() ? variant -> variant == null ? base : map.get(variant) : map::get);
+        return family.bindItemFamily(ComposedItemFamily.of(family).bind(base, map));
     }
 
+    /** @deprecated use {@link #registerFamily(ComposedBlockFamily, boolean)}, which returns a {@link ComposedItemFamily}. */
+    @Deprecated(since = "5.3", forRemoval = true)
+    public Function<BlockFamily.Variant, BlockItem> register(ComposedBlockFamily family, boolean addToGroup) {
+        return family.bindItemMap(registerFamily(family, addToGroup).asFunction());
+    }
+
+    /** @deprecated use {@link #registerFamily(ComposedBlockFamily)}. */
+    @Deprecated(since = "5.3", forRemoval = true)
     public Function<BlockFamily.Variant, BlockItem> register(ComposedBlockFamily family) {
         return register(family, true);
     }
@@ -122,7 +143,7 @@ public class DeferredItemRegistry extends EmptyDeferredRegistry {
     //? if >=1.21.3
     @SuppressWarnings("unchecked")
     private <I extends Item, S extends Item.Settings> I register(String name, @NotNull Function<? super S, I> provider, @NotNull S settings, boolean addToGroup) {
-        Identifier id = Identifier.of(modId, name);
+        Identifier id = id(name);
 
         S finalSettings = settings;
         //? if >=1.21.3

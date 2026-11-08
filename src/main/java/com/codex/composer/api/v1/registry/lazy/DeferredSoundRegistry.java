@@ -4,7 +4,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
 
 //? if <=1.21
 //import com.codex.composer.api.v1.util.misc.TranslatableSoundEvent;
@@ -15,12 +14,12 @@ public class DeferredSoundRegistry extends EmptyDeferredRegistry {
     }
 
     public SoundEvent register(String name) {
-        SoundEvent soundEvent = SoundEvent.of(Identifier.of(modId, name));
+        SoundEvent soundEvent = SoundEvent.of(id(name));
         return Registry.register(Registries.SOUND_EVENT, /*? if <=1.21 { */ /*soundEvent.getId() *//*? } else {*/soundEvent.id()/*?}*/, soundEvent);
     }
 
     public RegistryEntry.Reference<SoundEvent> registerReference(String name) {
-        SoundEvent soundEvent = SoundEvent.of(Identifier.of(modId, name));
+        SoundEvent soundEvent = SoundEvent.of(id(name));
         return Registry.registerReference(Registries.SOUND_EVENT, /*? if <=1.21 { */ /*soundEvent.getId() *//*? } else { */soundEvent.id()/*?}*/, soundEvent);
     }
 
@@ -30,7 +29,7 @@ public class DeferredSoundRegistry extends EmptyDeferredRegistry {
     }
 
     public TranslatableSoundEvent register(String name, String translationPrefix, String translationKey) {
-        TranslatableSoundEvent soundEvent = TranslatableSoundEvent.of(Identifier.of(modId, name));
+        TranslatableSoundEvent soundEvent = TranslatableSoundEvent.of(id(name));
         return Registry.register(Registries.SOUND_EVENT, soundEvent.getId(), soundEvent).translate(translationPrefix + "." + translationKey);
     }
 
@@ -39,7 +38,7 @@ public class DeferredSoundRegistry extends EmptyDeferredRegistry {
     }
 
     public RegistryEntry.Reference<SoundEvent> registerReference(String name, String translationPrefix, String translationKey) {
-        TranslatableSoundEvent soundEvent = TranslatableSoundEvent.of(Identifier.of(modId, name));
+        TranslatableSoundEvent soundEvent = TranslatableSoundEvent.of(id(name));
         return Registry.registerReference(Registries.SOUND_EVENT, soundEvent.getId(), soundEvent.translate(translationPrefix + "." + translationKey));
     }
     *///?}

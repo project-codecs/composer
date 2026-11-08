@@ -22,20 +22,20 @@ public class DeferredEntityRegistry extends EmptyDeferredRegistry {
     }
 
     public <T extends Entity> EntityType<T> register(String name, EntityType<T> type) {
-        Identifier id = Identifier.of(modId, name);
+        Identifier id = id(name);
         return Registry.register(Registries.ENTITY_TYPE, id, type);
     }
 
     //? if <26.2 {
     @SuppressWarnings("deprecation")
     public <T extends Entity> EntityType<T> register(String name, FabricEntityTypeBuilder<T> builder) {
-        return register(name, builder.build(/*? if >=1.21.3 { */RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(modId, name))/*?}*/));
+        return register(name, builder.build(/*? if >=1.21.3 { */RegistryKey.of(RegistryKeys.ENTITY_TYPE, id(name))/*?}*/));
     }
     //? }
 
     //? if >=1.21.3 {
     public <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
-        return register(name, builder.build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(modId, name))));
+        return register(name, builder.build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, id(name))));
     }
 
     public <T extends Entity> EntityType<T> register(String name, SpawnGroup group, UnaryOperator<EntityType.Builder<T>> builder) {

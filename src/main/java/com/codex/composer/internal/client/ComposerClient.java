@@ -1,5 +1,6 @@
 package com.codex.composer.internal.client;
 
+import com.codex.composer.api.v1.events.ComposerLoadedEvent;
 import com.codex.composer.internal.networking.*;
 import com.codex.composer.internal.overlay.OverlayHandler;
 import com.codex.composer.internal.registry.ModTooltips;
@@ -7,6 +8,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import com.codex.composer.internal.Composer;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import com.codex.composer.internal.client.render.block_entity.PlushBlockEntityRenderer;
 import com.codex.composer.internal.registry.ModBlockEntities;
@@ -54,5 +56,6 @@ public class ComposerClient implements ClientModInitializer {
         ShowCreditsPayload.registerHandler();
 
         ModTooltips.initialize();
+        ComposerLoadedEvent.CLIENT.invoker().run(FabricLoader.getInstance().getModContainer(Composer.MOD_ID).orElseThrow());
     }
 }

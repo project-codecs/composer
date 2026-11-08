@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumMap;
 import java.util.Map;
 
+@SuppressWarnings("UnusedReturnValue")
 public final class FamilyTranslationBuilder {
     @FunctionalInterface public interface Sink {  void accept(Block block, String name, boolean hasItem); }
 
@@ -20,6 +21,45 @@ public final class FamilyTranslationBuilder {
     public FamilyTranslationBuilder(ComposedBlockFamily family, Sink sink) {
         this.family = family;
         this.sink = sink;
+    }
+
+    public static FamilyTranslationBuilder baseEnglish(ComposedBlockFamily family, Sink sink, String baseNamePl, String baseNameS) {
+        FamilyTranslationBuilder builder = new FamilyTranslationBuilder(family, sink);
+        if (family.ownsBase()) builder.base(baseNamePl);
+        for (Variant variant : family.getVariants()) {
+            switch (variant) {
+                case BUTTON -> builder.button(baseNameS + " Button");
+                case CHISELED -> builder.chiseled("Chiseled " + baseNamePl);
+                case CRACKED -> builder.cracked("Cracked " + baseNamePl);
+                case CUT -> builder.cut("Cut " + baseNamePl);
+                case DOOR -> builder.door(baseNameS + " Door");
+                case CUSTOM_FENCE -> builder.customFence(baseNameS + " Fence");
+                case FENCE -> builder.fence(baseNameS + " Fence");
+                case CUSTOM_FENCE_GATE -> builder.customFenceGate(baseNameS + " Fence Gate");
+                case FENCE_GATE -> builder.fenceGate(baseNameS + " Fence Gate");
+                case MOSAIC -> builder.mosaic(baseNameS + " Mosaic");
+                case SIGN -> builder.sign(baseNameS + " Sign");
+                case SLAB -> builder.slab(baseNameS + " Slab");
+                case STAIRS -> builder.stairs(baseNameS + " Stairs");
+                case PRESSURE_PLATE -> builder.pressurePlate(baseNameS + " Pressure Plate");
+                case POLISHED -> builder.polished("Polished " + baseNamePl);
+                case TRAPDOOR -> builder.trapdoor(baseNameS + " Trapdoor");
+                case WALL -> builder.wall(baseNameS + " Wall");
+                //? if >=26.1.2 {
+                /*case BRICKS -> builder.bricks(baseNameS + " Bricks");
+                case COBBLED -> builder.cobbled("Cobbled " + baseNamePl);
+                case TILES -> builder.tiles(baseNameS + " Tiles");
+                //? if >=26.2 {
+                /^case HANGING_SIGN -> builder.hangingSign(baseNameS + " Hanging Sign");
+                case CUSTOM_HANGING_SIGN -> builder.customHangingSign(baseNameS + " Hanging Sign");
+                case LOG -> builder.log(baseNameS + " Log");
+                case STRIPPED_LOG -> builder.strippedLog("Stripped " + baseNameS + " Log");
+                case PILLAR -> builder.pillar(baseNameS + " Pillar");
+                ^///? }
+                *///? }
+            }
+        }
+        return builder;
     }
 
     public FamilyTranslationBuilder base(String name) {

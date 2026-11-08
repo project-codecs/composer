@@ -1,7 +1,7 @@
 package com.codex.composer.api.v1.datagen.ores;
 
+import com.codex.composer.api.v0.registry.lazy.AbstractItemRegisterable;
 import com.codex.composer.api.v1.registry.lazy.DeferredBlockRegistry;
-import com.codex.composer.api.v1.registry.lazy.DeferredItemRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -57,13 +57,13 @@ public class OreSet {
         return Collections.unmodifiableList(ALL.getOrDefault(modId, List.of()));
     }
 
-    public static OreSet create(String modId, String id, DeferredItemRegistry items, DeferredBlockRegistry blocks) {
+    public static OreSet create(String modId, String id, AbstractItemRegisterable items, DeferredBlockRegistry blocks) {
         return new OreSet(modId, id, items, blocks);
     }
 
     private final String modId;
     private final String id;
-    private final DeferredItemRegistry itemRegistry;
+    private final AbstractItemRegisterable itemRegistry;
     private final DeferredBlockRegistry blockRegistry;
 
     private final Set<Variant> requested = EnumSet.noneOf(Variant.class);
@@ -79,7 +79,7 @@ public class OreSet {
     private int maxMiningXp = 0;
     private boolean registered = false;
 
-    private OreSet(String modId, String id, DeferredItemRegistry itemRegistry, DeferredBlockRegistry blockRegistry) {
+    private OreSet(String modId, String id, AbstractItemRegisterable itemRegistry, DeferredBlockRegistry blockRegistry) {
         this.modId = modId;
         this.id = id;
         this.itemRegistry = itemRegistry;
@@ -178,7 +178,7 @@ public class OreSet {
 
     private void addBlock(Variant variant, String name, DeferredBlockRegistry.BlockProvider<Block> provider, AbstractBlock.Settings settings) {
         Block block = blockRegistry.register(name, provider, settings);
-        itemRegistry.register(block, name);
+        itemRegistry.registerBlock(block, name);
         blockMap.put(variant, block);
     }
 
@@ -238,6 +238,18 @@ public class OreSet {
     public @NotNull Item tItem(Variant variant) {
         return Optional.ofNullable(item(variant)).orElseThrow();
     }
+
+    public @NotNull Item getRaw() { return tItem(Variant.RAW_MATERIAL); }
+    public @NotNull Item getIngot() { return tItem(Variant.INGOT); }
+    public @NotNull Item getNugget() { return tItem(Variant.NUGGET); }
+    public @NotNull Block getOre() { return tBlock(Variant.STONE_ORE); }
+    public @NotNull Item getOreItem() { return tItem(Variant.STONE_ORE); }
+    public @NotNull Block getDeepslateOre() { return tBlock(Variant.DEEPSLATE_ORE); }
+    public @NotNull Item getDeepslateOreItem() { return tItem(Variant.DEEPSLATE_ORE); }
+    public @NotNull Block getStorageBlock() { return tBlock(Variant.STORAGE_BLOCK); }
+    public @NotNull Item getStorageBlockItem() { return tItem(Variant.STORAGE_BLOCK); }
+    public @NotNull Block getRawStorageBlock() { return tBlock(Variant.RAW_STORAGE_BLOCK); }
+    public @NotNull Item getRawStorageBlockItem() { return tItem(Variant.RAW_STORAGE_BLOCK); }
 
     public List<ItemConvertible> smeltingInputs() {
         locked();

@@ -10,7 +10,6 @@ import net.minecraft.component.ComponentType;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 import com.mojang.serialization.Codec;
 
@@ -24,7 +23,7 @@ public class DeferredDataComponentTypeRegistry extends EmptyDeferredRegistry {
     public <T> /*? minecraft: >=1.21 {*/ComponentType/*? } else {*//*DataComponentType*//*? }*/<T> register(String name, UnaryOperator</*? minecraft: >=1.21 {*/ComponentType/*? } else {*//*DataComponentType*//*? }*/.Builder<T>> handler) {
         return Registry.register(
                 Registries.DATA_COMPONENT_TYPE,
-                Identifier.of(modId, name),
+                id(name),
                 handler.apply(/*? minecraft: >=1.21 {*/ComponentType/*? } else {*//*DataComponentType*//*? }*/.builder()).build()
         );
     }
@@ -32,7 +31,7 @@ public class DeferredDataComponentTypeRegistry extends EmptyDeferredRegistry {
     public <T> /*? minecraft: >=1.21 {*/ComponentType/*? } else {*//*DataComponentType*//*? }*/<T> register(String name, TypePrefab<T> type) {
         return Registry.register(
                 Registries.DATA_COMPONENT_TYPE,
-                Identifier.of(modId, name),
+                id(name),
                 type.make()
         );
     }

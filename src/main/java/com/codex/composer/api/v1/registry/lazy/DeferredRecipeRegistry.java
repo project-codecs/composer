@@ -18,11 +18,9 @@ public class DeferredRecipeRegistry extends EmptyDeferredRegistry {
     }
 
     public <T extends Recipe<?>> RecipeTypeEntry<T> register(String name, RecipeSerializer<T> serializer) {
-        Identifier id = Identifier.of(modId, name);
+        Identifier id = id(name);
 
-        RecipeType<T> type = Registry.register(
-                Registries.RECIPE_TYPE,
-                id,
+        RecipeType<T> type = Registry.register(Registries.RECIPE_TYPE, id,
                 new RecipeType<T>() {
                     @Override
                     public String toString() {
@@ -31,26 +29,17 @@ public class DeferredRecipeRegistry extends EmptyDeferredRegistry {
                 }
         );
 
-        RecipeSerializer<T> recipeSerializer = Registry.register(
-                Registries.RECIPE_SERIALIZER,
-                id,
-                serializer
-        );
-
+        RecipeSerializer<T> recipeSerializer = Registry.register(Registries.RECIPE_SERIALIZER, id, serializer);
         return new RecipeTypeEntry<>(type, recipeSerializer);
     }
 
     //? if >=1.21.3 {
     public RecipeBookCategory registerCategory(String name) {
-        return Registry.register(
-                Registries.RECIPE_BOOK_CATEGORY,
-                Identifier.of(modId, name),
-                new RecipeBookCategory()
-        );
+        return Registry.register(Registries.RECIPE_BOOK_CATEGORY, id(name), new RecipeBookCategory());
     }
 
     public RegistryKey<RecipePropertySet> registerPropertySet(String name, ServerRecipeManager.SoleIngredientGetter ingredientGetter) {
-        RegistryKey<RecipePropertySet> key = RegistryKey.of(RecipePropertySet.REGISTRY, Identifier.of(modId, name));
+        RegistryKey<RecipePropertySet> key = RegistryKey.of(RecipePropertySet.REGISTRY, id(name));
         ServerRecipeManagerEvents.PROPERTY_SET_REGISTRATION.register(map -> map.put(key, ingredientGetter));
         return key;
     }

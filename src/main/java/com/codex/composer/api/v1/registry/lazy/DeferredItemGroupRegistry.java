@@ -6,7 +6,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 import java.util.function.Supplier;
 
@@ -21,8 +20,7 @@ public class DeferredItemGroupRegistry extends EmptyDeferredRegistry {
     }
 
     public RegistryKey<ItemGroup> registerItemGroup(String name, Supplier<ItemStack> iconSupplier) {
-        Identifier id = Identifier.of(modId, name);
-        RegistryKey<ItemGroup> key = RegistryKey.of(Registries.ITEM_GROUP.getKey(), id);
+        RegistryKey<ItemGroup> key = RegistryKey.of(Registries.ITEM_GROUP.getKey(), id(name));
 
         ItemGroup group = /*? if legacy {*/FabricItemGroup/*? } else {*//*FabricCreativeModeTab*//*? }*/.builder()
                 .icon(iconSupplier)

@@ -1,6 +1,7 @@
 package com.codex.composer.api.v1.datagen;
 
 import com.codex.composer.api.v1.registry.util.ComposedBlockFamily;
+import com.codex.composer.api.v2.registry.lazy.struct.ComposedItemFamily;
 import com.google.gson.JsonElement;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataOutput;
@@ -75,6 +76,21 @@ import com.google.common.collect.Maps;
         generator.registerCubeAllModelTexturePool(family.getBase()).family(family.getResult());
     }
 
+    public void blockItemModelsFor(ComposedItemFamily itemFamily) {
+        Stream.of(itemFamily.getBase(),
+                itemFamily.chiseled(),
+                itemFamily.cracked(),
+                itemFamily.cut(),
+                itemFamily.polished(),
+                itemFamily.mosaic(),
+                itemFamily.pressurePlate(),
+                itemFamily.customFenceGate(),
+                itemFamily.fenceGate()
+        ).filter(Objects::nonNull).forEach(this::blockItemModelFor);
+    }
+
+    /^* @deprecated use {@link #blockItemModelsFor(ComposedItemFamily)} ^/
+    @Deprecated(since = "5.3", forRemoval = true)
     public void blockItemModelsFor(Function<BlockFamily.Variant, BlockItem> itemSet) {
         Stream.of(itemSet.apply(null),
                 itemSet.apply(BlockFamily.Variant.CHISELED),
@@ -165,6 +181,21 @@ public abstract class ComposerModelProvider implements DataProvider {
         generator.registerCubeAllModelTexturePool(family.getBase()).family(family.getResult());
     }
 
+    public void blockItemModelsFor(ComposedItemFamily itemFamily) {
+        Stream.of(itemFamily.getBase(),
+                itemFamily.chiseled(),
+                itemFamily.cracked(),
+                itemFamily.cut(),
+                itemFamily.polished(),
+                itemFamily.mosaic(),
+                itemFamily.pressurePlate(),
+                itemFamily.customFenceGate(),
+                itemFamily.fenceGate()
+        ).filter(Objects::nonNull).forEach(this::blockItemModelFor);
+    }
+
+    /** @deprecated use {@link #blockItemModelsFor(ComposedItemFamily)} */
+    @Deprecated(since = "5.3", forRemoval = true)
     public void blockItemModelsFor(Function<BlockFamily.Variant, BlockItem> itemSet) {
         Stream.of(itemSet.apply(null),
                 itemSet.apply(BlockFamily.Variant.CHISELED),

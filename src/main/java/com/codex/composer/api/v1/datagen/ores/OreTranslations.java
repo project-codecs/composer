@@ -5,6 +5,7 @@ import com.codex.composer.api.v1.datagen.ores.OreSet.Variant;
 import java.util.EnumMap;
 import java.util.Map;
 
+@SuppressWarnings("UnusedReturnValue")
 public class OreTranslations {
     @FunctionalInterface
     public interface Sink {
@@ -19,6 +20,22 @@ public class OreTranslations {
     public OreTranslations(OreSet set, Sink sink) {
         this.set = set;
         this.sink = sink;
+    }
+
+    public static OreTranslations baseEnglish(OreSet set, Sink sink, String baseName) {
+        OreTranslations translations = new OreTranslations(set, sink);
+        for (Variant variant : set.variants()) {
+            switch (variant) {
+                case RAW_MATERIAL -> translations.rawMaterial("Raw " + baseName);
+                case INGOT -> translations.ingot(baseName + " Ingot");
+                case NUGGET -> translations.nugget(baseName + " Nugget");
+                case STONE_ORE -> translations.stoneOre(baseName + " Ore");
+                case DEEPSLATE_ORE -> translations.deepslateOre("Deepslate " + baseName + " Ore");
+                case STORAGE_BLOCK -> translations.storageBlock(baseName + " Block");
+                case RAW_STORAGE_BLOCK -> translations.rawStorageBlock("Raw " + baseName + " Block");
+            }
+        }
+        return translations;
     }
 
     public OreTranslations set(Variant variant, String name) {

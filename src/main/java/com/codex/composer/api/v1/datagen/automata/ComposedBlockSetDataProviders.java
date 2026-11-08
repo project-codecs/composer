@@ -132,7 +132,7 @@ public class ComposedBlockSetDataProviders {
 
         @Override
         public void generateItems(ItemModelGenerator generator) {
-            for (ComposedBlockFamily family : ComposedBlockFamily.allOf(modId)) blockItemModelsFor(Objects.requireNonNull(family.itemMap()));
+            for (ComposedBlockFamily family : ComposedBlockFamily.allOf(modId)) blockItemModelsFor(Objects.requireNonNull(family.itemFamily()));
         }
 
         @Override

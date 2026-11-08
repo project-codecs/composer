@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.3] - 2026-11-08
+
+### Added
+- DeferredItemRegistry v2 by @zn0n_
+- Base English ore & block set generation by @zn0n_
+- ComposerLoadedEvent over mod json callback by @zn0n_
+- Deferred Status Effect Registry by @zn0n_
+- Deferred Item Registry by @zn0n_
+
+### Changed
+- Deprecated itemMap and any instance of Function<Variant, Item> in favor of ComposedItemFamily by @zn0n_
+
+### Removed
+- Most thinks in api.v1.data by @zn0n_
+
 ## [5.2] - 2026-10-31
 
 ### Added
