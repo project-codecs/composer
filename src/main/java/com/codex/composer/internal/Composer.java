@@ -33,7 +33,6 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import com.codex.composer.internal.client.config.DupedBindsConfig;
 //? }
 
 //? if >=1.20.6 {
@@ -51,8 +50,6 @@ public class Composer implements ModInitializer {
     @Override
     public void onInitialize() {
         //? if <=1.21.6 {
-        DupedBindsConfig.initialize();
-
         for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
             ModMetadata meta = mod.getMetadata();
 
@@ -119,7 +116,7 @@ public class Composer implements ModInitializer {
                 .getEntrypointContainers("composer-post-init", ComposerPostInitialization.class)
                 .forEach(e -> e.getEntrypoint().initialize());
 
-        ComposerLoadedEvent.COMMON.invoker().run(FabricLoader.getInstance().getModContainer(Composer.MOD_ID).orElseThrow(), ComposerRegistries.OVERLAY_SERIALIZERS);
+        ComposerLoadedEvent.EVENT.invoker().run(FabricLoader.getInstance().getModContainer(Composer.MOD_ID).orElseThrow(), ComposerRegistries.OVERLAY_SERIALIZERS);
     }
 
     public static boolean disableDupedBinds() {
